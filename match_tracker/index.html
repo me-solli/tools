@@ -1226,8 +1226,8 @@ return
 /* normale Events */
 
 let teamPlayers = players
-.filter(p=>p.team===activeTeam)
-.map(p=>p.name)
+  .filter(p => !activeTeam || p.team === activeTeam)
+  .map(p => p.name)
 
 chooseFrom(teamPlayers,"Spieler auswählen",(player)=>{
 
