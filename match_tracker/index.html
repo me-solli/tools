@@ -809,7 +809,7 @@ let matchCount = matches
 let goals = 0
 
 matches
-.filter(m=>m.team===activeTeam)
+.filter(m=>m.team===activeTeam && m.events.length > 0)
 .forEach(m=>{
 goals += m.events.filter(e=>e.type==="goal").length
 })
