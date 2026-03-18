@@ -541,13 +541,18 @@ function loadFromServer(){
 
 function save(){
 
-data.teams = teams
-data.players = players
-data.matches = matches
-data.activeTeam = activeTeam
+  data.teams = teams
+  data.players = players
+  data.matches = matches
+  data.activeTeam = activeTeam
 
-localStorage.setItem("matchTracker",JSON.stringify(data))
-
+  fetch(API + "/save", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  })
 }
 
 function cell(p){
