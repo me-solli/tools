@@ -7,6 +7,37 @@
 
 <style>
 
+  .topbar{
+position:sticky;
+top:0;
+z-index:1000;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+background:#111;
+border:1px solid #2a2a2a;
+border-radius:12px;
+
+padding:12px 18px;
+margin-bottom:20px;
+
+box-shadow:0 0 20px rgba(0,0,0,0.4);
+}
+
+.topbar-left{
+font-weight:bold;
+font-size:18px;
+}
+
+.topbar-right{
+display:flex;
+gap:16px;
+font-size:13px;
+opacity:.8;
+}
+
 body{
 font-family:Arial,Helvetica,sans-serif;
 background:#0f0f0f;
