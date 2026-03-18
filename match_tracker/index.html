@@ -724,8 +724,21 @@ document.getElementById("modal").classList.add("hidden")
 }
 
 function confirmModal(){
+
 let value = document.getElementById("modalInput").value
-if(modalCallback) modalCallback(value)
+
+// 🔥 absichern
+if(!modalCallback){
+closeModal()
+return
+}
+
+// 🔥 callback sichern & resetten
+let cb = modalCallback
+modalCallback = null
+
+cb(value)
+
 closeModal()
 }
 
