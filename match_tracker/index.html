@@ -1244,19 +1244,22 @@ matches
 .filter(m=>m.team===activeTeam)
 .forEach(match=>{
 
-  let goals = match.events.filter(e=>e.type==="goal").length
+let goals = match.events.filter(e=>e.type==="goal").length
 let against = match.events.filter(e=>e.type==="goalAgainst").length
 
 let resultColor = "#aaa"
+let resultText = "Unentschieden"
 
-if(goals > against) resultColor = "#2f9e44"
-else if(goals < against) resultColor = "#c92a2a"
+if(goals > against){
+  resultColor = "#2f9e44"
+  resultText = "Sieg"
+}
+else if(goals < against){
+  resultColor = "#c92a2a"
+  resultText = "Niederlage"
+}
 
 let arrow = match.open ? "▼" : "▶"
-
-let goals = match.events.filter(e=>e.type==="goal").length
-
-  let against = match.events.filter(e=>e.type==="goalAgainst").length
 
 html+=`
 
