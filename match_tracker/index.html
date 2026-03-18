@@ -1236,19 +1236,38 @@ renderMatches()
 return
 }
 
-// 🔥 ALLE ANDEREN EVENTS KOMBINIERT
-openModal("Minute + Spieler (z.B. 23 Müller)","",(input)=>{
+// 🔥 STEP 1 → MINUTE
+openModal("Minute eingeben","z.B. 23",(minute)=>{
 
-if(!input) return
+if(!minute) return
 
-let parts = input.split(" ")
-let minute = Number(parts[0])
-let player = parts.slice(1).join(" ")
+minute = Number(minute)
 
-if(!minute || !player){
-alert("Format: Minute Name (z.B. 23 Müller)")
+// 🔥 SPIELER LISTE BAUEN
+let teamPlayers = players
+  .filter(p => p.team === match.team)
+
+if(teamPlayers.length === 0){
+alert("Keine Spieler im Team")
 return
 }
+
+// 🔥 NUMMERIERTE LISTE
+let listText = teamPlayers
+  .map((p,i)=> (i+1) + ": " + p.name)
+  .join("\n")
+
+// 🔥 STEP 2 → AUSWAHL
+openModal("Spieler wählen:\n" + listText,"Nummer eingeben",(choice)=>{
+
+let index = Number(choice) - 1
+
+if(index < 0 || index >= teamPlayers.length){
+alert("Ungültige Auswahl")
+return
+}
+
+let player = teamPlayers[index].name
 
 match.events.push({
 type:type,
@@ -1259,6 +1278,8 @@ minute:minute
 save()
 renderMatches()
 renderRankings()
+
+})
 
 })
 
