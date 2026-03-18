@@ -1226,8 +1226,13 @@ return
 /* normale Events */
 
 let teamPlayers = players
-  .filter(p => !activeTeam || p.team === activeTeam)
+  .filter(p => p.team === match.team)
   .map(p => p.name)
+
+if(teamPlayers.length === 0){
+  alert("Keine Spieler im Team vorhanden")
+  return
+}
 
 chooseFrom(teamPlayers,"Spieler auswählen",(player)=>{
 
