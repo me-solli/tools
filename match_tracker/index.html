@@ -1703,8 +1703,10 @@ txt=`${e.minute}' 🟥 ${e.player}`
 else if(e.type==="penalty")
 txt=`${e.minute}' ⏱ Zeitstrafe ${e.player}`
 
+let cls = e.type
+
 html+=`
-<div class="event">
+<div class="event ${cls} ${i === match.events.length-1 ? "new" : ""}">
 <span>${txt}</span>
 <button class="secondary"
 onclick="deleteEvent(${match.id},${i})">❌</button>
