@@ -511,17 +511,33 @@ closeModal()
 
 /* ========================= */
 
-let data = JSON.parse(localStorage.getItem("matchTracker")) || {
+let data = {
 teams:[],
 players:[],
 matches:[],
 activeTeam:null
 }
 
-let teams = data.teams
-let players = data.players
-let matches = data.matches
-let activeTeam = data.activeTeam
+let teams = []
+let players = []
+let matches = []
+let activeTeam = null
+
+function loadFromServer(){
+  fetch(API + "/data")
+    .then(res => res.json())
+    .then(serverData => {
+
+      data = serverData
+
+      teams = data.teams || []
+      players = data.players || []
+      matches = data.matches || []
+      activeTeam = data.activeTeam || null
+
+      renderAll()
+    })
+}
 
 function save(){
 
