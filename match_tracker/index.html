@@ -745,22 +745,6 @@ let activeTeam = null
 
 function loadFromServer(){
 
-  // 🔥 1. LOCAL LADEN (SOFORT)
-  let local = localStorage.getItem("matchTrackerData")
-
-  if(local){
-    try{
-      data = JSON.parse(local)
-
-      teams = data.teams || []
-      players = data.players || []
-      matches = data.matches || []
-      activeTeam = data.activeTeam || teams[0] || null
-
-      renderAll()
-    }catch{}
-  }
-
   // 🔥 2. SERVER VERSUCHEN
   fetch(API + "/data")
     .then(res => res.json())
