@@ -766,12 +766,6 @@ function loadFromServer(){
     .then(res => res.json())
 .then(serverData => {
 
-  // 🔥 WICHTIG: nur übernehmen wenn Daten vorhanden
-  if(!serverData || !serverData.teams || serverData.teams.length === 0){
-    console.log("Server leer – benutze localStorage")
-    return
-  }
-
   data = serverData
 
   teams = data.teams || []
