@@ -916,6 +916,22 @@ return p
 : `<div class='pitch-player' style='opacity:.25'>·</div>`
 }
 
+  function showToast(text,type="info"){
+
+let t = document.getElementById("toast")
+
+t.className = "toast " + type
+t.innerText = text
+
+// trigger animation
+setTimeout(()=> t.classList.add("show"),10)
+
+setTimeout(()=>{
+t.classList.remove("show")
+},2000)
+
+}
+
 /* =========================
 BACKUP
 ========================= */
