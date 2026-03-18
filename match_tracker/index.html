@@ -1301,16 +1301,24 @@ matches
 let goals = match.events.filter(e=>e.type==="goal").length
 let against = match.events.filter(e=>e.type==="goalAgainst").length
 
-let resultColor = "#aaa"
-let resultText = "Unentschieden"
+let resultText = "-"
+let resultColor = "#666"
 
-if(goals > against){
-  resultColor = "#2f9e44"
-  resultText = "Sieg"
-}
-else if(goals < against){
-  resultColor = "#c92a2a"
-  resultText = "Niederlage"
+if(match.events.length > 0){
+
+  if(goals > against){
+    resultColor = "#2f9e44"
+    resultText = "Sieg"
+  }
+  else if(goals < against){
+    resultColor = "#c92a2a"
+    resultText = "Niederlage"
+  }
+  else{
+    resultColor = "#aaa"
+    resultText = "Unentschieden"
+  }
+
 }
 
 let arrow = match.open ? "▼" : "▶"
