@@ -638,22 +638,26 @@ function loadFromServer(){
   // 🔥 2. SERVER VERSUCHEN
   fetch(API + "/data")
     .then(res => res.json())
-    .then(serverData => {
+.then(serverData => {
 
-      if(!serverData || !serverData.teams) return
+  // 🔥 WICHTIG: nur übernehmen wenn Daten vorhanden
+  if(!serverData || !serverData.teams || serverData.teams.length === 0){
+    console.log("Server leer – benutze localStorage")
+    return
+  }
 
-      data = serverData
+  data = serverData
 
-      teams = data.teams || []
-      players = data.players || []
-      matches = data.matches || []
-      activeTeam = data.activeTeam || teams[0] || null
+  teams = data.teams || []
+  players = data.players || []
+  matches = data.matches || []
+  activeTeam = data.activeTeam || teams[0] || null
 
-      // 🔥 SERVER → LOCAL SYNC
-      localStorage.setItem("matchTrackerData", JSON.stringify(data))
+  // 🔥 nur dann local überschreiben
+  localStorage.setItem("matchTrackerData", JSON.stringify(data))
 
-      renderAll()
-    })
+  renderAll()
+})
     .catch(() => {
       console.log("Server nicht erreichbar – nutze localStorage")
     })
