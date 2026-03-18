@@ -732,6 +732,18 @@ let input = document.getElementById("modalInput")
 input.value = ""
 input.placeholder = placeholder || ""
 
+// 🔥 AUTO FOCUS
+setTimeout(()=>{
+input.focus()
+},50)
+
+// 🔥 ENTER = BESTÄTIGEN
+input.addEventListener("keydown", function(e){
+if(e.key === "Enter"){
+confirmModal()
+}
+})
+
 // Callback setzen
 modalCallback = callback
 
