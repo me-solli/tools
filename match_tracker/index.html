@@ -974,11 +974,19 @@ players
 .forEach((p)=>{
 
 html+=`
-<span class="player-chip pos-${p.pos}">
-<span class="pos">${p.pos}</span>${p.name}
+<div class="player-chip pos-${p.pos}">
+
+<div class="player-left">
+<span class="pos-badge">${p.pos}</span>
+<span class="player-name">${p.name}</span>
+</div>
+
+<div class="player-actions">
 <button onclick="editPlayer('${p.name}')">✏️</button>
 <button onclick="deletePlayer('${p.name}')">x</button>
-</span>
+</div>
+
+</div>
 `
 
 })
