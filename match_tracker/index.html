@@ -1591,11 +1591,11 @@ renderRankings()
 
 }
 
-loadFromServer()
+setTimeout(loadFromServer, 200)
 
-  setInterval(() => {
+setInterval(() => {
   loadFromServer()
-}, 8000) // alle 8 Sekunden
+}, 5000)
 
 </script>
 
