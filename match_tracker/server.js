@@ -11,7 +11,7 @@ app.use(cors())
 // JSON parsing
 app.use(express.json())
 
-const FILE = path.join(__dirname, "data.json")
+const FILE = "/data/data.json"
 
 // 👉 Daten abrufen
 app.get("/data", (req, res) => {
