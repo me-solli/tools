@@ -1261,27 +1261,43 @@ let listText = teamPlayers
   .join("\n")
 
 // 🔥 STEP 2 → AUSWAHL
-openModal("Spieler wählen:\n" + listText,"Nummer eingeben",(choice)=>{
+// 🔥 STEP 2 → SPIELER KLICKEN
 
-let index = Number(choice) - 1
+let modal = document.getElementById("modal")
+let box = modal.querySelector(".modal-box")
 
-if(index < 0 || index >= teamPlayers.length){
-alert("Ungültige Auswahl")
-return
-}
+// Titel setzen
+box.innerHTML = `<h3>Spieler wählen</h3>`
 
-let player = teamPlayers[index].name
+teamPlayers.forEach(p=>{
+let btn = document.createElement("button")
+
+btn.innerText = p.name
+btn.classList.add("secondary")
+
+btn.onclick = ()=>{
+closeModal()
 
 match.events.push({
 type:type,
-player:player,
+player:p.name,
 minute:minute
 })
 
 save()
 renderAll()
+}
 
+box.appendChild(btn)
 })
+
+// Abbrechen Button
+let cancel = document.createElement("button")
+cancel.innerText = "Abbrechen"
+cancel.onclick = closeModal
+box.appendChild(cancel)
+
+modal.classList.remove("hidden")
 
 })
 
