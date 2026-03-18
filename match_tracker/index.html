@@ -714,6 +714,29 @@ renderAll()
 
 }
 
+function renderTopbar(){
+
+document.getElementById("topTeam").innerText =
+activeTeam ? activeTeam : "Kein Team"
+
+let matchCount = matches.filter(m=>m.team===activeTeam).length
+
+let goals = 0
+
+matches
+.filter(m=>m.team===activeTeam)
+.forEach(m=>{
+goals += m.events.filter(e=>e.type==="goal").length
+})
+
+document.getElementById("topMatches").innerText =
+matchCount + " Spiele"
+
+document.getElementById("topGoals").innerText =
+goals + " Tore"
+
+}
+  
 function renderTeams(){
 
 let html=""
