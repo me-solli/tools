@@ -763,28 +763,6 @@ function loadFromServer(){
     })
 }
 
-  // 🔥 2. SERVER VERSUCHEN
-  fetch(API + "/data")
-    .then(res => res.json())
-.then(serverData => {
-
-  data = serverData
-
-  teams = data.teams || []
-  players = data.players || []
-  matches = data.matches || []
-  activeTeam = data.activeTeam || teams[0] || null
-
-  // 🔥 nur dann local überschreiben
-  localStorage.setItem("matchTrackerData", JSON.stringify(data))
-
-  renderAll()
-})
-    .catch(() => {
-      console.log("Server nicht erreichbar – nutze localStorage")
-    })
-}
-
 function save(){
 
   const status = document.getElementById("saveStatus")
