@@ -704,19 +704,38 @@ opacity:.8;
 DATA
 ========================= */
 
-  const API = "https://rare-kindness-production.up.railway.app"
+const API = "https://rare-kindness-production.up.railway.app"
 
-  /* 🔥 MODAL SYSTEM */
+/* 🔥 MODAL SYSTEM */
 let modalCallback = null
 
 function openModal(title, placeholder, callback){
-document.getElementById("modalTitle").innerText = title
-document.getElementById("modalInput").value = ""
-document.getElementById("modalInput").placeholder = placeholder
 
+// 🔥 IMMER RESET
+modalCallback = null
+
+let modal = document.getElementById("modal")
+let box = modal.querySelector(".modal-box")
+
+// 🔥 STANDARD LAYOUT IMMER NEU
+box.innerHTML = `
+<h3 id="modalTitle"></h3>
+<input id="modalInput" placeholder="">
+<button onclick="confirmModal()">OK</button>
+<button onclick="closeModal()">Abbrechen</button>
+`
+
+// Titel + Input setzen
+document.getElementById("modalTitle").innerText = title
+
+let input = document.getElementById("modalInput")
+input.value = ""
+input.placeholder = placeholder || ""
+
+// Callback setzen
 modalCallback = callback
 
-document.getElementById("modal").classList.remove("hidden")
+modal.classList.remove("hidden")
 }
 
 function closeModal(){
