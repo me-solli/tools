@@ -721,19 +721,19 @@ transform:translateY(0);
 .toast.sub{border-left:4px solid #6c63ff}
 .toast.info{border-left:4px solid #3a7cff}
 
-  .team-name{
+.team-name{
 display:-webkit-box;
 -webkit-line-clamp:2;
 -webkit-box-orient:vertical;
 
 overflow:hidden;
 
-/* 🔥 saubere Optik */
 line-height:1.25;
-text-align:right;
 
-/* 🔥 Abstand nach unten */
-margin-bottom:2px;
+/* 🔥 HIER DER TRICK */
+text-align:right;
+max-width:220px;
+margin-left:auto;
 }
 
 .hidden{display:none}
