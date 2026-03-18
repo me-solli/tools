@@ -77,28 +77,75 @@ gap:6px;
 transition:.15s;
 }
 
+/* 🔥 BASIS HOVER */
 button:hover{
+transform:translateY(-1px);
 filter:brightness(1.2);
 }
 
+/* 🔵 PRIMARY */
 button.primary{
 background:#3a7cff;
 color:#fff;
 }
 
+/* 🔴 DANGER */
 button.danger{
-background:#c92a2a;
+background:rgba(201,42,42,0.15);
+color:#ff4d4d;
 }
 
-button.success{
-background:#2f9e44;
+button.danger:hover{
+box-shadow:0 4px 12px rgba(201,42,42,0.3);
 }
 
-button.secondary{background:#444}
-button.goal{background:#2f9e44}
-button.yellow{background:#d4a017}
-button.red{background:#c92a2a}
-button.sub{background:#6c63ff}
+/* 🟢 SUCCESS / TOR */
+button.success,
+button.goal{
+background:rgba(47,158,68,0.15);
+color:#2f9e44;
+}
+
+button.success:hover,
+button.goal:hover{
+box-shadow:0 4px 12px rgba(47,158,68,0.3);
+}
+
+/* 🟡 GELB */
+button.yellow{
+background:rgba(212,160,23,0.15);
+color:#d4a017;
+}
+
+button.yellow:hover{
+box-shadow:0 4px 12px rgba(212,160,23,0.3);
+}
+
+/* 🔴 ROT */
+button.red{
+background:rgba(201,42,42,0.15);
+color:#ff4d4d;
+}
+
+button.red:hover{
+box-shadow:0 4px 12px rgba(201,42,42,0.3);
+}
+
+/* 🟣 WECHSEL */
+button.sub{
+background:rgba(108,99,255,0.15);
+color:#8f88ff;
+}
+
+button.sub:hover{
+box-shadow:0 4px 12px rgba(108,99,255,0.3);
+}
+
+/* ⚪ SECONDARY */
+button.secondary{
+background:#2a2a2a;
+color:#aaa;
+}
 
 .matches-grid{
 display:grid;
