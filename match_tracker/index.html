@@ -727,19 +727,22 @@ function confirmModal(){
 
 let value = document.getElementById("modalInput").value
 
-// 🔥 absichern
 if(!modalCallback){
 closeModal()
 return
 }
 
-// 🔥 callback sichern & resetten
 let cb = modalCallback
 modalCallback = null
 
-cb(value)
-
+// 🔥 erst schließen
 closeModal()
+
+// 🔥 dann callback (wichtig!)
+setTimeout(() => {
+cb(value)
+}, 50)
+
 }
 
 /* ========================= */
