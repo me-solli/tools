@@ -612,11 +612,15 @@ function loadFromServer(){
       teams = data.teams || []
       players = data.players || []
       matches = data.matches || []
-
-      // 🔥 WICHTIGER FIX
       activeTeam = data.activeTeam || teams[0] || null
 
       renderAll()
+    })
+    .catch(() => {
+      console.log("Server schläft, retry...")
+
+      // 🔥 retry nach kurzer Zeit
+      setTimeout(loadFromServer, 1500)
     })
 }
 
