@@ -1172,30 +1172,30 @@ return
 }
 
 let modal = document.getElementById("modal")
-let box = modal.querySelector(".modal-box")
 
-box.innerHTML = `<h3>${title}</h3>`
+// Titel setzen
+document.getElementById("modalTitle").innerText = title
 
-list.forEach(name=>{
-let btn = document.createElement("button")
+let input = document.getElementById("modalInput")
+input.placeholder = "Spielername eingeben"
+input.value = ""
 
-let p = players.find(pl=>pl.name===name)
+// Liste merken
+let names = list.join(", ")
 
-btn.innerHTML = `<span class="pos">${p.pos}</span> ${name}`
+// Callback neu setzen
+modalCallback = (value)=>{
+if(!value) return
 
-btn.classList.add("pos-"+p.pos)
-btn.onclick = ()=>{
-closeModal()
-callback(name)
+if(!list.includes(value)){
+alert("Spieler nicht gefunden:\n" + names)
+return
 }
-box.appendChild(btn)
-})
 
-let cancel = document.createElement("button")
-cancel.innerText = "Abbrechen"
-cancel.onclick = closeModal
-box.appendChild(cancel)
+callback(value)
+}
 
+// Modal öffnen
 modal.classList.remove("hidden")
 }
 
