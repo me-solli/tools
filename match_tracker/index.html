@@ -612,9 +612,11 @@ function loadFromServer(){
       teams = data.teams || []
       players = data.players || []
       matches = data.matches || []
-      activeTeam = data.activeTeam || null
 
-renderAll()
+      // 🔥 WICHTIGER FIX
+      activeTeam = data.activeTeam || teams[0] || null
+
+      renderAll()
     })
 }
 
