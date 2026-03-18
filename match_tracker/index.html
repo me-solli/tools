@@ -634,6 +634,10 @@ function save(){
   data.matches = matches
   data.activeTeam = activeTeam
 
+  // 🔥 LOCAL SPEICHERN
+  localStorage.setItem("matchTrackerData", JSON.stringify(data))
+
+  // 🔥 SERVER SPEICHERN (optional)
   fetch(API + "/save", {
     method: "POST",
     headers: {
@@ -648,7 +652,7 @@ function save(){
     }
   })
   .catch(() => {
-    if(status) status.innerText = "❌ Fehler beim Speichern"
+    if(status) status.innerText = "⚠️ nur lokal gespeichert"
   })
 }
 
