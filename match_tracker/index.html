@@ -646,6 +646,34 @@ background:rgba(0,0,0,0.3);
 opacity:.8;
 }
 
+  .toast{
+position:fixed;
+top:20px;
+right:20px;
+background:#1f1f1f;
+color:#fff;
+padding:10px 14px;
+border-radius:8px;
+font-size:13px;
+box-shadow:0 6px 20px rgba(0,0,0,0.5);
+opacity:0;
+transform:translateY(-10px);
+transition:.25s;
+z-index:2000;
+}
+
+.toast.show{
+opacity:1;
+transform:translateY(0);
+}
+
+/* Typen */
+.toast.goal{border-left:4px solid #2f9e44}
+.toast.yellow{border-left:4px solid #d4a017}
+.toast.red{border-left:4px solid #c92a2a}
+.toast.sub{border-left:4px solid #6c63ff}
+.toast.info{border-left:4px solid #3a7cff}
+
 .hidden{display:none}
 
 </style>
