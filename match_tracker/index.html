@@ -1214,16 +1214,14 @@ modal.classList.remove("hidden")
 
 function addEvent(matchId,type){
 
+let match = matches.find(m=>m.id==matchId)
+
+// 🔥 Gegentor bleibt simpel
+if(type==="goalAgainst"){
+
 openModal("Minute eingeben","z.B. 23",(minute)=>{
 
 if(!minute) return
-
-minute = Number(minute)
-
-let match=matches.find(m=>m.id==matchId)
-
-/* Gegentor braucht keinen Spieler */
-if(type==="goalAgainst"){
 
 match.events.push({
 type:type,
@@ -1232,27 +1230,30 @@ minute:Number(minute)
 
 save()
 renderMatches()
+
+})
+
 return
-
 }
 
-/* normale Events */
+// 🔥 ALLE ANDEREN EVENTS KOMBINIERT
+openModal("Minute + Spieler (z.B. 23 Müller)","",(input)=>{
 
-let teamPlayers = players
-  .filter(p => p.team === match.team)
-  .map(p => p.name)
+if(!input) return
 
-if(teamPlayers.length === 0){
-  alert("Keine Spieler im Team vorhanden")
-  return
+let parts = input.split(" ")
+let minute = Number(parts[0])
+let player = parts.slice(1).join(" ")
+
+if(!minute || !player){
+alert("Format: Minute Name (z.B. 23 Müller)")
+return
 }
-
-chooseFrom(teamPlayers,"Spieler auswählen",(player)=>{
 
 match.events.push({
 type:type,
 player:player,
-minute:Number(minute)
+minute:minute
 })
 
 save()
@@ -1260,7 +1261,6 @@ renderMatches()
 renderRankings()
 
 })
-  })
 
 }
 
