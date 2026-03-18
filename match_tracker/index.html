@@ -644,6 +644,11 @@ function save(){
   })
 }
 
+function forceSyncToServer(){
+  save()
+  alert("Server wurde überschrieben ✅")
+}
+
 function cell(p){
 return p
 ? `<div class='pitch-player pos-${p.pos}'><span class="pos">${p.pos}</span>${p.name}</div>`
