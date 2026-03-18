@@ -608,14 +608,15 @@ min-width:90px;
 }
 
 .match-sub{
-display:flex;
-justify-content:space-between;
+display:grid;
+grid-template-columns: repeat(4,auto);
+justify-content:end;
 align-items:center;
+gap:12px;
+
 font-size:12px;
 opacity:.75;
 margin-top:6px;
-gap:10px;
-flex-wrap:wrap;
 }
 
 .match:hover{
