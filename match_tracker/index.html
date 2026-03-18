@@ -802,7 +802,9 @@ function renderTopbar(){
 document.getElementById("topTeam").innerText =
 activeTeam ? activeTeam : "Kein Team"
 
-let matchCount = matches.filter(m=>m.team===activeTeam).length
+let matchCount = matches
+.filter(m=>m.team===activeTeam && m.events.length > 0)
+.length
 
 let goals = 0
 
