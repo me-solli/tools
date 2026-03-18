@@ -1276,9 +1276,17 @@ btn.innerText = p.name
 btn.classList.add("secondary")
 
 btn.onclick = ()=>{
+
+let m = matches.find(x => x.id === matchId)
+
+if(!m){
+alert("Match nicht gefunden")
+return
+}
+
 closeModal()
 
-match.events.push({
+m.events.push({
 type:type,
 player:p.name,
 minute:minute
