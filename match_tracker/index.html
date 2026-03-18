@@ -1225,15 +1225,27 @@ html+=`
 
 <div class="match-header" onclick="toggleMatch(${match.id})">
 
-<div>
-${arrow} ${formatDate(match.date)} ${match.time ? "🕒 "+match.time : ""}<br>
+<div class="match-main">
+
+<div class="team-left">
+${activeTeam}
+</div>
+
+<div class="score">
+${goals} : ${against}
+</div>
+
+<div class="team-right">
 ${match.opponent}
 </div>
 
-<div style="display:flex;gap:10px;align-items:center">
+</div>
 
-<span>${goals} : ${against}</span>
+<div class="match-sub">
+<span>${formatDate(match.date)}</span>
+<span>${match.time ? "🕒 "+match.time : ""}</span>
 <span>${match.lineup.length}/${match.mode}</span>
+</div>
 
 <button class="danger"
 onclick="event.stopPropagation();deleteMatch(${match.id})">
