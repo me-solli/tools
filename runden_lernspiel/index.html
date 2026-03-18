@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mathe Lernspiel – Runden</title>
+
+<style>
+
+body{
+font-family:Arial,Helvetica,sans-serif;
+text-align:center;
+background:linear-gradient(180deg,#eef2ff,#ffffff);
+margin:0;
+padding:20px;
+}
+
+h1{margin-bottom:5px}
+
+#menu button{
+font-size:18px;
+padding:12px 18px;
+margin:8px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+background:#4c6ef5;
+color:white;
+width:220px;
+max-width:90%;
+}
+
+#game{display:none}
+
+#levelDisplay{
+font-weight:bold;
+margin-bottom:10px;
+font-size:18px;
+}
+
+#number{
+font-size:clamp(60px,18vw,120px);
+font-weight:bold;
+margin:20px 0;
+}
+
+.answers{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
+max-width:420px;
+margin:auto;
+}
+
+.answerBtn{
+font-size:28px;
+padding:18px 10px;
+border:none;
+border-radius:14px;
+background:#4c6ef5;
+color:white;
+cursor:pointer;
+width:100%;
+}
+
+.answerBtn:hover{background:#364fc7}
+
+#result{
+font-size:26px;
+min-height:36px;
+margin-top:12px;
+}
+
+#explain{
+font-size:16px;
+color:#333;
+margin-top:6px;
+min-height:20px;
+padding:0 10px;
+}
+
+#hud{
+margin-top:10px;
+font-size:16px;
+}
+
+#progressContainer{
+width:90%;
+max-width:420px;
+height:18px;
+background:#ddd;
+margin:18px auto;
+border-radius:10px;
+overflow:hidden;
+}
+
+#progressBar{
+height:100%;
+width:0%;
+background:#4c6ef5;
+}
+
+#numberline{
+width:90%;
+max-width:420px;
+margin:20px auto;
+}
+
+#line{
+height:4px;
+background:black;
+position:relative;
+}
+
+#marker{
+width:12px;
+height:12px;
+background:red;
+border-radius:50%;
+position:absolute;
+top:-4px;
+}
+
+#ticks{
+display:flex;
+justify-content:space-between;
+font-size:14px;
+}
+
+#final{display:none}
+
+button.restart{
+font-size:18px;
+padding:12px 18px;
+border:none;
+border-radius:10px;
+background:#4c6ef5;
+color:white;
+cursor:pointer;
+margin-top:10px;
+}
+
+#stars{
+font-size:26px;
+margin-top:10px;
+}
+
+/* Mobile Optimierung */
+@media (max-width:600px){
+
+body{
+padding:16px;
+}
+
+#number{
+margin:10px 0 16px 0;
+}
+
+.answers{
+grid-template-columns:1fr;
+}
+
+.answerBtn{
+font-size:30px;
+padding:20px;
+}
+
+#hud{
+font-size:15px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>🎯 Mathe Lernspiel</h1>
+<p>Runde die Zahl richtig.</p>
+
+<div id="menu">
+
+<b>Level wählen</b><br>
+
+<button onclick="startGame(1)">Level 1 – Zehner</button>
+<button onclick="startGame(2)">Level 2 – Hunderter</button>
+<button onclick="startGame(3)">Level 3 – Tausender</button>
+
+</div>
+
+<div id="game">
+
+<div id="levelDisplay"></div>
+
+<div id="number">?</div>
+
+<div id="numberline">
+<div id="line">
+<div id="marker"></div>
+</div>
+<div id="ticks">
+<span id="tick1"></span>
+<span id="tick2"></span>
+</div>
+</div>
+
+<div class="answers" id="answers"></div>
+
+<div id="result"></div>
+<div id="explain"></div>
+
+<div id="hud">
+Aufgabe <span id="task"></span> / 10 |
+Richtig: <span id="score"></span>
+</div>
+
+<div id="progressContainer">
+<div id="progressBar"></div>
+</div>
+
+</div>
+
+<div id="final">
+<h2>🏁 Runde beendet!</h2>
+
+<p id="finalText"></p>
+
+<div id="stars"></div>
+
+<button class="restart" onclick="location.reload()">Nochmal spielen</button>
+
+</div>
+
+<script>
+
+let level
+let step
+let number
+let correct
+
+let score=0
+let total=0
+
+let maxTasks=10
+
+function startGame(l){
+
+level=l
+
+if(level===1) step=10
+if(level===2) step=100
+if(level===3) step=1000
+
+menu.style.display='none'
+game.style.display='block'
+
+levelDisplay.innerText='Level '+level
+
+newTask()
+
+}
+
+function newTask(){
+
+if(total>=maxTasks){endGame();return}
+
+result.innerText=''
+explain.innerText=''
+
+let max=step*9
+number=Math.floor(Math.random()*max)+step
+
+let base=Math.floor(number/step)*step
+let upper=base+step
+
+correct=(number%step>=step/2)?upper:base
+
+numberEl.innerText=number
+
+buildAnswers(base,upper)
+
+updateNumberLine(base,upper)
+
+updateHUD()
+
+}
+
+function buildAnswers(base,upper){
+
+answers.innerHTML=''
+
+let options=[base,upper,base-step,upper+step]
+
+options=[...new Set(options)]
+
+options=options.sort(()=>Math.random()-0.5)
+
+options.slice(0,4).forEach(v=>{
+
+let b=document.createElement('button')
+
+b.className='answerBtn'
+b.innerText=v
+
+b.onclick=()=>check(v,base,upper)
+
+answers.appendChild(b)
+
+})
+
+}
+
+function updateNumberLine(base,upper){
+
+tick1.innerText=base
+
+tick2.innerText=upper
+
+let percent=(number-base)/(upper-base)
+
+marker.style.left=(percent*100)+'%'
+
+}
+
+function check(val,base,upper){
+
+ total++
+
+ if(val===correct){
+
+ score++
+
+ result.innerText='✅ Richtig!'
+
+ if(number%step<step/2)
+ explain.innerText=number+' liegt näher bei '+base
+ else
+ explain.innerText=number+' liegt näher bei '+upper
+
+ playSound(600)
+
+ }
+ else{
+
+ result.innerText='❌ Falsch'
+
+ if(number%step<step/2)
+ explain.innerText='Wir runden ab auf '+base
+ else
+ explain.innerText='Wir runden auf '+upper
+
+ playSound(200)
+
+ }
+
+ updateProgress()
+ updateHUD()
+
+ setTimeout(newTask,1200)
+
+}
+
+function updateProgress(){
+
+progressBar.style.width=(total/maxTasks*100)+'%'
+
+}
+
+function updateHUD(){
+
+ task.innerText=total+1
+ scoreEl.innerText=score
+
+}
+
+function endGame(){
+
+ game.style.display='none'
+ final.style.display='block'
+
+ finalText.innerText='Ergebnis: '+score+' von '+maxTasks+' richtig.'
+
+ let starCount=1
+
+ if(score>=7) starCount=2
+ if(score>=9) starCount=3
+
+ stars.innerText='⭐'.repeat(starCount)
+
+}
+
+function playSound(freq){
+
+ let ctx=new (window.AudioContext||window.webkitAudioContext)()
+ let osc=ctx.createOscillator()
+
+ osc.type='sine'
+ osc.frequency.value=freq
+
+ osc.connect(ctx.destination)
+ osc.start()
+
+ setTimeout(()=>osc.stop(),150)
+
+}
+
+const numberEl=document.getElementById('number')
+const answers=document.getElementById('answers')
+const result=document.getElementById('result')
+const explain=document.getElementById('explain')
+const progressBar=document.getElementById('progressBar')
+
+const task=document.getElementById('task')
+const scoreEl=document.getElementById('score')
+
+const marker=document.getElementById('marker')
+const tick1=document.getElementById('tick1')
+const tick2=document.getElementById('tick2')
+
+const game=document.getElementById('game')
+const menu=document.getElementById('menu')
+
+const final=document.getElementById('final')
+const finalText=document.getElementById('finalText')
+const stars=document.getElementById('stars')
+const levelDisplay=document.getElementById('levelDisplay')
+
+</script>
+
+</body>
+</html>
