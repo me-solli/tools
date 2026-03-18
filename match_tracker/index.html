@@ -745,8 +745,6 @@ let activeTeam = null
 
 function loadFromServer(){
 
-  function loadFromServer(){
-
   fetch(API + "/data")
     .then(res => res.json())
     .then(serverData => {
