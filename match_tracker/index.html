@@ -543,6 +543,9 @@ renderAll()
 
 function save(){
 
+  const status = document.getElementById("saveStatus")
+  if(status) status.innerText = "Speichert…"
+
   data.teams = teams
   data.players = players
   data.matches = matches
@@ -554,6 +557,15 @@ function save(){
       "Content-Type": "application/json"
     },
     body: JSON.stringify(data)
+  })
+  .then(() => {
+    if(status){
+      status.innerText = "✓ gespeichert"
+      setTimeout(()=> status.innerText = "", 1500)
+    }
+  })
+  .catch(() => {
+    if(status) status.innerText = "❌ Fehler beim Speichern"
   })
 }
 
