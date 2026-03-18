@@ -264,7 +264,42 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 font-size:13px;
-margin:2px 0
+margin:2px 0;
+padding:4px 6px;
+border-radius:6px;
+}
+
+/* 🔥 NEUES EVENT */
+.event.new{
+animation:fadeInUp 0.35s ease;
+}
+
+/* 🔥 EVENT FARBEN */
+.event.goal{
+background:rgba(47,158,68,0.15);
+}
+
+.event.yellow{
+background:rgba(212,160,23,0.15);
+}
+
+.event.red{
+background:rgba(201,42,42,0.15);
+}
+
+.event.sub{
+background:rgba(108,99,255,0.15);
+}
+
+@keyframes fadeInUp{
+from{
+opacity:0;
+transform:translateY(8px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
 }
 
 .stat-row{
