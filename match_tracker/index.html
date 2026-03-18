@@ -1329,7 +1329,7 @@ let arrow = match.open ? "▼" : "▶"
 
 html+=`
 
-<div class="match ${match.open ? "open" : ""}">
+<div class="match ${match.open ? "open" : ""} result-${resultText}">
 
 <div class="match-header" onclick="toggleMatch(${match.id})">
 
