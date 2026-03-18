@@ -1244,6 +1244,14 @@ matches
 .filter(m=>m.team===activeTeam)
 .forEach(match=>{
 
+  let goals = match.events.filter(e=>e.type==="goal").length
+let against = match.events.filter(e=>e.type==="goalAgainst").length
+
+let resultColor = "#aaa"
+
+if(goals > against) resultColor = "#2f9e44"
+else if(goals < against) resultColor = "#c92a2a"
+
 let arrow = match.open ? "▼" : "▶"
 
 let goals = match.events.filter(e=>e.type==="goal").length
