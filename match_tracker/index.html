@@ -1853,9 +1853,10 @@ renderRankings()
 
 setTimeout(loadFromServer, 1000)
 
-setInterval(() => {
-  loadFromServer()
-}, 5000)
+// ❌ AUTO-RELOAD AUS (überschreibt deine Eingaben)
+// setInterval(() => {
+//   loadFromServer()
+// }, 5000)
 
 </script>
 
