@@ -581,18 +581,29 @@ font-size:14px;
 line-height:1.2;
 }
 
+.team-left,
+.team-right{
+display:flex;
+align-items:center;
+height:44px;
+font-size:14px;
+line-height:1.2;
+
+/* 🔥 wichtig für Umbruch */
+white-space:normal;
+word-break:break-word;
+}
+
 .team-left{
 justify-content:flex-start;
 text-align:left;
+padding-right:10px;
 }
 
 .team-right{
 justify-content:flex-end;
 text-align:right;
-}
-
-.team-right{
-text-align:right;
+padding-left:10px;
 }
 
 .score{
