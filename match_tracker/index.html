@@ -1879,10 +1879,7 @@ let st2 = strs[1] || null
 
 function row(players){
 
-// nur echte Spieler behalten (kein null)
-let filtered = players.filter(p => p)
-
-let html = filtered.map(p => cell(p)).join("")
+let html = players.map(p => cell(p)).join("")
 
 return `<div class='pitch-row'>${html}</div>`
 }
