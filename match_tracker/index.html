@@ -980,6 +980,56 @@ color:#aaa;
 border:none;
 }
 
+  /* 🔥 FORM WRAPPER */
+.match-form-row{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:12px;
+}
+
+/* 🔥 EINHEITLICHER LOOK */
+.match-form-row input,
+.match-form-row select{
+height:42px;
+padding:0 12px;
+border-radius:10px;
+
+background:#1a1a1a;
+color:#eee;
+
+border:1px solid rgba(255,255,255,0.08);
+
+transition:.2s;
+}
+
+/* 🔥 HOVER / FOCUS */
+.match-form-row input:focus,
+.match-form-row select:focus{
+outline:none;
+border-color:#3a7cff;
+box-shadow:0 0 0 2px rgba(58,124,255,0.15);
+}
+
+/* 🔥 GRÖSSEN LOGIK */
+#date{width:150px}
+#time{width:110px}
+#homeAway{width:130px}
+
+/* FLEX INPUTS */
+#opponent{flex:1}
+#location{flex:1}
+
+/* 🔥 ICON SELECT FIX */
+#homeAway{
+padding-left:10px;
+}
+
+/* 🔥 OPTIONAL: Platzhalter dezenter */
+.match-form-row input::placeholder{
+color:#777;
+}
+
 .hidden{display:none}
 
 </style>
