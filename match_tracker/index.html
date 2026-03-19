@@ -7,6 +7,60 @@
 
 <style>
 
+  .hero-banner{
+  position:relative;
+  border-radius:16px;
+  margin-bottom:20px;
+  overflow:hidden;
+
+  background:
+    radial-gradient(circle at 20% 30%, rgba(58,124,255,0.25), transparent 60%),
+    radial-gradient(circle at 80% 70%, rgba(47,158,68,0.25), transparent 60%),
+    linear-gradient(135deg, #141414, #1b1b1b);
+
+  border:1px solid rgba(255,255,255,0.05);
+  box-shadow:0 15px 40px rgba(0,0,0,0.6);
+}
+
+.hero-content{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:22px 26px;
+}
+
+.hero-title{
+  font-size:28px;
+  font-weight:800;
+  letter-spacing:1px;
+}
+
+.hero-sub{
+  font-size:13px;
+  opacity:.6;
+  margin-top:4px;
+}
+
+.hero-right{
+  display:flex;
+  gap:20px;
+}
+
+.hero-stat{
+  text-align:center;
+}
+
+.hero-stat span{
+  font-size:20px;
+  font-weight:bold;
+  display:block;
+}
+
+.hero-stat small{
+  font-size:11px;
+  opacity:.6;
+}
+
 .topbar{
 position:sticky;
 top:0;
