@@ -1594,6 +1594,9 @@ return
 
 match.lineup.push(name)
 
+// 🔥 aus Bank entfernen
+match.bench = match.bench.filter(p=>p!==name)
+
 }
 
 save()
