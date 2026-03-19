@@ -1575,25 +1575,21 @@ renderMatches()
 
 }
 
-function toggleBench(matchId,name){
+function toggleSquad(matchId,name){
 
-let match=matches.find(m=>m.id===matchId)
+let match = matches.find(m=>m.id===matchId)
 
-let i = match.bench.indexOf(name)
+let i = match.squad.indexOf(name)
 
 if(i>-1){
+match.squad.splice(i,1)
 
-match.bench.splice(i,1)
+// 🔥 falls raus aus Kader → auch aus lineup/bench entfernen
+match.lineup = match.lineup.filter(p=>p!==name)
+match.bench = match.bench.filter(p=>p!==name)
 
 }else{
-
-if(match.bench.length>=3){
-alert("Maximal 3 Bankspieler")
-return
-}
-
-match.bench.push(name)
-
+match.squad.push(name)
 }
 
 save()
