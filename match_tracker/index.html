@@ -1256,6 +1256,34 @@ renderAll()
 
 }
 
+  function openPlayerModal(){
+
+if(!activeTeam){
+alert("Kein Team ausgewählt")
+return
+}
+
+openModal("Spieler hinzufügen","Name eingeben",(name)=>{
+
+if(!name) return
+
+let pos = prompt("Position (TW, IV, LV, RV, ZM, LM, RM, ST):","")
+
+if(!pos) return
+
+players.push({
+team:activeTeam,
+name:name,
+pos:pos
+})
+
+save()
+renderAll()
+
+})
+
+}
+
 let name = document.getElementById("teamName").value.trim()
 if(!name) return
 
