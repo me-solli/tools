@@ -207,30 +207,80 @@ white-space:nowrap;
 overflow:hidden;
 }
 
-.player-chip.pos-TW{background:#1e88e5}
-.player-chip.pos-IV,.player-chip.pos-LV,.player-chip.pos-RV{background:#6d4c41}
-.player-chip.pos-ZM,.player-chip.pos-LM,.player-chip.pos-RM{background:#8e24aa}
-.player-chip.pos-ST{background:#e53935}
-
-  .pitch-player.pos-TW{background:#1e88e5}
-.pitch-player.pos-IV,
-.pitch-player.pos-LV,
-.pitch-player.pos-RV{background:#6d4c41}
-.pitch-player.pos-ZM,
-.pitch-player.pos-LM,
-.pitch-player.pos-RM{background:#8e24aa}
-.pitch-player.pos-ST{background:#e53935}
-
-.player-chip.selected{
-outline:2px solid #ffd54f;
-box-shadow:0 0 6px rgba(255,213,79,.6);
-transform:scale(1.05)
+/* 🔥 PLAYER CHIP BASIS */
+.player-chip{
+background:#1f1f1f;
+color:#ddd;
+border:1px solid rgba(255,255,255,0.05);
 }
 
-  .player-chip:hover button{
+/* 🔥 DEZENTE POSITIONSFARBEN */
+
+/* TW */
+.player-chip.pos-TW{
+background:rgba(30,136,229,0.12);
+border-left:3px solid #1e88e5;
+}
+
+/* ABWEHR */
+.player-chip.pos-IV,
+.player-chip.pos-LV,
+.player-chip.pos-RV{
+background:rgba(109,76,65,0.12);
+border-left:3px solid #6d4c41;
+}
+
+/* MITTELFELD */
+.player-chip.pos-ZM,
+.player-chip.pos-LM,
+.player-chip.pos-RM{
+background:rgba(142,36,170,0.12);
+border-left:3px solid #8e24aa;
+}
+
+/* STURM */
+.player-chip.pos-ST{
+background:rgba(229,57,53,0.12);
+border-left:3px solid #e53935;
+}
+
+/* 🔥 PITCH GLEICHER STYLE */
+.pitch-player{
+background:#1f1f1f;
+border:1px solid rgba(255,255,255,0.05);
+}
+
+.pitch-player.pos-TW{border-left:3px solid #1e88e5}
+
+.pitch-player.pos-IV,
+.pitch-player.pos-LV,
+.pitch-player.pos-RV{
+border-left:3px solid #6d4c41;
+}
+
+.pitch-player.pos-ZM,
+.pitch-player.pos-LM,
+.pitch-player.pos-RM{
+border-left:3px solid #8e24aa;
+}
+
+.pitch-player.pos-ST{
+border-left:3px solid #e53935;
+}
+
+/* 🔥 SELECTED */
+.player-chip.selected{
+outline:2px solid #ffd54f;
+box-shadow:0 0 6px rgba(255,213,79,.4);
+transform:scale(1.03);
+}
+
+/* 🔥 HOVER ACTION BUTTONS */
+.player-chip:hover button{
 opacity:1;
 }
 
+/* 🔥 BUTTON STYLE */
 .player-chip button{
 margin-left:4px;
 width:16px;
@@ -242,13 +292,11 @@ padding:0;
 font-size:9px;
 border-radius:4px;
 flex-shrink:0;
-
-/* 🔥 NEU */
 opacity:0;
 transition:.15s;
 }
 
-/* Edit (Stift) */
+/* Edit */
 .player-chip button:first-of-type{
 background:#ffd54f;
 color:#000;
