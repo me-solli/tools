@@ -193,18 +193,30 @@ border-radius:10px;
 background:#202020;
 }
 
-/* 🔥 PLAYER CHIP BASIS */
-/* 🔥 RUNEN STYLE */
+/* 🔥 PLAYER CHIP – GAME STYLE (FINAL) */
 .player-chip{
-background:linear-gradient(90deg, rgba(255,255,255,0.03), transparent);
-color:#ddd;
-border:1px solid rgba(255,255,255,0.06);
+display:flex;
+align-items:center;
+justify-content:space-between;
+
+background:#2a2a2a;
+color:#eee;
+
+padding:5px 7px;
+border-radius:6px;
+margin:3px 0;
+font-size:11px;
+cursor:pointer;
+
+transition:.15s;
 
 position:relative;
 overflow:hidden;
+
+white-space:nowrap;
 }
 
-/* 🔥 EDGE / RUNE LINE */
+/* 🔥 SUBTILE EDGE */
 .player-chip::before{
 content:"";
 position:absolute;
@@ -212,42 +224,40 @@ left:0;
 top:0;
 bottom:0;
 width:2px;
-background:linear-gradient(to bottom, transparent, rgba(255,255,255,0.2), transparent);
+background:rgba(255,255,255,0.15);
+opacity:.4;
 }
 
-/* 🔥 HOVER FEELING */
+/* 🔥 HOVER */
 .player-chip:hover{
-background:linear-gradient(90deg, rgba(255,255,255,0.06), transparent);
+transform:scale(1.03);
+filter:brightness(1.1);
 }
 
-/* 🔥 DEZENTE POSITIONSFARBEN */
+/* 🔥 POS COLORS (WIE PITCH) */
 
 /* TW */
 .player-chip.pos-TW{
-background:rgba(30,136,229,0.12);
-border-left:3px solid #1e88e5;
+background:#1e88e5;
 }
 
-/* ABWEHR */
+/* DEF */
 .player-chip.pos-IV,
 .player-chip.pos-LV,
 .player-chip.pos-RV{
-background:rgba(109,76,65,0.12);
-border-left:3px solid #6d4c41;
+background:#6d4c41;
 }
 
-/* MITTELFELD */
+/* MID */
 .player-chip.pos-ZM,
 .player-chip.pos-LM,
 .player-chip.pos-RM{
-background:rgba(142,36,170,0.12);
-border-left:3px solid #8e24aa;
+background:#8e24aa;
 }
 
-/* STURM */
+/* ST */
 .player-chip.pos-ST{
-background:rgba(229,57,53,0.12);
-border-left:3px solid #e53935;
+background:#e53935;
 }
 
 /* 🔥 PITCH GLEICHER STYLE */
