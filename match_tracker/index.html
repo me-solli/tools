@@ -1578,6 +1578,30 @@ renderMatches()
 
 }
 
+  function toggleBench(matchId,name){
+
+let match = matches.find(m=>m.id===matchId)
+
+let i = match.bench.indexOf(name)
+
+if(i>-1){
+
+match.bench.splice(i,1)
+
+}else{
+
+match.bench.push(name)
+
+// aus Startelf entfernen
+match.lineup = match.lineup.filter(p=>p!==name)
+
+}
+
+save()
+renderMatches()
+
+}
+
 function toggleSquad(matchId,name){
 
 let match = matches.find(m=>m.id===matchId)
