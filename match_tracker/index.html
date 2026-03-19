@@ -1901,6 +1901,8 @@ matches
 .filter(m=>m.team===activeTeam)
 .forEach(match=>{
 
+if(!match.squad) match.squad = []
+
 let goals = match.events.filter(e=>e.type==="goal").length
 let against = match.events.filter(e=>e.type==="goalAgainst").length
 
