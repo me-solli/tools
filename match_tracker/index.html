@@ -1384,7 +1384,20 @@ let red = 0
 matches
 .filter(m=>m.team===activeTeam && m.events.length > 0)
 .forEach(m=>{
-goals += m.events.filter(e=>e.type==="goal").length
+
+let g = m.events.filter(e=>e.type==="goal").length
+let a = m.events.filter(e=>e.type==="goalAgainst").length
+
+goals += g
+againstTotal += a
+
+yellow += m.events.filter(e=>e.type==="yellow").length
+red += m.events.filter(e=>e.type==="red").length
+
+// Punkte berechnen
+if(g > a) points += 3
+else if(g === a) points += 1
+
 })
 
 document.getElementById("topWins").innerText =
