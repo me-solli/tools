@@ -1457,7 +1457,10 @@ let order = ["TW","IV","LV","RV","ZM","LM","RM","ST"]
 
 players
 .filter(p=>p.team===activeTeam)
-.sort((a,b)=>order.indexOf(a.pos)-order.indexOf(b.pos))
+.sort((a, b) => {
+  return (order.indexOf(a.pos) === -1 ? 99 : order.indexOf(a.pos)) 
+       - (order.indexOf(b.pos) === -1 ? 99 : order.indexOf(b.pos))
+})
 .forEach((p)=>{
 
 html+=`
