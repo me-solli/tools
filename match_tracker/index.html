@@ -766,16 +766,23 @@ max-height 0.35s ease;
 
 /* BODY ANIMATION */
 .match-body{
-opacity:0;
-transform:translateY(-8px);
-transition:all 0.25s ease;
-pointer-events:none;
+display:none;
 }
 
 .match-body.open{
+display:block;
+animation:fadeSlide 0.25s ease;
+}
+
+  @keyframes fadeSlide{
+from{
+opacity:0;
+transform:translateY(-6px);
+}
+to{
 opacity:1;
 transform:translateY(0);
-pointer-events:auto;
+}
 }
 
 .hidden{display:none}
