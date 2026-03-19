@@ -2011,7 +2011,7 @@ onclick='toggleLineup(${match.id}, ${JSON.stringify(p.name)})'>
 html+=`<div class="section-title">Bank wählen</div>`
 
 players
-.filter(p=>p.team===activeTeam && !match.lineup.includes(p.name))
+.filter(p=>p.team===activeTeam && match.squad?.includes(p.name) && !match.lineup.includes(p.name))
 .sort((a,b)=>order.indexOf(a.pos)-order.indexOf(b.pos))
 .forEach(p=>{
 
