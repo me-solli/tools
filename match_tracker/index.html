@@ -2029,7 +2029,16 @@ return p.team===activeTeam
 && (match.squad?.length ? match.squad.includes(p.name) : true)
 && !match.bench.includes(p.name)
 })
-.sort((a,b)=>order.indexOf(a.pos)-order.indexOf(b.pos))
+.sort((a, b) => {
+  const group = {
+    TW: 1,
+    IV: 2, LV: 2, RV: 2,
+    ZM: 3, LM: 3, RM: 3,
+    ST: 4
+  }
+
+  return (group[a.pos] || 99) - (group[b.pos] || 99)
+})
 .forEach(p=>{
 
 let active = match.lineup.includes(p.name)?"selected":""
