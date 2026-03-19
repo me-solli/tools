@@ -1874,8 +1874,8 @@ let mid3 = rm || remainingMids.shift()
   
 let strs = teamPlayers.filter(p => p.pos === "ST")
 
-let st1 = strs[0]
-let st2 = strs[1]
+let st1 = strs[0] || null
+let st2 = strs[1] || null
 
 function row(players){
 
