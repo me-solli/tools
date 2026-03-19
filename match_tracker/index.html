@@ -1379,6 +1379,9 @@ matches
 goals += m.events.filter(e=>e.type==="goal").length
 })
 
+document.getElementById("topWins").innerText =
+"🏆 " + wins
+
 document.getElementById("topMatches").innerText =
 "📊 " + matchCount
 
