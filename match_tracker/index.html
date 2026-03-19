@@ -2366,6 +2366,52 @@ alert("Spielbericht kopiert")
 
 }
 
+  function copySquad(matchId){
+
+let match = matches.find(m=>m.id===matchId)
+if(!match) return
+
+let text = "📑 Kader\n\n"
+
+text += activeTeam + " – " + match.opponent + "\n"
+text += "🗓 " + formatDate(match.date)
+
+if(match.time){
+text += "  🕒 " + match.time
+}
+
+text += "\n\n────────────\n"
+
+// 🔥 NUR KADER (ohne Startelf/Bank!)
+let squadList = match.squad?.length 
+  ? match.squad 
+  : players
+      .filter(p=>p.team===activeTeam)
+      .map(p=>p.name)
+
+// 🔥 nach Position sortieren (wie UI)
+const order = ["TW","IV","LV","RV","ZM","LM","RM","ST"]
+
+let sorted = squadList
+.map(name => players.find(p=>p.name===name))
+.filter(Boolean)
+.sort((a,b)=>{
+return (order.indexOf(a.pos) === -1 ? 99 : order.indexOf(a.pos)) 
+     - (order.indexOf(b.pos) === -1 ? 99 : order.indexOf(b.pos))
+})
+
+text += "👥 Kader\n"
+
+sorted.forEach(p=>{
+text += `${p.pos} ${p.name}\n`
+})
+
+// 🔥 COPY
+navigator.clipboard.writeText(text)
+
+showToast("📑 Kader kopiert","info")
+}
+
 /* ========================= */
 
 function renderAll(){
