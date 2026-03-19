@@ -1362,6 +1362,15 @@ let matchCount = matches
 .filter(m=>m.team===activeTeam && m.events.length > 0)
 .length
 
+  let wins = matches.filter(m=>{
+  if(m.team !== activeTeam || m.events.length === 0) return false
+
+  let g = m.events.filter(e=>e.type==="goal").length
+  let a = m.events.filter(e=>e.type==="goalAgainst").length
+
+  return g > a
+}).length
+
 let goals = 0
 
 matches
