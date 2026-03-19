@@ -1355,20 +1355,6 @@ document.getElementById("teamList").innerHTML=html
 PLAYERS
 ========================= */
 
-if(!activeTeam) return
-
-players.push({
-team:activeTeam,
-name:playerName.value,
-pos:playerPosition.value
-})
-
-playerName.value=""
-save()
-renderAll()
-
-}
-
 function deletePlayer(name){
 
 players = players.filter(p=>p.name!==name)
