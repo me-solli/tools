@@ -1966,6 +1966,25 @@ onclick="event.stopPropagation();deleteMatch(${match.id})">
 
 <div class="match-body ${match.open ? 'open' : ''}">
 
+<div class="section-title">Kader (Spieler im Spiel)</div>
+`
+
+players
+.filter(p=>p.team===activeTeam)
+.forEach(p=>{
+
+let active = match.squad?.includes(p.name) ? "selected" : ""
+
+html+=`
+<span class="player-chip small pos-${p.pos} ${active}"
+onclick='toggleSquad(${match.id}, ${JSON.stringify(p.name)})'>
+
+<span class="pos">${p.pos}</span>${p.name}
+
+</span>
+`
+})
+
 <div class="section-title">Startelf</div>
 `
 
