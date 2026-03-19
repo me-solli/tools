@@ -897,6 +897,18 @@ background:#2a2a2a;
 color:#fff;
 }
 
+ .player-chip::after{
+content:"";
+position:absolute;
+top:0;
+right:0;
+width:6px;
+height:6px;
+background:rgba(255,255,255,0.2);
+clip-path:polygon(100% 0, 0 0, 100% 100%);
+opacity:.4;
+} 
+
 .hidden{display:none}
 
 </style>
