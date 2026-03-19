@@ -1503,19 +1503,28 @@ matches.push({
 id:Date.now(),
 team:activeTeam,
 date:date.value,
-  time:time.value,
+time:time.value,
 opponent:opponent.value,
 mode:mode.value,
 lineup:[],
 bench:[],
 events:[],
-  twOverride:null,
+twOverride:null,
 open:false
 
 })
 
 save()
 renderAll()
+
+// 🔥 NEU: Inputs leeren
+date.value = ""
+time.value = ""
+opponent.value = ""
+mode.value = "7"
+
+// 🔥 NEU: Feedback
+showToast("Spiel erstellt ✅","info")
 
 }
 
