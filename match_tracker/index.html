@@ -1967,8 +1967,9 @@ onclick="event.stopPropagation();deleteMatch(${match.id})">
 </div>
 
 <div class="match-body ${match.open ? 'open' : ''}">
-
-<div class="section-title">Kader (Spieler im Spiel)</div>
+html+=`<div class="section-title">
+Kader (${match.squad?.length || 0} Spieler)
+</div>`
 `
 
 players
