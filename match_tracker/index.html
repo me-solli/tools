@@ -2505,10 +2505,22 @@ if(!match) return
 let text = "📑 Kader\n\n"
 
 text += activeTeam + " – " + match.opponent + "\n"
+
+// 🏠 / 🚗
+let place = match.homeAway === "away" ? "🚗 Auswärts" : "🏠 Heim"
+
 text += "🗓 " + formatDate(match.date)
 
 if(match.time){
 text += "  🕒 " + match.time
+}
+
+// 🔥 NEU: Heim/Auswärts
+text += "  " + place
+
+// 🔥 NEU: Spielort
+if(match.location){
+text += "  📍 " + match.location
 }
 
 text += "\n\n────────────\n"
