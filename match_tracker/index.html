@@ -811,6 +811,17 @@ margin-left:auto;
 <h2>Top Scorer</h2>
 <div id="scorerRanking"></div>
 </div> <!-- main -->
+
+  <div class="panel" style="opacity:.7">
+<h3 style="font-size:13px;margin-bottom:8px">Tools</h3>
+
+<button onclick="exportBackup()">💾 Backup</button>
+<button class="secondary" onclick="document.getElementById('importFile').click()">📂 Laden</button>
+<button class="secondary" onclick="forceSyncToServer()">☁️ Sync</button>
+
+<input type="file" id="importFile" hidden>
+</div>
+  
 </div>
 
 <script>
