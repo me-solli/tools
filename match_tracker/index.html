@@ -7,60 +7,6 @@
 
 <style>
 
-  .hero-banner{
-  position:relative;
-  border-radius:16px;
-  margin-bottom:20px;
-  overflow:hidden;
-
-  background:
-    radial-gradient(circle at 20% 30%, rgba(58,124,255,0.25), transparent 60%),
-    radial-gradient(circle at 80% 70%, rgba(47,158,68,0.25), transparent 60%),
-    linear-gradient(135deg, #141414, #1b1b1b);
-
-  border:1px solid rgba(255,255,255,0.05);
-  box-shadow:0 15px 40px rgba(0,0,0,0.6);
-}
-
-.hero-content{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:22px 26px;
-}
-
-.hero-title{
-  font-size:28px;
-  font-weight:800;
-  letter-spacing:1px;
-}
-
-.hero-sub{
-  font-size:13px;
-  opacity:.6;
-  margin-top:4px;
-}
-
-.hero-right{
-  display:flex;
-  gap:20px;
-}
-
-.hero-stat{
-  text-align:center;
-}
-
-.hero-stat span{
-  font-size:20px;
-  font-weight:bold;
-  display:block;
-}
-
-.hero-stat small{
-  font-size:11px;
-  opacity:.6;
-}
-
 .topbar{
 position:sticky;
 top:0;
@@ -848,33 +794,6 @@ transform:translateY(0);
 <body>
 
   <div class="topbar">
-
-    <div class="hero-banner">
-  <div class="hero-content">
-
-    <div class="hero-left">
-      <div class="hero-title">MATCH TRACKER</div>
-      <div class="hero-sub">Spielverwaltung · Tore · Stats</div>
-    </div>
-
-    <div class="hero-right">
-      <div class="hero-stat">
-        <span id="heroTeam">–</span>
-        <small>Team</small>
-      </div>
-      <div class="hero-stat">
-        <span id="heroMatches">0</span>
-        <small>Spiele</small>
-      </div>
-      <div class="hero-stat">
-        <span id="heroGoals">0</span>
-        <small>Tore</small>
-      </div>
-    </div>
-
-  </div>
-</div>
-    
   <div class="topbar-left">
     ⚽ Match Tracker
   </div>
@@ -915,6 +834,7 @@ transform:translateY(0);
 </div>
 
 <div class="main">
+<h1>⚽ Match Tracker</h1>
 
   <div id="saveStatus" style="font-size:12px;opacity:.7;margin-top:-10px;margin-bottom:10px"></div>
 
@@ -1224,33 +1144,26 @@ renderAll()
 
 function renderTopbar(){
 
-  document.getElementById("topTeam").innerText =
-  activeTeam ? activeTeam : "Kein Team"
+document.getElementById("topTeam").innerText =
+activeTeam ? activeTeam : "Kein Team"
 
-  let matchCount = matches
-  .filter(m=>m.team===activeTeam && m.events.length > 0)
-  .length
+let matchCount = matches
+.filter(m=>m.team===activeTeam && m.events.length > 0)
+.length
 
-  let goals = 0
+let goals = 0
 
-  matches
-  .filter(m=>m.team===activeTeam && m.events.length > 0)
-  .forEach(m=>{
-    goals += m.events.filter(e=>e.type==="goal").length
-  })
+matches
+.filter(m=>m.team===activeTeam && m.events.length > 0)
+.forEach(m=>{
+goals += m.events.filter(e=>e.type==="goal").length
+})
 
-  document.getElementById("topMatches").innerText =
-  matchCount + " Spiele"
+document.getElementById("topMatches").innerText =
+matchCount + " Spiele"
 
-  document.getElementById("topGoals").innerText =
-  goals + " Tore"
-
-  // 🔥 HIER REIN (neu)
-  document.getElementById("heroTeam").innerText =
-  activeTeam ? activeTeam : "–"
-
-  document.getElementById("heroMatches").innerText = matchCount
-  document.getElementById("heroGoals").innerText = goals
+document.getElementById("topGoals").innerText =
+goals + " Tore"
 
 }
   
