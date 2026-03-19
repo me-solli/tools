@@ -1974,7 +1974,7 @@ let active = match.lineup.includes(p.name)?"selected":""
 
 html+=`
 <span class="player-chip small pos-${p.pos} ${active}"
-onclick="toggleLineup(${match.id},'${p.name}')">
+onclick='toggleLineup(${match.id}, ${JSON.stringify(p.name)})'>
 
 <span class="pos">${p.pos}</span>${p.name}
 
