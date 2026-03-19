@@ -742,15 +742,15 @@ min-width:70px;
 
 .match-sub{
 display:flex;
-justify-content:flex-end;
+justify-content:space-between;
 align-items:center;
-gap:12px;
+gap:10px;
 
 font-size:12px;
 opacity:.75;
 margin-top:8px;
 
-white-space:nowrap;
+flex-wrap:wrap; /* 🔥 erlaubt Umbruch */
 }
 
 .match:not(.open):hover{
