@@ -1991,7 +1991,7 @@ onclick='toggleSquad(${match.id}, ${JSON.stringify(p.name)})'>
 const order = ["TW","IV","LV","RV","ZM","LM","RM","ST"]
 
 players
-.filter(p=>p.team===activeTeam && !match.bench.includes(p.name))
+.filter(p=>p.team===activeTeam && match.squad?.includes(p.name) && !match.bench.includes(p.name))
 .sort((a,b)=>order.indexOf(a.pos)-order.indexOf(b.pos))
 .forEach(p=>{
 
