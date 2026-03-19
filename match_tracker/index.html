@@ -194,10 +194,30 @@ background:#202020;
 }
 
 /* 🔥 PLAYER CHIP BASIS */
+/* 🔥 RUNEN STYLE */
 .player-chip{
-background:#1f1f1f;
+background:linear-gradient(90deg, rgba(255,255,255,0.03), transparent);
 color:#ddd;
-border:1px solid rgba(255,255,255,0.05);
+border:1px solid rgba(255,255,255,0.06);
+
+position:relative;
+overflow:hidden;
+}
+
+/* 🔥 EDGE / RUNE LINE */
+.player-chip::before{
+content:"";
+position:absolute;
+left:0;
+top:0;
+bottom:0;
+width:2px;
+background:linear-gradient(to bottom, transparent, rgba(255,255,255,0.2), transparent);
+}
+
+/* 🔥 HOVER FEELING */
+.player-chip:hover{
+background:linear-gradient(90deg, rgba(255,255,255,0.06), transparent);
 }
 
 /* 🔥 DEZENTE POSITIONSFARBEN */
