@@ -1284,19 +1284,6 @@ renderAll()
 
 }
 
-let name = document.getElementById("teamName").value.trim()
-if(!name) return
-
-teams.push(name)
-activeTeam=name
-
-document.getElementById("teamName").value=""
-
-save()
-renderAll()
-
-}
-
 function selectTeam(name){
 
 activeTeam=name
