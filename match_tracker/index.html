@@ -2058,6 +2058,15 @@ ${goals} : ${against}
   <div class="match-meta">
 <span>${formatDate(match.date)}</span>
 <span>${match.time ? "🕒 "+match.time : ""}</span>
+
+<span>
+${match.homeAway === "away" ? "🚗" : "🏠"}
+</span>
+
+<span>
+${match.location ? "📍 " + match.location : ""}
+</span>
+
 <span>${match.lineup.length}/${match.mode}</span>
 <span style="color:${resultColor}">${resultText}</span>
 </div>
