@@ -2497,7 +2497,7 @@ alert("Spielbericht kopiert")
 
 }
 
-  function copySquad(matchId){
+function copySquad(matchId){
 
 let match = matches.find(m=>m.id===matchId)
 if(!match) return
@@ -2506,33 +2506,39 @@ let text = "📑 Kader\n\n"
 
 text += activeTeam + " – " + match.opponent + "\n"
 
-// 🏠 / 🚗
-let place = match.homeAway === "away" ? "🚗 Auswärtsspiel" : "🏠 Heimspiel"
+// 🔥 ALLES IN EINE SAUBERE ZEILE BAUEN
+let line = "🗓 " + formatDate(match.date)
 
-text += "🗓 " + formatDate(match.date)
-
+// Uhrzeit
 if(match.time){
-text += "  🕒 " + match.time
+line += "  🕒 " + match.time
 }
 
-// 🔥 NEU: Heim/Auswärts
-text += "  " + place
+// Heim / Auswärts
+let place = match.homeAway === "away"
+  ? "🚗 Auswärtsspiel"
+  : "🏠 Heimspiel"
 
-// 🔥 Spielort (robust)
+line += "  " + place
+
+// Spielort (robust)
 if(match.location && match.location.trim() !== ""){
-text += "  📍 " + match.location.trim()
+line += "  📍 " + match.location.trim()
 }
+
+// 👉 EINMAL anhängen
+text += line
 
 text += "\n\n────────────\n"
 
-// 🔥 NUR KADER (ohne Startelf/Bank!)
+// 🔥 KADER
 let squadList = match.squad?.length 
   ? match.squad 
   : players
       .filter(p=>p.team===activeTeam)
       .map(p=>p.name)
 
-// 🔥 nach Position sortieren (wie UI)
+// Sortierung
 const order = ["TW","IV","LV","RV","ZM","LM","RM","ST"]
 
 let sorted = squadList
@@ -2549,7 +2555,6 @@ sorted.forEach(p=>{
 text += `${p.pos} ${p.name}\n`
 })
 
-// 🔥 COPY
 navigator.clipboard.writeText(text)
 
 showToast("📑 Kader kopiert","info")
