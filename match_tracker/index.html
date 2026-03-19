@@ -1251,7 +1251,17 @@ reader.readAsText(file)
 TEAMS
 ========================= */
 
-function addTeam(){
+function addTeam(name){
+
+if(!name) return
+
+teams.push(name)
+activeTeam = name
+
+save()
+renderAll()
+
+}
 
 let name = document.getElementById("teamName").value.trim()
 if(!name) return
