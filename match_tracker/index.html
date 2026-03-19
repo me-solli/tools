@@ -1301,9 +1301,7 @@ function toggleMatch(id){
 let m = matches.find(x=>x.id===id)
 m.open=!m.open
 
-save()          // ← wichtig
-renderMatches()
-
+renderMatches()   // ❌ kein save mehr
 }
 
 function deleteMatch(id){
