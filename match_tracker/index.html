@@ -296,32 +296,48 @@ transform:scale(1.03);
 opacity:1;
 }
 
-/* 🔥 BUTTON STYLE */
+/* 🔥 BUTTON STYLE – CLEAN GAME LOOK */
 .player-chip button{
-margin-left:4px;
-width:16px;
-height:16px;
+margin-left:6px;
+width:18px;
+height:18px;
+
 display:flex;
 align-items:center;
 justify-content:center;
+
 padding:0;
-font-size:9px;
-border-radius:4px;
+font-size:10px;
+
+border-radius:5px;
 flex-shrink:0;
+
+/* 🔥 DEZENT STANDARD */
+background:rgba(255,255,255,0.06);
+color:#bbb;
+border:1px solid rgba(255,255,255,0.08);
+
 opacity:0;
 transition:.15s;
 }
 
-/* Edit */
-.player-chip button:first-of-type{
-background:#ffd54f;
-color:#000;
+/* 🔥 BEI HOVER SICHTBAR */
+.player-chip:hover button{
+opacity:1;
 }
 
-/* Delete (X) */
-.player-chip button:last-of-type{
-background:#c92a2a;
-color:#fff;
+/* ✏️ EDIT */
+.player-chip button:first-of-type:hover{
+background:rgba(255,213,79,0.2);
+color:#ffd54f;
+border-color:rgba(255,213,79,0.4);
+}
+
+/* ❌ DELETE */
+.player-chip button:last-of-type:hover{
+background:rgba(201,42,42,0.2);
+color:#ff4d4d;
+border-color:rgba(201,42,42,0.4);
 }
 
 .pos{
