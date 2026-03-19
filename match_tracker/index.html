@@ -757,6 +757,40 @@ gap:12px;
 margin-left:10px;
 }
 
+  /* 🔥 ANIMATION */
+.match{
+transition:
+transform 0.2s ease,
+box-shadow 0.2s ease,
+border-color 0.2s ease,
+max-height 0.35s ease;
+}
+
+/* geschlossen */
+.match{
+max-height:80px;
+overflow:hidden;
+}
+
+/* geöffnet */
+.match.open{
+max-height:1000px;
+}
+
+/* BODY ANIMATION */
+.match-body{
+opacity:0;
+transform:translateY(-8px);
+transition:all 0.25s ease;
+pointer-events:none;
+}
+
+.match-body.open{
+opacity:1;
+transform:translateY(0);
+pointer-events:auto;
+}
+
 .hidden{display:none}
 
 </style>
