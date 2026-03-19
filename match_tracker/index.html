@@ -1929,7 +1929,14 @@ let st2 = strs[1] || null
 
 function row(players){
 
-let html = players.map(p => cell(p)).join("")
+// 🔥 null entfernen
+let clean = players.filter(p => p)
+
+// 🔥 wenn leer → nichts anzeigen
+if(clean.length === 0) return ""
+
+// 🔥 normal rendern
+let html = clean.map(p => cell(p)).join("")
 
 return `<div class='pitch-row'>${html}</div>`
 }
