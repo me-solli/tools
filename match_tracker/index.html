@@ -2518,9 +2518,9 @@ text += "  🕒 " + match.time
 // 🔥 NEU: Heim/Auswärts
 text += "  " + place
 
-// 🔥 NEU: Spielort
-if(match.location){
-text += "  📍 " + match.location
+// 🔥 Spielort (robust)
+if(match.location && match.location.trim() !== ""){
+text += "  📍 " + match.location.trim()
 }
 
 text += "\n\n────────────\n"
