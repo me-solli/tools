@@ -1653,14 +1653,15 @@ if(!activeTeam) return
 
 matches.push({
 
-id:Date.now(),
-team:activeTeam,
-date:date.value,
-time:time.value,
-opponent:opponent.value,
-mode:mode.value,
+id: Date.now(),
+team: activeTeam,
 
-homeAway: homeAway.value,
+date: document.getElementById("date").value,
+time: document.getElementById("time").value,
+opponent: document.getElementById("opponent").value,
+mode: document.getElementById("mode").value,
+
+homeAway: document.getElementById("homeAway").value,
 location: document.getElementById("location").value.trim(),
 
 squad:[], 
