@@ -1945,10 +1945,19 @@ let html="<div class='pitch-wrap'>"
 
 html+="<div class='pitch'>"
 
-html+=row([st1,null,st2])
-html+=row([mid1,mid2,mid3])
-html+=row([def1,def2,def3])
-html+=`<div class='pitch-row'>${cell(gk)}</div>`
+// 🔥 STURM
+html += row([st1, st2])
+
+// 🔥 MITTELFELD
+html += row([mid1, mid2, mid3])
+
+// 🔥 VERTEIDIGUNG
+html += row([def1, def2, def3])
+
+// 🔥 TORWART
+if(gk){
+html += `<div class='pitch-row'>${cell(gk)}</div>`
+}
 
 html+="</div>"
 
