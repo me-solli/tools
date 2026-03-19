@@ -730,10 +730,15 @@ overflow:hidden;
 
 line-height:1.25;
 
-/* 🔥 HIER DER TRICK */
-text-align:right;
+/* 🔥 WICHTIG */
+text-align:left;
+
+/* 🔥 verhindert "nach rechts gedrückt werden" */
+margin-left:0;
+margin-right:0;
+
+/* 🔥 optional max width */
 max-width:220px;
-margin-left:auto;
 }
 
 .hidden{display:none}
