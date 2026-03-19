@@ -2005,6 +2005,16 @@ Kader (${match.squad?.length || 0} Spieler)
 
 players
 .filter(p=>p.team===activeTeam)
+.sort((a, b) => {
+  const group = {
+    TW: 1,
+    IV: 2, LV: 2, RV: 2,
+    ZM: 3, LM: 3, RM: 3,
+    ST: 4
+  }
+
+  return (group[a.pos] || 99) - (group[b.pos] || 99)
+})
 .forEach(p=>{
 
 let active = match.squad?.includes(p.name) ? "selected" : ""
