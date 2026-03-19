@@ -1341,8 +1341,10 @@ teams.forEach(t=>{
 let cls = t===activeTeam ? "team-chip active" : "team-chip"
 
 html+=`
-<span class="${cls}" onclick="selectTeam('${t}')">${t}</span>
-<button class="secondary" onclick="deleteTeam('${t}')">🗑</button>
+<div class="team-row">
+  <span class="${cls}" onclick="selectTeam(${JSON.stringify(t)})">${t}</span>
+  <button onclick="deleteTeam(${JSON.stringify(t)})">🗑</button>
+</div>
 `
 
 })
