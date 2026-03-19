@@ -1994,7 +1994,7 @@ let active = match.bench.includes(p.name)?"selected":""
 
 html+=`
 <span class="player-chip small pos-${p.pos} ${active}"
-onclick="toggleBench(${match.id},'${p.name}')">
+onclick='toggleBench(${match.id}, ${JSON.stringify(p.name)})'>
 
 <span class="pos">${p.pos}</span>${p.name}
 
