@@ -1993,7 +1993,12 @@ html+=`<div class="section-title">Startelf</div>`
 const order = ["TW","IV","LV","RV","ZM","LM","RM","ST"]
 
 players
-.filter(p=>p.team===activeTeam && match.squad?.includes(p.name) && !match.bench.includes(p.name))
+players
+.filter(p=>{
+return p.team===activeTeam
+&& (match.squad?.length ? match.squad.includes(p.name) : true)
+&& !match.bench.includes(p.name)
+})
 .sort((a,b)=>order.indexOf(a.pos)-order.indexOf(b.pos))
 .forEach(p=>{
 
