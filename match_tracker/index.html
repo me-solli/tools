@@ -1224,26 +1224,33 @@ renderAll()
 
 function renderTopbar(){
 
-document.getElementById("topTeam").innerText =
-activeTeam ? activeTeam : "Kein Team"
+  document.getElementById("topTeam").innerText =
+  activeTeam ? activeTeam : "Kein Team"
 
-let matchCount = matches
-.filter(m=>m.team===activeTeam && m.events.length > 0)
-.length
+  let matchCount = matches
+  .filter(m=>m.team===activeTeam && m.events.length > 0)
+  .length
 
-let goals = 0
+  let goals = 0
 
-matches
-.filter(m=>m.team===activeTeam && m.events.length > 0)
-.forEach(m=>{
-goals += m.events.filter(e=>e.type==="goal").length
-})
+  matches
+  .filter(m=>m.team===activeTeam && m.events.length > 0)
+  .forEach(m=>{
+    goals += m.events.filter(e=>e.type==="goal").length
+  })
 
-document.getElementById("topMatches").innerText =
-matchCount + " Spiele"
+  document.getElementById("topMatches").innerText =
+  matchCount + " Spiele"
 
-document.getElementById("topGoals").innerText =
-goals + " Tore"
+  document.getElementById("topGoals").innerText =
+  goals + " Tore"
+
+  // 🔥 HIER REIN (neu)
+  document.getElementById("heroTeam").innerText =
+  activeTeam ? activeTeam : "–"
+
+  document.getElementById("heroMatches").innerText = matchCount
+  document.getElementById("heroGoals").innerText = goals
 
 }
   
