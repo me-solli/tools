@@ -1550,6 +1550,32 @@ renderAll()
 
 function toggleLineup(matchId,name){
 
+  function toggleBench(matchId,name){
+
+let match = matches.find(m=>m.id===matchId)
+
+let i = match.bench.indexOf(name)
+
+if(i>-1){
+
+// raus aus Bank
+match.bench.splice(i,1)
+
+}else{
+
+// rein in Bank
+match.bench.push(name)
+
+// 🔥 wichtig: nicht doppelt (aus Startelf entfernen)
+match.lineup = match.lineup.filter(p=>p!==name)
+
+}
+
+save()
+renderMatches()
+
+}
+
 let match = matches.find(m=>m.id===matchId)
 let max = match.mode=="7"?7:11
 
