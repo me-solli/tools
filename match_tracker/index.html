@@ -1578,7 +1578,9 @@ function loadFromServer(){
       teams = data.teams || []
       players = data.players || []
       matches = data.matches || []
-      matches.forEach(m => m.open = false)
+      matches.forEach(m => {
+  if(m.open === undefined) m.open = false
+})
       activeTeam = data.activeTeam || teams[0] || null
 
       renderAll()
