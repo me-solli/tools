@@ -1953,12 +1953,14 @@ renderMatches()   // ❌ kein save mehr
 
 function deleteMatch(id){
 
-if(!confirm("Spiel löschen?")) return
+confirmDeleteAction(()=>{
 
 matches = matches.filter(m=>m.id!==id)
 
 save()
 renderAll()
+
+})
 
 }
 
