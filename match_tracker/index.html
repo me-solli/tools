@@ -2101,64 +2101,59 @@ return p[2]+"-"+p[1]+"-"+p[0]
 function createMatch(){
 
   let date = document.getElementById("date").value
-let opponent = document.getElementById("opponent").value.trim()
+  let opponent = document.getElementById("opponent").value.trim()
 
-if(!activeTeam){
-  showToast("⚠️ Kein Team ausgewählt","info")
-  return
-}
+  // 🔐 Team prüfen
+  if(!activeTeam){
+    showToast("⚠️ Kein Team ausgewählt","info")
+    return
+  }
 
-if(!date || !opponent){
-  showToast("⚠️ Datum & Gegner fehlen","info")
-  return
-}
+  // 📅 Eingaben prüfen
+  if(!date || !opponent){
+    showToast("⚠️ Datum & Gegner fehlen","info")
+    return
+  }
 
-if(!activeTeam) return
+  // ✅ Spiel erstellen
+  matches.push({
 
-matches.push({
+    id: Date.now(),
+    team: activeTeam,
 
-id: Date.now(),
-team: activeTeam,
+    date: date,
+    time: document.getElementById("time").value,
+    opponent: opponent,
+    mode: document.getElementById("mode").value,
 
-date: document.getElementById("date").value,
-time: document.getElementById("time").value,
-opponent: document.getElementById("opponent").value,
-mode: document.getElementById("mode").value,
+    homeAway: document.getElementById("homeAway").value,
+    location: document.getElementById("location").value.trim(),
 
-homeAway: document.getElementById("homeAway").value,
-location: document.getElementById("location").value.trim(),
+    squad:[], 
+    lineup:[],
+    bench:[],
+    events:[],
+    twOverride:null,
+    open:false
 
-squad:[], 
-lineup:[],
-bench:[],
-events:[],
-twOverride:null,
-open:false
+  })
 
-})
+  save()
+  renderAll()
 
-save()
-renderAll()
+  // 🔄 Inputs reset
+  document.getElementById("date").value = ""
+  document.getElementById("time").value = ""
+  document.getElementById("opponent").value = ""
+  document.getElementById("mode").value = "7"
+  document.getElementById("homeAway").value = "home"
+  document.getElementById("location").value = ""
 
-// 🔥 NEU: Inputs leeren
-document.getElementById("date").value = ""
-document.getElementById("time").value = ""
-document.getElementById("opponent").value = ""
-document.getElementById("mode").value = "7"
-document.getElementById("homeAway").value = "home"
-document.getElementById("location").value = ""
+  // 🔒 Button wieder deaktivieren
+  validateMatchForm()
 
-// 🔥 NEU: Feedback
-showToast("Spiel erstellt ✅","info")
-
-}
-
-function toggleMatch(id){
-
-let m = matches.find(x=>x.id===id)
-m.open=!m.open
-
-renderMatches()   // ❌ kein save mehr
+  // 🔔 Feedback
+  showToast("Spiel erstellt ✅","info")
 }
 
 function deleteMatch(id){
