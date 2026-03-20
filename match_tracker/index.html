@@ -1582,6 +1582,7 @@ function loadFromServer(){
       activeTeam = data.activeTeam || teams[0] || null
 
       renderAll()
+ensureTeamAccessOnLoad()
     })
     .catch(() => {
       console.log("Server nicht erreichbar")
