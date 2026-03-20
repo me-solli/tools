@@ -1079,6 +1079,43 @@ overflow:hidden;
 text-overflow:ellipsis;
 }
 
+  .match-sub{
+display:flex;
+flex-direction:column;
+gap:4px;
+font-size:12px;
+opacity:.75;
+margin-top:8px;
+}
+
+/* obere Reihe */
+.meta-top{
+display:flex;
+gap:10px;
+align-items:center;
+}
+
+/* untere Reihe */
+.meta-bottom{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+}
+
+/* Location kürzen */
+.location{
+max-width:240px;
+overflow:hidden;
+text-overflow:ellipsis;
+white-space:nowrap;
+}
+
+/* rechte Seite fix */
+.meta-right{
+white-space:nowrap;
+}
+
 .hidden{display:none}
 
 </style>
