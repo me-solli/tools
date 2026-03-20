@@ -2188,18 +2188,18 @@ ${goals} : ${against}
     <span>${formatDate(match.date)}</span>
     <span>${match.time ? "🕒 "+match.time : ""}</span>
     <span>${match.homeAway === "away" ? "🚗" : "🏠"}</span>
-  </div>
-
-  <div class="meta-bottom">
-    <span class="location">
-      ${match.location ? "📍 " + match.location : ""}
-    </span>
 
     <span class="meta-right">
       ${match.lineup.length}/${match.mode} · 
       <span style="color:${resultColor}">${resultText}</span>
     </span>
   </div>
+
+  ${match.location ? `
+  <div class="location">
+    📍 ${match.location}
+  </div>
+  ` : ""}
 
 </div>
 
