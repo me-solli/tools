@@ -1440,6 +1440,50 @@ cb(value)
 
 }
 
+  function confirmDeleteAction(callback){
+
+let modal = document.getElementById("modal")
+let box = modal.querySelector(".modal-box")
+
+box.innerHTML = `
+<h3 style="grid-column:1/-1">Löschen bestätigen</h3>
+
+<input id="modalInput" placeholder="LÖSCHEN eingeben" style="grid-column:1/-1">
+
+<button class="danger" onclick="confirmDeleteModal()">Löschen</button>
+<button onclick="closeModal()">Abbrechen</button>
+`
+
+modalCallback = callback
+
+modal.classList.remove("hidden")
+
+setTimeout(()=>{
+document.getElementById("modalInput").focus()
+},50)
+
+}
+
+function confirmDeleteModal(){
+
+let value = document.getElementById("modalInput").value
+
+if(value.trim().toUpperCase() !== "LÖSCHEN"){
+alert("Falsche Eingabe ❌")
+return
+}
+
+let cb = modalCallback
+modalCallback = null
+
+closeModal()
+
+setTimeout(()=>{
+cb()
+},50)
+
+}
+
 /* ========================= */
 
 let data = {
