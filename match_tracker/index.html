@@ -1747,6 +1747,46 @@ renderAll()
 
 let accessCache = {}
 
+  function ensureTeamAccessOnLoad(){
+
+  if(!activeTeam) return
+
+  if(accessCache[activeTeam]) return
+
+  let pw = prompt("🔐 Passwort für " + activeTeam)
+
+  if(!pw){
+    activeTeam = null
+    renderAll()
+    return
+  }
+
+  fetch(API + "/check-team-access", {
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body: JSON.stringify({
+      team:activeTeam,
+      password:pw
+    })
+  })
+  .then(res=>res.json())
+  .then(data=>{
+
+    if(!data.ok){
+      alert("❌ Kein Zugriff")
+      activeTeam = null
+      renderAll()
+      return
+    }
+
+    accessCache[activeTeam] = true
+    renderAll()
+
+  })
+}
+
 function selectTeam(name){
 
   if(accessCache[name]){
