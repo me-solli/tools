@@ -1656,9 +1656,20 @@ teams.forEach(t=>{
 let cls = t===activeTeam ? "team-chip active" : "team-chip"
 
 html+=`
-<div class="team-row" onclick='selectTeam(${JSON.stringify(t)})'>
-  <span class="${cls}">${t}</span>
-  <button onclick='event.stopPropagation(); deleteTeam(${JSON.stringify(t)})'>🗑</button>
+<div class="team-row">
+
+  <div class="${cls} team-chip-full"
+       onclick='selectTeam(${JSON.stringify(t)})'>
+
+    <span class="team-name">${t}</span>
+
+    <button class="team-delete"
+      onclick='event.stopPropagation(); deleteTeam(${JSON.stringify(t)})'>
+      🗑
+    </button>
+
+  </div>
+
 </div>
 `
 
