@@ -12,7 +12,22 @@ app.use(cors())
 // JSON parsing
 app.use(express.json())
 
-const FILE = "/data/data.json"
+/* =========================
+📁 DATEI (AUTO CREATE)
+========================= */
+
+const FILE = path.join(__dirname, "data.json")
+
+// 🔥 Datei automatisch erstellen, wenn nicht vorhanden
+if (!fs.existsSync(FILE)) {
+  fs.writeFileSync(FILE, JSON.stringify({
+    teams: [],
+    players: [],
+    matches: [],
+    activeTeam: null
+  }, null, 2))
+  console.log("📁 data.json wurde erstellt")
+}
 
 /* =========================
 🔐 TEAM PASSWÖRTER (LIGHT SECURITY)
@@ -31,15 +46,6 @@ DATA ENDPOINTS
 // 👉 Daten abrufen
 app.get("/data", (req, res) => {
   try {
-    if (!fs.existsSync(FILE)) {
-      return res.json({
-        teams: [],
-        players: [],
-        matches: [],
-        activeTeam: null
-      })
-    }
-
     res.sendFile(FILE)
   } catch (err) {
     console.error("GET ERROR:", err)
@@ -67,12 +73,10 @@ app.post("/check-team-access", (req, res) => {
 
   const { team, password } = req.body
 
-  // kein Team angegeben
   if (!team) {
     return res.json({ ok: false })
   }
 
-  // Team hat Passwort → prüfen
   if (TEAM_PASSWORDS[team]) {
     if (TEAM_PASSWORDS[team] === password) {
       return res.json({ ok: true })
@@ -81,7 +85,7 @@ app.post("/check-team-access", (req, res) => {
     }
   }
 
-  // 🔥 wenn KEIN Passwort gesetzt → frei zugänglich
+  // 🔥 kein Passwort gesetzt → frei
   return res.json({ ok: true })
 })
 
@@ -94,7 +98,7 @@ app.get("/", (req, res) => {
   res.send("API läuft 🚀")
 })
 
-// 👉 Server starten (Railway Port!)
+// 👉 Server starten
 const PORT = process.env.PORT || 3000
 
 app.listen(PORT, () => {
