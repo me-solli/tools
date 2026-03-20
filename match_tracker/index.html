@@ -1831,38 +1831,51 @@ if(!p) return
 
 let oldName = p.name
 
-let newName = prompt("Neuer Name:", p.name)
-if(newName===null || newName.trim()==="") return
+openModal("Spieler bearbeiten","Name eingeben",(newName)=>{
 
-let newPos = prompt("Neue Position (TW, IV, LV, RV, ZM, LM, RM, ST):", p.pos)
-if(newPos===null || newPos.trim()==="") return
+if(!newName || newName.trim()==="") return
 
 newName = newName.trim()
+
+let newPos = prompt("Position (TW, IV, LV, RV, ZM, LM, RM, ST):", p.pos)
+if(!newPos || newPos.trim()==="") return
+
 newPos = newPos.trim()
 
-// Spieler aktualisieren
+// 🔥 EXTRA DELETE OPTION
+let del = confirm("Spieler löschen?\nOK = löschen | Abbrechen = speichern")
+
+if(del){
+confirmDeleteAction(()=>{
+
+players = players.filter(pl=>pl.name!==oldName)
+
+save()
+renderAll()
+
+})
+return
+}
+
+// 🔥 UPDATE
 p.name = newName
 p.pos = newPos
 
-// 🔥 ALLE MATCHES UPDATEN
+// Matches updaten
 matches.forEach(match=>{
-
-// Startelf
 match.lineup = match.lineup.map(n => n===oldName ? newName : n)
-
-// Bank
 match.bench = match.bench.map(n => n===oldName ? newName : n)
 
-// Events
 match.events.forEach(ev=>{
 if(ev.player===oldName) ev.player = newName
 if(ev.in===oldName) ev.in = newName
 })
-
 })
 
 save()
 renderAll()
+
+})
 
 }
 
