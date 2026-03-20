@@ -1261,6 +1261,41 @@ pointer-events:none;
   z-index:2;
 }
 
+  .player-menu{
+  position:absolute;
+  right:6px;
+  top:28px;
+
+  background:#1a1a1a;
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:8px;
+
+  box-shadow:0 8px 20px rgba(0,0,0,0.6);
+
+  display:flex;
+  flex-direction:column;
+
+  z-index:10;
+  overflow:hidden;
+}
+
+.player-menu button{
+  background:none;
+  border:none;
+  color:#ccc;
+
+  padding:6px 10px;
+  font-size:11px;
+
+  text-align:left;
+  justify-content:flex-start;
+}
+
+.player-menu button:hover{
+  background:#222;
+  color:#fff;
+}
+
 .hidden{display:none}
 
 </style>
