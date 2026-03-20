@@ -2100,6 +2100,19 @@ return p[2]+"-"+p[1]+"-"+p[0]
 
 function createMatch(){
 
+  let date = document.getElementById("date").value
+let opponent = document.getElementById("opponent").value.trim()
+
+if(!activeTeam){
+  showToast("⚠️ Kein Team ausgewählt","info")
+  return
+}
+
+if(!date || !opponent){
+  showToast("⚠️ Datum & Gegner fehlen","info")
+  return
+}
+
 if(!activeTeam) return
 
 matches.push({
