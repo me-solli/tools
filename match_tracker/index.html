@@ -1116,6 +1116,21 @@ margin-top:2px;
   padding:0 20px;
 }
 
+  body::before{
+content:"";
+position:fixed;
+inset:0;
+
+background:url("./img/bg_pitch_bw.png") center/cover no-repeat;
+
+transform:rotate(-6deg) scale(1.2);
+
+opacity:0.08;
+
+z-index:-1;
+pointer-events:none;
+}
+
 .hidden{display:none}
 
 </style>
