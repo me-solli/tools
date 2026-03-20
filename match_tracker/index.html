@@ -2336,10 +2336,10 @@ onclick="addEvent(${match.id},'penalty')">⏱ Zeitstrafe</button>
 onclick="addSubstitution(${match.id})">🔁 Wechsel</button>
 
 <button class="secondary"
-onclick="copyReport(${match.id})">📋 Bericht kopieren</button>
+onclick="copySquad(${match.id})">📑 Kader kopieren</button>
 
 <button class="secondary"
-onclick="copySquad(${match.id})">📑 Kader kopieren</button>
+onclick="copyReport(${match.id})">📋 Bericht kopieren</button>
 `
 
 match.events.sort((a,b)=>a.minute-b.minute)
