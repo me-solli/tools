@@ -1876,8 +1876,8 @@ html+=`
 </div>
 
 <div class="player-actions">
-<button onclick="editPlayer('${p.name}')">✏️</button>
-<button onclick="deletePlayer('${p.name}')">x</button>
+<button onclick="event.stopPropagation(); editPlayer('${p.name}')">✏️</button>
+<button onclick="event.stopPropagation(); deletePlayer('${p.name}')">🗑</button>
 </div>
 
 </div>
