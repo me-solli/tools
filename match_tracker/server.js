@@ -1,3 +1,4 @@
+```js
 const express = require("express")
 const fs = require("fs")
 const path = require("path")
@@ -12,6 +13,20 @@ app.use(cors())
 app.use(express.json())
 
 const FILE = "/data/data.json"
+
+/* =========================
+🔐 TEAM PASSWÖRTER (LIGHT SECURITY)
+========================= */
+
+const TEAM_PASSWORDS = {
+  "SV Riedmoos U10-II": "u10-2",
+  "SV Riedmoos U10-III": "u10-3",
+  "SV Testhausen :)": "test"
+}
+
+/* =========================
+DATA ENDPOINTS
+========================= */
 
 // 👉 Daten abrufen
 app.get("/data", (req, res) => {
@@ -44,7 +59,37 @@ app.post("/save", (req, res) => {
   }
 })
 
-// 👉 Health Check (nice to have)
+/* =========================
+🔐 TEAM ACCESS CHECK
+========================= */
+
+app.post("/check-team-access", (req, res) => {
+
+  const { team, password } = req.body
+
+  // kein Team angegeben
+  if (!team) {
+    return res.json({ ok: false })
+  }
+
+  // Team hat Passwort → prüfen
+  if (TEAM_PASSWORDS[team]) {
+    if (TEAM_PASSWORDS[team] === password) {
+      return res.json({ ok: true })
+    } else {
+      return res.json({ ok: false })
+    }
+  }
+
+  // 🔥 wenn KEIN Passwort gesetzt → frei zugänglich
+  return res.json({ ok: true })
+})
+
+/* =========================
+SYSTEM
+========================= */
+
+// 👉 Health Check
 app.get("/", (req, res) => {
   res.send("API läuft 🚀")
 })
@@ -55,3 +100,4 @@ const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
   console.log("Server läuft auf Port " + PORT)
 })
+```
