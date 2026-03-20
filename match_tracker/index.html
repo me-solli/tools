@@ -1685,7 +1685,7 @@ renderAll()
 
 function deleteTeam(name){
 
-if(!confirm("Team löschen?")) return
+confirmDeleteAction(()=>{
 
 teams = teams.filter(t=>t!==name)
 players = players.filter(p=>p.team!==name)
@@ -1695,6 +1695,8 @@ activeTeam = teams[0] || null
 
 save()
 renderAll()
+
+})
 
 }
 
