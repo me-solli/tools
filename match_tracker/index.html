@@ -1179,6 +1179,56 @@ pointer-events:none;
   color:#fff;
 }
 
+  .team-chip-full{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:8px 10px; /* passt zu deinem Style */
+  border-radius:10px;
+
+  position:relative;
+}
+
+/* Name */
+.team-chip-full .team-name{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+/* Delete Button (wie Player!) */
+.team-delete{
+  opacity:0;
+
+  width:18px;
+  height:18px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:5px;
+
+  background:rgba(255,255,255,0.06);
+  color:#bbb;
+  border:1px solid rgba(255,255,255,0.08);
+
+  transition:.15s;
+}
+
+/* erscheint bei hover */
+.team-chip-full:hover .team-delete{
+  opacity:1;
+}
+
+/* hover style wie player */
+.team-delete:hover{
+  background:rgba(201,42,42,0.2);
+  color:#ff4d4d;
+}
+
 .hidden{display:none}
 
 </style>
