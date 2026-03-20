@@ -1,4 +1,3 @@
-```js
 const express = require("express")
 const fs = require("fs")
 const path = require("path")
@@ -104,4 +103,3 @@ const PORT = process.env.PORT || 3000
 app.listen(PORT, () => {
   console.log("Server läuft auf Port " + PORT)
 })
-```
