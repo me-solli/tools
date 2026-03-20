@@ -1744,12 +1744,46 @@ renderAll()
 
 }
 
+let accessCache = {}
+
 function selectTeam(name){
 
-activeTeam=name
-save()
-renderAll()
+  if(accessCache[name]){
+    activeTeam = name
+    save()
+    renderAll()
+    return
+  }
 
+  let pw = prompt("🔐 Passwort für " + name)
+
+  if(!pw) return
+
+  fetch(API + "/check-team-access", {
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body: JSON.stringify({
+      team:name,
+      password:pw
+    })
+  })
+  .then(res=>res.json())
+  .then(data=>{
+
+    if(!data.ok){
+      alert("❌ Falsches Passwort")
+      return
+    }
+
+    accessCache[name] = true
+
+    activeTeam = name
+    save()
+    renderAll()
+
+  })
 }
 
 function deleteTeam(name){
