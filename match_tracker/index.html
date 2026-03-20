@@ -788,7 +788,8 @@ box-shadow: 0 10px 30px rgba(255,255,255,0.08);
   gap:6px;
   overflow:hidden;
 
-  padding-right:48px;
+  flex:1;                /* 🔥 nimmt verfügbaren Platz */
+  min-width:0;           /* 🔥 wichtig für ellipsis */
 }
 
 .player-name{
