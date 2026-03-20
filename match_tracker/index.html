@@ -2171,6 +2171,20 @@ renderAll()
 
 }
 
+  function toggleMatch(id){
+
+  matches.forEach(m => {
+    if(m.id === id){
+      m.open = !m.open
+    }else{
+      m.open = false
+    }
+  })
+
+  save()
+  renderMatches()
+}
+
 function toggleLineup(matchId,name){
 
 let match = matches.find(m=>m.id===matchId)
