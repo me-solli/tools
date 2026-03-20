@@ -1046,23 +1046,25 @@ align-items:center;
 margin-top:6px;
 }
 
-  .match-sub{
+.match-sub{
 display:flex;
 flex-direction:column;
 gap:4px;
-font-size:12px;
+font-size:11px;
 opacity:.75;
 margin-top:8px;
 }
 
-/* obere Reihe */
 .meta-top{
 display:flex;
 gap:10px;
 align-items:center;
 }
 
-/* untere Reihe */
+.meta-top span{
+white-space:nowrap;
+}
+
 .meta-bottom{
 display:flex;
 justify-content:space-between;
@@ -1070,17 +1072,18 @@ align-items:center;
 gap:10px;
 }
 
-/* Location kürzen */
 .location{
-max-width:240px;
+max-width:220px;
 overflow:hidden;
 text-overflow:ellipsis;
 white-space:nowrap;
+font-size:10px;
+opacity:.85;
 }
 
-/* rechte Seite fix */
 .meta-right{
 white-space:nowrap;
+font-size:10px;
 }
 
   .match-sub{
