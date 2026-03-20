@@ -15,7 +15,7 @@ app.use(express.json())
 📁 DATEI (AUTO CREATE)
 ========================= */
 
-const FILE = path.join(__dirname, "data.json")
+const FILE = "/data/data.json"
 
 // 🔥 Datei automatisch erstellen, wenn nicht vorhanden
 if (!fs.existsSync(FILE)) {
