@@ -1949,6 +1949,43 @@ document.getElementById("playerList").innerHTML=html
 
 }
 
+  let openMenu = null
+
+function togglePlayerMenu(e, name){
+
+  e.stopPropagation()
+
+  // altes Menü schließen
+  closePlayerMenu()
+
+  let btn = e.currentTarget
+
+  let menu = document.createElement("div")
+  menu.className = "player-menu"
+
+  menu.innerHTML = `
+    <button onclick='editPlayer(${JSON.stringify(name)})'>✏️ Bearbeiten</button>
+    <button onclick='deletePlayer(${JSON.stringify(name)})'>🗑 Löschen</button>
+  `
+
+  btn.parentElement.appendChild(menu)
+
+  openMenu = menu
+
+  // Klick außerhalb schließt Menü
+  setTimeout(()=>{
+    document.addEventListener("click", closePlayerMenu, {once:true})
+  },10)
+
+}
+
+function closePlayerMenu(){
+  if(openMenu){
+    openMenu.remove()
+    openMenu = null
+  }
+}
+
 /* =========================
 MATCHES
 ========================= */
