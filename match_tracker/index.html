@@ -1886,7 +1886,7 @@ html+=`
 
 <div class="player-actions">
 <button onclick="event.stopPropagation(); editPlayer('${p.name}')">✏️</button>
-<button onclick="event.stopPropagation(); deletePlayer('${p.name}')">🗑</button>
+<button onclick='event.stopPropagation(); deletePlayer(${JSON.stringify(p.name)})'>🗑</button>
 </div>
 
 </div>
