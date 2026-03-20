@@ -2547,12 +2547,13 @@ let place = match.homeAway === "away"
 line += "  " + place
 
 // Spielort (robust)
-if(match.location && match.location.trim() !== ""){
-line += "  📍 " + match.location.trim()
-}
+// 👉 EINMAL anhängen (OHNE Location)
+text += line + "\n"
 
-// 👉 EINMAL anhängen
-text += line
+// 🔥 Spielort eigene Zeile
+if(match.location && match.location.trim() !== ""){
+  text += "📍 " + match.location.trim()
+}
 
 text += "\n\n────────────\n"
 
