@@ -1813,10 +1813,14 @@ PLAYERS
 
 function deletePlayer(name){
 
+confirmDeleteAction(()=>{
+
 players = players.filter(p=>p.name!==name)
 
 save()
 renderAll()
+
+})
 
 }
 
