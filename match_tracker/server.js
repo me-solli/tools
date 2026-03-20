@@ -12,12 +12,17 @@ app.use(cors())
 app.use(express.json())
 
 /* =========================
-📁 DATEI (AUTO CREATE)
+📁 DATEI (VOLUME STORAGE)
 ========================= */
 
 const FILE = "/data/data.json"
 
-// 🔥 Datei automatisch erstellen, wenn nicht vorhanden
+// 🔥 sicherstellen, dass /data existiert
+if (!fs.existsSync("/data")) {
+  fs.mkdirSync("/data", { recursive: true })
+}
+
+// 🔥 Datei automatisch erstellen
 if (!fs.existsSync(FILE)) {
   fs.writeFileSync(FILE, JSON.stringify({
     teams: [],
@@ -25,7 +30,7 @@ if (!fs.existsSync(FILE)) {
     matches: [],
     activeTeam: null
   }, null, 2))
-  console.log("📁 data.json wurde erstellt")
+  console.log("📁 data.json wurde im Volume erstellt")
 }
 
 /* =========================
