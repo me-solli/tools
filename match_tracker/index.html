@@ -1974,6 +1974,11 @@ function selectTeam(name){
 
 function deleteTeam(name){
 
+if(!isUnlocked){
+  showToast("🔒 Kein Zugriff","info")
+  return
+}
+
 confirmDeleteAction(()=>{
 
 teams = teams.filter(t=>t!==name)
