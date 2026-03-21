@@ -1856,11 +1856,12 @@ function ensureTeamAccessOnLoad(){
 
   openModal("🔐 Passwort für " + activeTeam, "Passwort eingeben", (pw)=>{
 
-    if(!pw){
-      activeTeam = null
-      renderAll()
-      return
-    }
+if(!pw){
+  activeTeam = null
+  isUnlocked = false
+  renderAll()
+  return
+}
 
     fetch(API + "/check-team-access", {
       method:"POST",
