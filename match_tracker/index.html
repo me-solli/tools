@@ -1247,6 +1247,32 @@ pointer-events:none;
   transition:.15s;
 }
 
+  .team-actions{
+  display:flex;
+  gap:8px;
+  width:100%;
+}
+
+.team-actions button{
+  flex:1;                         /* 🔥 gleich breit */
+  height:24px;
+
+  font-size:11px;
+
+  border-radius:6px;
+
+  background:rgba(255,255,255,0.05);
+  color:#aaa;
+  border:1px solid rgba(255,255,255,0.08);
+
+  transition:.15s;
+}
+
+.team-actions button:hover{
+  background:#222;
+  color:#fff;
+}
+
 /* erscheint bei hover */
 .team-chip-full:hover .team-delete{
   opacity:1;
