@@ -3248,6 +3248,20 @@ renderRankings()
 
 }
 
+  function validateMatchForm(){
+
+let date = document.getElementById("date").value
+let opponent = document.getElementById("opponent").value.trim()
+
+let btn = document.getElementById("createBtn")
+
+btn.disabled = !(date && opponent)
+
+}
+
+document.getElementById("date").addEventListener("input",validateMatchForm)
+document.getElementById("opponent").addEventListener("input",validateMatchForm)
+
 setTimeout(loadFromServer, 1000)
 
 // ❌ AUTO-RELOAD AUS (überschreibt deine Eingaben)
