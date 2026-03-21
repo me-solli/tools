@@ -1204,16 +1204,20 @@ pointer-events:none;
   color:#fff;
 }
 
-  .team-chip-full{
+.team-chip-full{
   width:100%;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
 
-  padding:8px 10px; /* passt zu deinem Style */
+  display:flex;
+  flex-direction:column;   /* 🔥 WICHTIG */
+
+  align-items:flex-start;
+  justify-content:center;
+
+  padding:10px 12px;
   border-radius:10px;
 
   position:relative;
+  gap:6px;                /* 🔥 Abstand zwischen Zeilen */
 }
 
 /* Name */
