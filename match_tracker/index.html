@@ -2200,17 +2200,31 @@ html+=`
 
 <div class="team-actions">
 
-  <!-- 🔐 LOCK BUTTON -->
-  <button class="team-delete"
-    onclick='event.stopPropagation(); unlockTeamFromList(${JSON.stringify(t)})'>
-${accessCache[t] ? "🔓 Offen" : "🔐 Sperren"}
-  </button>
+  ${
+    accessCache[t]
+    ? `
+      <button class="team-login active">
+        ✓ Eingeloggt
+      </button>
 
-  <!-- 🗑 DELETE -->
-  <button class="team-delete"
-    onclick='event.stopPropagation(); deleteTeam(${JSON.stringify(t)})'>
-    🗑
-  </button>
+      <button
+        onclick='event.stopPropagation(); editTeamName(${JSON.stringify(t)})'>
+        ✏️
+      </button>
+
+      <button
+        onclick='event.stopPropagation(); deleteTeam(${JSON.stringify(t)})'>
+        🗑
+      </button>
+    `
+    : `
+      <button
+        class="team-login"
+        onclick='event.stopPropagation(); unlockTeamFromList(${JSON.stringify(t)})'>
+        🔐 Einloggen
+      </button>
+    `
+  }
 
 </div>
 
