@@ -1528,12 +1528,22 @@ box.innerHTML = `
   <div id="modalTitle" class="modal-title"></div>
 </div>
 
+<!-- 🔥 FAKE INPUT (killt Passwort-Manager Fokus) -->
+<input type="text"
+       style="position:absolute; opacity:0; pointer-events:none;"
+       autocomplete="username">
+
+<!-- 🔐 ECHTES PASSWORT -->
 <input id="modalInput"
        type="password"
        placeholder=""
        autocomplete="new-password"
+       name="nope"
        data-lpignore="true"
-       data-1p-ignore="true">
+       data-1p-ignore="true"
+       data-bwignore="true"
+       data-form-type="other"
+       inputmode="text">
 
 <div class="modal-actions">
   <button class="primary" onclick="confirmModal()">OK</button>
