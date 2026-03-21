@@ -2233,10 +2233,7 @@ renderAll()
 
 function renderPlayers(){
 
-  if(!isUnlocked){
-  document.getElementById("playerList").innerHTML = ""
-  return
-}
+let locked = !isUnlocked
 
 let html=""
 
