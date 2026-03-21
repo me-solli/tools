@@ -1976,11 +1976,51 @@ function selectTeam(name){
 
   activeTeam = name
 
-  // 🔐 kein Popup mehr – nur Status prüfen
-  isUnlocked = !!accessCache[name]
+  // 🔓 schon freigeschaltet → direkt rein
+  if(accessCache[name]){
+    isUnlocked = true
+    save()
+    renderAll()
+    return
+  }
 
-  save()
+  // 👀 erstmal Besucher-Modus
+  isUnlocked = false
   renderAll()
+
+  // 🔐 Passwort abfragen
+  openModal("🔐 Passwort für " + name, "Passwort eingeben", (pw)=>{
+
+    if(!pw) return
+
+    fetch(API + "/check-team-access", {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({
+        team:name,
+        password:pw
+      })
+    })
+    .then(res=>res.json())
+    .then(data=>{
+
+      if(!data.ok){
+        showToast("❌ Falsches Passwort","info")
+        return
+      }
+
+      accessCache[name] = true
+      isUnlocked = true
+
+      save()
+      renderAll()
+
+      showToast("🔓 Freigeschaltet","info")
+
+    })
+  })
 }
 
 function deleteTeam(name){
