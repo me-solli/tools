@@ -2656,9 +2656,7 @@ let sortedMatches = [...matches]
 
 let html=""
 
-matches
-.filter(m=>m.team===activeTeam)
-.forEach(match=>{
+sortedMatches.forEach(match=>{
 
 if(!match.squad) match.squad = []
 
