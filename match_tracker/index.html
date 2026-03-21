@@ -2121,7 +2121,9 @@ html+=`
   <div class="${cls} team-chip-full"
        onclick='selectTeam(${JSON.stringify(t)})'>
 
-    <span class="team-name">${t}</span>
+<span class="team-name">
+  ${accessCache[t] ? "🔓 " : "🔐 "} ${t}
+</span>
 
     <button class="team-delete"
       onclick='event.stopPropagation(); deleteTeam(${JSON.stringify(t)})'>
