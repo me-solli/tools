@@ -2617,6 +2617,11 @@ renderAll()
 
 function addSubstitution(matchId){
 
+  if(!isUnlocked){
+  showToast("🔒 Kein Zugriff","info")
+  return
+}
+
 let match=matches.find(m=>m.id==matchId)
 
 openModal("Minute eingeben","z.B. 45",(minute)=>{
