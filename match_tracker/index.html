@@ -2660,6 +2660,10 @@ renderMatches()
 /* 🔥 NEU: TW setzen */
 function setGoalkeeper(matchId){
 
+  if(!isUnlocked){
+  return
+}
+
 let match = matches.find(m=>m.id===matchId)
 
 // nur Spieler aus Startelf wählen
