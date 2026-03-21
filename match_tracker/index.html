@@ -2768,31 +2768,32 @@ ${goals} : ${against}
 
 <div class="match-sub">
 
-<div class="meta-top">
+  <div class="meta-top">
 
-<span>📅 ${formatDate(match.date)}</span>
+    <span>📅 ${formatDate(match.date)}</span>
 
-${match.time ? `<span>🕒 ${match.time}</span>` : ""}
+    ${match.time ? `<span>🕒 ${match.time}</span>` : ""}
 
-<span>${match.homeAway === "away" ? "🚗" : "🏠"}</span>
-${match.location ? `
-<span class="location">
+    <span>${match.homeAway === "away" ? "🚗" : "🏠"}</span>
 
-<span class="location">
-📍 ${match.location}
-</span>
+    ${match.location ? `
+    <div class="location-wrap">
 
-<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(match.location)}"
-   target="_blank"
-   onclick="event.stopPropagation()"
-   class="map-link">
-🗺️
-</a>
+      <span class="location">
+        📍 ${match.location}
+      </span>
 
-</span>
-` : ""}
+      <a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(match.location)}"
+         target="_blank"
+         onclick="event.stopPropagation()"
+         class="map-link">
+        🗺️
+      </a>
 
-</div>
+    </div>
+    ` : ""}
+
+  </div>
 
 </div>
 
