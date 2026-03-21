@@ -2148,6 +2148,28 @@ document.getElementById("editMode").value = m.mode || "7"
 modal.classList.remove("hidden")
 
 }
+
+  function saveMatchEdit(id){
+
+let m = matches.find(x => x.id === id)
+if(!m) return
+
+m.date = document.getElementById("editDate").value
+m.time = document.getElementById("editTime").value
+m.opponent = document.getElementById("editOpponent").value.trim()
+
+m.homeAway = document.getElementById("editHomeAway").value
+m.location = document.getElementById("editLocation").value.trim()
+
+m.mode = document.getElementById("editMode").value
+
+save()
+renderAll()
+closeModal()
+
+showToast("Spiel aktualisiert ✅","info")
+
+}
   
 function createMatch(){
 
