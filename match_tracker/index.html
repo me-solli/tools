@@ -2741,8 +2741,20 @@ ${goals} : ${against}
 ${match.time ? `<span>🕒 ${match.time}</span>` : ""}
 
 <span>${match.homeAway === "away" ? "🚗" : "🏠"}</span>
+${match.location ? `
+<span class="location">
 
-${match.location ? `<span>📍 ${match.location}</span>` : ""}
+📍 ${match.location}
+
+<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(match.location)}"
+   target="_blank"
+   onclick="event.stopPropagation()"
+   class="map-link">
+🗺️
+</a>
+
+</span>
+` : ""}
 
 </div>
 
