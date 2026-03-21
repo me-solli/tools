@@ -1924,16 +1924,14 @@ if(!pw){
 
 function selectTeam(name){
 
-  // 👉 IMMER wechseln (Visitor darf das)
   activeTeam = name
 
-  // 🔐 wenn schon freigeschaltet → direkt Vollzugriff
-  if(accessCache[name]){
-    isUnlocked = true
-    save()
-    renderAll()
-    return
-  }
+  // 🔐 kein Popup mehr – nur Status prüfen
+  isUnlocked = !!accessCache[name]
+
+  save()
+  renderAll()
+}
 
   // 👀 VISITOR MODE
   isUnlocked = false
