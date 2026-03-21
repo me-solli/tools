@@ -2067,6 +2067,12 @@ document.getElementById("topYellow").innerText =
 document.getElementById("topRed").innerText =
 "🟥 " + red
 
+  let btn = document.querySelector(".topbar-inner > button")
+
+if(btn){
+  btn.style.display = isUnlocked ? "none" : "inline-flex"
+}
+
 }
   
 function renderTeams(){
