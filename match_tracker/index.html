@@ -2850,11 +2850,13 @@ ${goals} : ${against}
 <div class="match-actions-right">
 
 <button class="secondary"
+${!isUnlocked ? "disabled" : ""}
 onclick="event.stopPropagation();editMatch(${match.id})">
 ✏️
 </button>
 
 <button class="danger"
+${!isUnlocked ? "disabled" : ""}
 onclick="event.stopPropagation();deleteMatch(${match.id})">
 🗑
 </button>
