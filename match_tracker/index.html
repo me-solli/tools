@@ -1888,39 +1888,39 @@ let accessCache = {}
     return
   }
 
-  openModal("🔐 Passwort für " + activeTeam, "Passwort eingeben", (pw)=>{
+openModal("🔐 Passwort für " + name, "Passwort eingeben", (pw)=>{
 
-    if(!pw) return
+  if(!pw) return
 
-    fetch(API + "/check-team-access", {
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body: JSON.stringify({
-        team:activeTeam,
-        password:pw
-      })
-    })
-    .then(res=>res.json())
-    .then(data=>{
-
-      if(!data.ok){
-        showToast("❌ Falsches Passwort","info")
-        return
-      }
-
-      accessCache[activeTeam] = true
-      isUnlocked = true
-
-      save()
-      renderAll()
-
-      showToast("🔓 Freigeschaltet","info")
-
+  fetch(API + "/check-team-access", {
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body: JSON.stringify({
+      team:name,
+      password:pw
     })
   })
-}
+  .then(res=>res.json())
+  .then(data=>{
+
+    if(!data.ok){
+      showToast("❌ Falsches Passwort","info")
+      return
+    }
+
+    accessCache[name] = true
+    isUnlocked = true
+
+    save()
+    renderAll()
+
+    showToast("🔓 Freigeschaltet","info")
+
+  })
+
+}, true)
   
 function ensureTeamAccessOnLoad(){
 
