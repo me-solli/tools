@@ -2193,7 +2193,7 @@ html+=`
   <!-- 🔐 LOCK BUTTON -->
   <button class="team-delete"
     onclick='event.stopPropagation(); unlockTeamFromList(${JSON.stringify(t)})'>
-    ${accessCache[t] ? "🔓" : "🔐"}
+${accessCache[t] ? "🔓 Offen" : "🔐 Sperren"}
   </button>
 
   <!-- 🗑 DELETE -->
