@@ -2115,13 +2115,24 @@ html+=`
        onclick='selectTeam(${JSON.stringify(t)})'>
 
 <span class="team-name">
-  ${accessCache[t] ? "🔓 " : "🔐 "} ${t}
+  ${t}
 </span>
 
-    <button class="team-delete"
-      onclick='event.stopPropagation(); deleteTeam(${JSON.stringify(t)})'>
-      🗑
-    </button>
+<div style="display:flex; gap:6px; align-items:center;">
+
+  <!-- 🔐 LOCK BUTTON -->
+  <button class="team-delete"
+    onclick='event.stopPropagation(); unlockTeamFromList(${JSON.stringify(t)})'>
+    ${accessCache[t] ? "🔓" : "🔐"}
+  </button>
+
+  <!-- 🗑 DELETE -->
+  <button class="team-delete"
+    onclick='event.stopPropagation(); deleteTeam(${JSON.stringify(t)})'>
+    🗑
+  </button>
+
+</div>
 
   </div>
 
