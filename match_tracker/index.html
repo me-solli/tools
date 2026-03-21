@@ -2272,6 +2272,11 @@ return p[2]+"-"+p[1]+"-"+p[0]
 
 function editMatch(id){
 
+if(!isUnlocked){
+  showToast("🔒 Kein Zugriff","info")
+  return
+}
+
 let m = matches.find(x => x.id === id)
 if(!m) return
 
