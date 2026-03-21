@@ -1879,6 +1879,48 @@ renderAll()
 }
 
 let accessCache = {}
+
+  function unlockTeam(){
+
+  if(!activeTeam){
+    showToast("⚠️ Kein Team ausgewählt","info")
+    return
+  }
+
+  openModal("🔐 Passwort für " + activeTeam, "Passwort eingeben", (pw)=>{
+
+    if(!pw) return
+
+    fetch(API + "/check-team-access", {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({
+        team:activeTeam,
+        password:pw
+      })
+    })
+    .then(res=>res.json())
+    .then(data=>{
+
+      if(!data.ok){
+        showToast("❌ Falsches Passwort","info")
+        return
+      }
+
+      accessCache[activeTeam] = true
+      isUnlocked = true
+
+      save()
+      renderAll()
+
+      showToast("🔓 Freigeschaltet","info")
+
+    })
+  })
+}
+  
 function ensureTeamAccessOnLoad(){
 
   if(!activeTeam) return
