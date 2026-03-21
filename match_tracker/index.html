@@ -1914,6 +1914,20 @@ if(!pw){
 
 function selectTeam(name){
 
+  // 👉 IMMER wechseln (Visitor darf das)
+  activeTeam = name
+
+  // 🔐 wenn schon freigeschaltet → direkt Vollzugriff
+  if(accessCache[name]){
+    isUnlocked = true
+  }else{
+    isUnlocked = false
+  }
+
+  save()
+  renderAll()
+}
+
   // 👉 IMMER setzen (auch ohne PW)
   activeTeam = name
 
