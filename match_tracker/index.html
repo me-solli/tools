@@ -219,9 +219,12 @@ box-shadow:0 6px 20px rgba(0,0,0,0.5);
 }
 
 .match-header{
-display:flex;
-justify-content:space-between;
+display:grid;
+grid-template-columns: 1fr auto auto;
+
 align-items:center;
+gap:10px;
+
 cursor:pointer;
 padding:10px 12px;
 border-radius:10px;
