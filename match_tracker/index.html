@@ -2771,7 +2771,7 @@ function renderMatches(){
 
   // 🔥 SORTIERUNG NACH DATUM + ZEIT
 let sortedMatches = [...matches]
-.filter(m=>m.team===activeTeam)
+.filter(m=> isUnlocked ? m.team===activeTeam : true)
 .sort((a,b)=>{
 
   let dateA = new Date(a.date + " " + (a.time || "00:00"))
