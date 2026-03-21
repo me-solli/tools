@@ -1687,9 +1687,26 @@ isUnlocked = false
       renderAll()
 ensureTeamAccessOnLoad()
     })
-    .catch(() => {
-      console.log("Server nicht erreichbar")
-    })
+.catch(() => {
+
+  console.log("Server nicht erreichbar → lade lokal")
+
+  let local = localStorage.getItem("matchTrackerData")
+
+  if(local){
+    data = JSON.parse(local)
+
+    teams = data.teams || []
+    players = data.players || []
+    matches = data.matches || []
+
+    activeTeam = null
+    isUnlocked = false
+
+    renderAll()
+  }
+
+})
 }
 
 function save(){
