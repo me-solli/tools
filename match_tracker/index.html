@@ -1560,7 +1560,13 @@ input.placeholder = placeholder || ""
 
 // 🔥 AUTO FOCUS
 setTimeout(()=>{
-input.focus()
+  input.type = "text"
+  input.focus()
+
+  setTimeout(()=>{
+    input.type = "password"
+  }, 80)
+
 },50)
 
 // 🔥 ENTER = BESTÄTIGEN
