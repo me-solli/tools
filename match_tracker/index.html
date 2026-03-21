@@ -2744,16 +2744,22 @@ ${goals} : ${against}
 
 <div class="match-sub">
 
-  <div class="meta-top">
-    <span>${formatDate(match.date)}</span>
-    <span>${match.time ? "🕒 "+match.time : ""}</span>
-    <span>${match.homeAway === "away" ? "🚗" : "🏠"}</span>
+<div class="meta-top">
 
-    <span class="meta-right">
-      ${match.lineup.length}/${match.mode} · 
-      <span style="color:${resultColor}">${resultText}</span>
-    </span>
-  </div>
+<span>📅 ${formatDate(match.date)}</span>
+
+${match.time ? `<span>🕒 ${match.time}</span>` : ""}
+
+<span>${match.homeAway === "away" ? "🚗" : "🏠"}</span>
+
+${match.location ? `<span>📍 ${match.location}</span>` : ""}
+
+<span style="margin-left:auto">
+${match.lineup.length}/${match.mode} · 
+<span style="color:${resultColor}">${resultText}</span>
+</span>
+
+</div>
 
   ${match.location ? `
   <div class="location">
