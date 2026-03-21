@@ -2153,6 +2153,35 @@ renderAll()
 
 }
 
+function editTeamName(oldName){
+
+  openModal("Team umbenennen","Neuer Name",(newName)=>{
+
+    if(!newName || newName.trim()==="") return
+
+    newName = newName.trim()
+
+    teams = teams.map(t => t === oldName ? newName : t)
+
+    if(activeTeam === oldName){
+      activeTeam = newName
+    }
+
+    players.forEach(p=>{
+      if(p.team === oldName) p.team = newName
+    })
+
+    matches.forEach(m=>{
+      if(m.team === oldName) m.team = newName
+    })
+
+    save()
+    renderAll()
+
+  })
+
+}  
+
 function renderTopbar(){
 
 document.getElementById("topTeam").innerText =
