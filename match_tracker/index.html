@@ -1945,6 +1945,46 @@ function unlockTeam(){
   }, true)
 
 }
+
+  function unlockTeamFromList(team){
+
+  activeTeam = team
+
+  openModal("🔐 Passwort für " + team, "Passwort eingeben", (pw)=>{
+
+    if(!pw) return
+
+    fetch(API + "/check-team-access", {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({
+        team:team,
+        password:pw
+      })
+    })
+    .then(res=>res.json())
+    .then(data=>{
+
+      if(!data.ok){
+        showToast("❌ Falsches Passwort","info")
+        return
+      }
+
+      accessCache[team] = true
+      isUnlocked = true
+
+      save()
+      renderAll()
+
+      showToast("🔓 Freigeschaltet","info")
+
+    })
+
+  }, true)
+
+}
   
 function ensureTeamAccessOnLoad(){
 
