@@ -2277,6 +2277,11 @@ showToast("Spiel aktualisiert ✅","info")
   
 function createMatch(){
 
+  if(!isUnlocked){
+  showToast("🔒 Kein Zugriff","info")
+  return
+}
+
   let date = document.getElementById("date").value
   let opponent = document.getElementById("opponent").value.trim()
 
