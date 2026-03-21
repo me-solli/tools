@@ -3067,6 +3067,11 @@ SCORER
 
 function renderRankings(){
 
+  if(!isUnlocked){
+  document.getElementById("scorerRanking").innerHTML = ""
+  return
+}
+
 let goalMap={}
 
 matches
