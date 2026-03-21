@@ -1894,12 +1894,13 @@ function ensureTeamAccessOnLoad(){
 function selectTeam(name){
 
   // 🔥 bereits freigeschaltet
-  if(accessCache[name]){
-    activeTeam = name
-    save()
-    renderAll()
-    return
-  }
+if(accessCache[name]){
+  activeTeam = name
+  isUnlocked = true
+  save()
+  renderAll()
+  return
+}
 
   openModal("🔐 Passwort für " + name, "Passwort eingeben", (pw)=>{
 
