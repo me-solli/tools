@@ -2123,6 +2123,11 @@ renderAll()
 
 function editPlayer(name){
 
+if(!isUnlocked){
+  showToast("🔒 Kein Zugriff","info")
+  return
+}
+
 let p = players.find(x=>x.name===name)
 if(!p) return
 
