@@ -1496,7 +1496,12 @@ let box = modal.querySelector(".modal-box")
 // 🔥 STANDARD LAYOUT IMMER NEU
 box.innerHTML = `
 <h3 id="modalTitle"></h3>
-<input id="modalInput" placeholder="">
+<input id="modalInput"
+       type="password"
+       placeholder=""
+       autocomplete="new-password"
+       data-lpignore="true"
+       data-1p-ignore="true">
 <button onclick="confirmModal()">OK</button>
 <button onclick="closeModal()">Abbrechen</button>
 `
