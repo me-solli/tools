@@ -2655,6 +2655,11 @@ ${goals} : ${against}
 
 </div>
 
+<button class="secondary"
+onclick="event.stopPropagation();editMatch(${match.id})">
+✏️
+</button>
+
 <button class="danger"
 onclick="event.stopPropagation();deleteMatch(${match.id})">
 🗑
