@@ -1915,15 +1915,22 @@ if(!pw){
 
 function selectTeam(name){
 
-  // 🔥 bereits freigeschaltet
-if(accessCache[name]){
+  // 👉 IMMER setzen (auch ohne PW)
   activeTeam = name
-  isUnlocked = true
-  save()
-  renderAll()
-  return
-}
 
+  // 🔐 wenn schon unlocked → direkt anzeigen
+  if(accessCache[name]){
+    isUnlocked = true
+    save()
+    renderAll()
+    return
+  }
+
+  // 👀 VISITOR MODE → nur anzeigen
+  isUnlocked = false
+  renderAll()
+
+  // 🔐 OPTIONAL: Passwort später anbieten
   openModal("🔐 Passwort für " + name, "Passwort eingeben", (pw)=>{
 
     if(!pw) return
@@ -1947,8 +1954,8 @@ if(accessCache[name]){
       }
 
       accessCache[name] = true
+      isUnlocked = true
 
-      activeTeam = name
       save()
       renderAll()
 
