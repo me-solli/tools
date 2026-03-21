@@ -3562,7 +3562,19 @@ showToast("📑 Kader kopiert","info")
 }
 
 /* ========================= */
+function renderTools(){
 
+  let panel = document.getElementById("toolsPanel")
+  if(!panel) return
+
+  if(isUnlocked && activeTeam === "Testhausen"){
+    panel.style.display = "block"
+  }else{
+    panel.style.display = "none"
+  }
+
+}
+  
 function renderAll(){
 
 renderTeams()
