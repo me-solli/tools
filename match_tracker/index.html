@@ -2999,7 +2999,7 @@ onclick="event.stopPropagation();deleteMatch(${match.id})">
 
 </div>
 
-<div class="match-body ${match.open ? 'open' : ''}">
+<div class="match-body ${match.open && isUnlocked ? 'open' : ''}">
 
 <div class="section-title">
 Kader (${match.squad?.length || 0} Spieler)
