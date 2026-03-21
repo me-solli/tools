@@ -2499,6 +2499,11 @@ modal.classList.remove("hidden")
 
 function addEvent(matchId,type){
 
+  if(!isUnlocked){
+  showToast("🔒 Kein Zugriff","info")
+  return
+}
+
 let match = matches.find(m=>m.id==matchId)
 
 // 🔥 Gegentor bleibt simpel
