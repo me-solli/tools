@@ -3118,7 +3118,9 @@ ${goals} : ${against}
 
     ${match.time ? `<span>🕒 ${match.time}</span>` : ""}
 
-    <span>${match.homeAway === "away" ? "🚗" : "🏠"}</span>
+<span>
+  ${match.homeAway === "away" ? "🚗 Auswärts" : "🏠 Heim"}
+</span>
 
 ${match.location ? `
 <a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(match.location)}"
