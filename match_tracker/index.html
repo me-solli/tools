@@ -2399,6 +2399,11 @@ function createMatch(){
 
 function deleteMatch(id){
 
+if(!isUnlocked){
+  showToast("🔒 Kein Zugriff","info")
+  return
+}
+
 confirmDeleteAction(()=>{
 
 matches = matches.filter(m=>m.id!==id)
