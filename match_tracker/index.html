@@ -2967,27 +2967,35 @@ onclick="setGoalkeeper(${match.id})">🧤 TW setzen</button>
 <div class="section-title">Events</div>
 
 <button class="success"
+${!isUnlocked ? "disabled" : ""}
 onclick="addEvent(${match.id},'goal')">⚽ Tor</button>
 
 <button class="secondary"
+${!isUnlocked ? "disabled" : ""}
 onclick="addEvent(${match.id},'goalAgainst')">🥅 Gegentor</button>
 
 <button class="yellow"
+${!isUnlocked ? "disabled" : ""}
 onclick="addEvent(${match.id},'yellow')">🟨 Gelb</button>
 
 <button class="red"
+${!isUnlocked ? "disabled" : ""}
 onclick="addEvent(${match.id},'red')">🟥 Rot</button>
 
 <button class="secondary"
+${!isUnlocked ? "disabled" : ""}
 onclick="addEvent(${match.id},'penalty')">⏱ Zeitstrafe</button>
 
 <button class="sub"
+${!isUnlocked ? "disabled" : ""}
 onclick="addSubstitution(${match.id})">🔁 Wechsel</button>
 
 <button class="secondary"
+${!isUnlocked ? "disabled" : ""}
 onclick="copySquad(${match.id})">📑 Kader kopieren</button>
 
 <button class="secondary"
+${!isUnlocked ? "disabled" : ""}
 onclick="copyReport(${match.id})">📋 Bericht kopieren</button>
 `
 
