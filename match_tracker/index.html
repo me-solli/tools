@@ -1978,7 +1978,7 @@ function selectTeam(name){
   renderAll()
 
   // 🔐 Passwort abfragen
-  openModal("🔐 Passwort für " + name, "Passwort eingeben", (pw)=>{
+openModal("🔐 Passwort für " + name, "Passwort eingeben", (pw)=>{}, true)
 
     if(!pw) return
 
