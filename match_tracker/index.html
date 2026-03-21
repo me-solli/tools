@@ -3127,22 +3127,18 @@ ${goals} : ${against}
 
     <span>${match.homeAway === "away" ? "🚗" : "🏠"}</span>
 
-    ${match.location ? `
-    <div class="location-wrap">
+${match.location ? `
+<a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(match.location)}"
+   target="_blank"
+   onclick="event.stopPropagation()"
+   class="map-link">
+  🗺️
+</a>
 
-      <span class="location">
-        📍 ${match.location}
-      </span>
-
-      <a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(match.location)}"
-         target="_blank"
-         onclick="event.stopPropagation()"
-         class="map-link">
-        🗺️
-      </a>
-
-    </div>
-    ` : ""}
+<span class="location">
+  📍 ${match.location}
+</span>
+` : ""}
 
   </div>
 
