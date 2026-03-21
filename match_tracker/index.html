@@ -1963,8 +1963,6 @@ if(!pw){
   })
 }
 
-
-
 function selectTeam(name){
 
   activeTeam = name
@@ -1982,7 +1980,7 @@ function selectTeam(name){
   renderAll()
 
   // 🔐 Passwort abfragen
-openModal("🔐 Passwort für " + name, "Passwort eingeben", (pw)=>{}, true)
+  openModal("🔐 Passwort für " + name, "Passwort eingeben", (pw)=>{
 
     if(!pw) return
 
@@ -2013,7 +2011,8 @@ openModal("🔐 Passwort für " + name, "Passwort eingeben", (pw)=>{}, true)
       showToast("🔓 Freigeschaltet","info")
 
     })
-  })
+
+  }, true)
 }
 
 function deleteTeam(name){
