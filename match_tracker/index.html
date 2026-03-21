@@ -1983,43 +1983,6 @@ function selectTeam(name){
   renderAll()
 }
 
-  // 👀 VISITOR MODE
-  isUnlocked = false
-  renderAll()
-
-  // 🔐 OPTIONAL Passwort
-  openModal("🔐 Passwort für " + name, "Passwort eingeben", (pw)=>{
-
-    if(!pw) return
-
-    fetch(API + "/check-team-access", {
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body: JSON.stringify({
-        team:name,
-        password:pw
-      })
-    })
-    .then(res=>res.json())
-    .then(data=>{
-
-      if(!data.ok){
-        alert("❌ Falsches Passwort")
-        return
-      }
-
-      accessCache[name] = true
-      isUnlocked = true
-
-      save()
-      renderAll()
-
-    })
-  })
-}
-
 function deleteTeam(name){
 
 if(!isUnlocked){
