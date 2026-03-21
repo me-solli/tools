@@ -1663,6 +1663,10 @@ activeTeam:null
 
 let teams = []
 let players = []
+
+function getVisiblePlayers(){
+  return isUnlocked ? players : []
+}
 let matches = []
 let activeTeam = null
   let isUnlocked = false
