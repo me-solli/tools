@@ -2248,7 +2248,7 @@ players
 .forEach((p)=>{
 
 html+=`
-<div class="player-chip pos-${p.pos}">
+<div class="player-chip pos-${p.pos} ${locked ? "locked" : ""}">
 
 <div class="player-left">
 <span class="pos-badge">${p.pos}</span>
