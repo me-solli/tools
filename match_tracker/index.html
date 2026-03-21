@@ -2962,6 +2962,7 @@ html+=renderPitch(match)
 html+=`
 
 <button class="secondary"
+${!isUnlocked ? "disabled" : ""}
 onclick="setGoalkeeper(${match.id})">🧤 TW setzen</button>
 
 <div class="section-title">Events</div>
