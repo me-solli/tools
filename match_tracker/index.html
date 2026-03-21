@@ -1681,7 +1681,8 @@ function loadFromServer(){
       matches.forEach(m => {
   if(m.open === undefined) m.open = false
 })
-      activeTeam = data.activeTeam || teams[0] || null
+activeTeam = null
+isUnlocked = false
 
       renderAll()
 ensureTeamAccessOnLoad()
