@@ -2124,6 +2124,11 @@ renderAll()
 
 function renderPlayers(){
 
+  if(!isUnlocked){
+  document.getElementById("playerList").innerHTML = ""
+  return
+}
+
 let html=""
 
 let order = ["TW","IV","LV","RV","ZM","LM","RM","ST"]
