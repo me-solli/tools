@@ -2105,6 +2105,11 @@ PLAYERS
 
 function deletePlayer(name){
 
+if(!isUnlocked){
+  showToast("🔒 Kein Zugriff","info")
+  return
+}
+
 confirmDeleteAction(()=>{
 
 players = players.filter(p=>p.name!==name)
