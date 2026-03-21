@@ -2067,10 +2067,11 @@ document.getElementById("topYellow").innerText =
 document.getElementById("topRed").innerText =
 "🟥 " + red
 
-  let btn = document.querySelector(".topbar-inner > button")
+let btn = document.querySelector(".topbar-inner > button")
 
 if(btn){
-  btn.style.display = isUnlocked ? "none" : "inline-flex"
+  btn.style.display = "inline-flex"   // bleibt immer sichtbar
+  btn.innerText = isUnlocked ? "🔓" : "🔐"
 }
 
 }
