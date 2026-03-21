@@ -3526,7 +3526,11 @@ text += line + "\n"
 
 // 🔥 Spielort eigene Zeile
 if(match.location && match.location.trim() !== ""){
-  text += "📍 " + match.location.trim()
+  let loc = match.location.trim()
+
+  text += "📍 " + loc + "\n"
+  text += "🗺️ Route: https://www.google.com/maps/dir/?api=1&destination=" 
+    + encodeURIComponent(loc)
 }
 
 text += "\n\n────────────\n"
