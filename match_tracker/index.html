@@ -3817,17 +3817,14 @@ function openLiveMode(matchId){
     </div>
   `
 
-  // 🔥 STATE
-  window.liveMatchId = matchId
-  window.liveEventType = null
+// 🔥 STATE
+window.liveMatchId = matchId
+window.liveEventType = null
 
-  // 🔥 WICHTIG: LIVE TIMER STARTEN
-  liveStartTime = Date.now()
-  livePausedAt = null
-  livePausedTotal = 0
+// 🔥 TIMER NICHT HIER STARTEN!
+// (Start passiert erst bei ▶ Weiter)
 
-  box.classList.remove("hidden")
-}
+box.classList.remove("hidden")
 
  function setLiveEvent(type){
   window.liveEventType = type
