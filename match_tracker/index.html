@@ -3886,19 +3886,16 @@ function selectLivePlayer(name){
 
   console.log("EVENT:", window.liveEventType)
 
-  // 🔒 Spiel muss laufen
   if(!liveStartTime){
     showToast("▶ Erst Spiel starten","info")
     return
   }
 
-  // ⏸ PAUSE BLOCK
   if(livePausedAt){
     showToast("⏸ Spiel pausiert","info")
     return
   }
 
-  // ⚠️ Event gewählt?
   if(!window.liveEventType){
     showToast("⚠️ Erst Event wählen","info")
     return
@@ -3907,21 +3904,21 @@ function selectLivePlayer(name){
   let match = matches.find(m => m.id === window.liveMatchId)
   if(!match) return
 
-  // 🔥 VISUAL RESET
   document.querySelectorAll(".live-player")
     .forEach(el => el.classList.remove("active"))
 
-  // 🔥 AKTIVEN MARKIEREN
   let el = [...document.querySelectorAll(".live-player")]
     .find(x => x.dataset.name === name)
 
   if(el) el.classList.add("active")
 
-  // 🔥 MINUTE
   let minute = getLiveMinute()
 
+  let type = window.liveEventType // 🔥 SPEICHERN
+  window.liveEventType = null     // 🔥 RESET
+
   match.events.push({
-    type: window.liveEventType,
+    type: type,
     player: name,
     minute: minute
   })
@@ -3929,17 +3926,17 @@ function selectLivePlayer(name){
   save()
   renderMatches()
 
-  // 🔥 RESET
-  window.liveEventType = null
-
-  // 🔥 BESSERE TOASTS
-  if(window.liveEventType === "goal"){
+  // 🔥 TOAST
+  if(type === "goal"){
     showToast("⚽ " + name + " (" + minute + "')","goal")
-  } else if(window.liveEventType === "yellow"){
+  } 
+  else if(type === "yellow"){
     showToast("🟨 " + name + " (" + minute + "')","yellow")
-  } else if(window.liveEventType === "red"){
+  } 
+  else if(type === "red"){
     showToast("🟥 " + name + " (" + minute + "')","red")
-  } else {
+  } 
+  else{
     showToast("⚡ " + name + " (" + minute + "')","info")
   }
 }
