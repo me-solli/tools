@@ -3826,6 +3826,11 @@ window.liveEventType = null
 box.classList.remove("hidden")
   }
 
+  function setLiveEvent(type){
+  window.liveEventType = type
+  showToast("Event: " + type,"info")
+}
+
 function selectLivePlayer(name){
 
   console.log("EVENT:", window.liveEventType) // 👈 HIER rein
