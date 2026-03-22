@@ -3840,18 +3840,41 @@ function selectLivePlayer(name){
     return
   }
 
-  // 🔥 alle reset
+  let match = matches.find(m => m.id === window.liveMatchId)
+  if(!match) return
+
+  // 🔥 VISUAL RESET
   document.querySelectorAll(".live-player")
     .forEach(el => el.classList.remove("active"))
 
-  // 🔥 aktiven markieren
+  // 🔥 AKTIVEN MARKIEREN
   let el = [...document.querySelectorAll(".live-player")]
     .find(x => x.innerText.includes(name))
 
   if(el) el.classList.add("active")
 
-  showToast(name + " gewählt","info")
-} 
+  // 🔥 MINUTE (simple Version)
+  let minute = Math.floor((Date.now() - match.id) / 60000)
+
+  if(minute < 0 || minute > 120){
+    minute = match.events.length * 2 + 1
+  }
+
+  // 🔥 EVENT SPEICHERN
+  match.events.push({
+    type: window.liveEventType,
+    player: name,
+    minute: minute
+  })
+
+  save()
+  renderMatches()
+
+  // 🔥 RESET
+  window.liveEventType = null
+
+  showToast("✅ " + name + " (" + minute + "')","goal")
+}
 
 document.getElementById("date").addEventListener("input",validateMatchForm)
 document.getElementById("opponent").addEventListener("input",validateMatchForm)
