@@ -3849,7 +3849,7 @@ function selectLivePlayer(name){
     return
   }
 
-  let match = matches.find(m => m.id === window.liveMatchId)
+  let match = matches.find(m => m.id === liveMatchId)
   if(!match) return
 
   // 🔥 VISUAL RESET
@@ -3862,12 +3862,8 @@ function selectLivePlayer(name){
 
   if(el) el.classList.add("active")
 
-  // 🔥 MINUTE (simple Version)
-  let minute = Math.floor((Date.now() - match.id) / 60000)
-
-  if(minute < 0 || minute > 120){
-    minute = match.events.length * 2 + 1
-  }
+  // 🔥 ECHTE MINUTE
+  let minute = getLiveMinute()
 
   // 🔥 EVENT SPEICHERN
   match.events.push({
@@ -3882,13 +3878,10 @@ function selectLivePlayer(name){
   // 🔥 RESET
   window.liveEventType = null
   
-showToast("✅ " + name + " (" + minute + "')","goal")
-
-// 🔥 LIVE MODE ZU → damit du das Ergebnis siehst
-closeLiveMode()
+  showToast("⚡ " + name + " (" + minute + "')","goal")
 }
 
-  function getLiveMinute(){
+function getLiveMinute(){
 
   if(!liveStartTime) return 0
 
