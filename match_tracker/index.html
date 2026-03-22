@@ -3848,8 +3848,8 @@ function selectLivePlayer(name){
     showToast("⚠️ Erst Event wählen","info")
     return
   }
-
-  let match = matches.find(m => m.id === liveMatchId)
+  
+let match = matches.find(m => m.id === window.liveMatchId)
   if(!match) return
 
   // 🔥 VISUAL RESET
