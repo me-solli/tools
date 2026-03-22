@@ -3888,6 +3888,24 @@ showToast("✅ " + name + " (" + minute + "')","goal")
 closeLiveMode()
 }
 
+  function getLiveMinute(){
+
+  if(!liveStartTime) return 0
+
+  let now = Date.now()
+
+  // 🔥 wenn pausiert → Zeit einfrieren
+  if(livePausedAt){
+    now = livePausedAt
+  }
+
+  let diff = now - liveStartTime - livePausedTotal
+
+  let minutes = Math.floor(diff / 60000)
+
+  return Math.min(minutes, 60)
+}
+
 document.getElementById("date").addEventListener("input",validateMatchForm)
 document.getElementById("opponent").addEventListener("input",validateMatchForm)
 
