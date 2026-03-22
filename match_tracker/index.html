@@ -3039,7 +3039,7 @@ html+="<div class='bench'><h4>Bank</h4>"
 
 bench.forEach(n=>{
 
-let p=players.find(pl=>pl.name===n)
+let p = players.find(pl => pl.name === n && pl.team === match.team)
 
 html+=`
 <div class='bench-player'>
