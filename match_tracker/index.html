@@ -3817,6 +3817,11 @@ function closeLiveMode(){
         <button class="red" onclick="setLiveEvent('red')">🟥 Rot</button>
       </div>
 
+          <div class="live-grid">
+      <button onclick="pauseLiveGame()">⏸ Pause</button>
+      <button onclick="resumeLiveGame()">▶ Weiter</button>
+    </div>
+
       <!-- SPIELER -->
       <div id="livePlayers" class="live-grid">
         ${teamPlayers.map(p => `
