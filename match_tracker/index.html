@@ -3768,7 +3768,12 @@ btn.disabled = !(date && opponent)
 
 }
 
-  function closeLiveMode(){
+function closeLiveMode(){
+
+  if(liveTimerInterval){
+    clearInterval(liveTimerInterval)
+  }
+
   document.getElementById("liveMode").classList.add("hidden")
 }
 
