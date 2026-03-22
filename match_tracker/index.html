@@ -3827,28 +3827,6 @@ window.liveEventType = null
 
 box.classList.remove("hidden")
 
-  function resumeLiveGame(){
-
-  // 🔥 ERSTER START
-  if(!liveStartTime){
-    liveStartTime = Date.now()
-    livePausedTotal = 0
-    livePausedAt = null
-
-    showToast("▶ Spiel gestartet","info")
-    return
-  }
-
-  if(!livePausedAt) return
-
-  let pauseDuration = Date.now() - livePausedAt
-  livePausedTotal += pauseDuration
-
-  livePausedAt = null
-
-  showToast("▶ Weiter","info")
-}
-
  function setLiveEvent(type){
   window.liveEventType = type
   showToast("Event: " + type,"info")
