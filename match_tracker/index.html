@@ -1743,7 +1743,18 @@ let input = document.getElementById("modalInput")
 input.value = ""
 input.placeholder = placeholder || ""
 
-  setTimeout(()=>{
+input.setAttribute("autocomplete","off")
+input.setAttribute("spellcheck","false")
+input.setAttribute("name","no-autofill")
+input.setAttribute("data-form-type","other")
+
+if(!isPassword){
+  input.type = "number"
+  input.min = 0
+  input.max = 120
+}
+
+setTimeout(()=>{
   input.focus()
 },50)
 
