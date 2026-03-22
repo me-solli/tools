@@ -2971,7 +2971,9 @@ let teamPlayers = players.filter(p =>
 let gk
 
 if(match.twOverride){
-gk = players.find(p=>p.name===match.twOverride)
+gk = players.find(p =>
+  p.name === match.twOverride && p.team === match.team
+)
 }else{
 gk = teamPlayers.find(p=>p.pos==='TW')
 }
