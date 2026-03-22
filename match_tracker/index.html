@@ -1714,9 +1714,8 @@ box.innerHTML = `
 </div>
 
 <!-- 🔥 FAKE INPUT (killt Passwort-Manager Fokus) -->
-<input type="text"
-       style="position:absolute; opacity:0; pointer-events:none;"
-       autocomplete="username">
+<input type="text" autocomplete="username" style="position:absolute;opacity:0;">
+<input type="password" autocomplete="current-password" style="position:absolute;opacity:0;">
 
 <!-- 🔐 ECHTES PASSWORT -->
 <input id="modalInput"
