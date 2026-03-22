@@ -3899,6 +3899,27 @@ function getLiveMinute(){
   return Math.min(minutes, 60)
 }
 
+  function pauseLiveGame(){
+
+  if(livePausedAt) return
+
+  livePausedAt = Date.now()
+
+  showToast("⏸ Pause","info")
+}
+
+function resumeLiveGame(){
+
+  if(!livePausedAt) return
+
+  let pauseDuration = Date.now() - livePausedAt
+  livePausedTotal += pauseDuration
+
+  livePausedAt = null
+
+  showToast("▶ Weiter","info")
+}
+
 document.getElementById("date").addEventListener("input",validateMatchForm)
 document.getElementById("opponent").addEventListener("input",validateMatchForm)
 
