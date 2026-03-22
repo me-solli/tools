@@ -3556,14 +3556,14 @@ html || "Keine Tore"
 
 }
 
-  function togglePlayerStats(name){
+function togglePlayerStats(name){
 
 let box = document.getElementById("player-"+name)
 
 // toggle schließen
 if(!box.classList.contains("hidden")){
-box.classList.add("hidden")
-return
+  box.classList.add("hidden")
+  return
 }
 
 // Daten sammeln
@@ -3573,18 +3573,18 @@ matches
 .filter(m=>m.team===activeTeam)
 .forEach(m=>{
 
-let goals = m.events.filter(e=>e.type==="goal" && e.player===name)
+  let goals = m.events.filter(e=>e.type==="goal" && e.player===name)
 
-if(goals.length){
+  if(goals.length){
 
-html+=`
+    html+=`
 <div style="padding:4px 0;border-bottom:1px solid #333;font-size:12px">
 ${formatDate(m.date)} vs ${m.opponent}<br>
 ⚽ ${goals.length} Tor(e)
 </div>
 `
 
-}
+  }
 
 })
 
