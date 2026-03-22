@@ -2964,7 +2964,9 @@ function renderPitch(match){
 let list=match.lineup
 let bench=match.bench
 
-let teamPlayers = players.filter(p=>list.includes(p.name))
+let teamPlayers = players.filter(p =>
+  list.includes(p.name) && p.team === match.team
+)
 
 let gk
 
