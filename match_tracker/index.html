@@ -3394,7 +3394,7 @@ let html=""
 
 list.forEach(([name,goals])=>{
 
-let p = players.find(pl=>pl.name===name)
+let p = players.find(pl => pl.name === name && pl.team === activeTeam)
 
 html+=`
 <div class="stat-row" onclick="togglePlayerStats('${name}')">
