@@ -3826,8 +3826,17 @@ window.liveEventType = null
 box.classList.remove("hidden")
   }
 
-  function setLiveEvent(type){
+function setLiveEvent(type){
+
   window.liveEventType = type
+
+  // 🔥 ALLE BUTTONS RESET
+  document.querySelectorAll(".live-grid button")
+    .forEach(b => b.classList.remove("active"))
+
+  // 🔥 AKTIVEN BUTTON MARKIEREN
+  event.target.classList.add("active")
+
   showToast("Event: " + type,"info")
 }
 
