@@ -2787,28 +2787,6 @@ function toggleMatch(id){
   },100)
 }
 
-function toggleSquad(matchId,name){
-
-let match = matches.find(m=>m.id===matchId)
-
-let i = match.squad.indexOf(name)
-
-if(i>-1){
-match.squad.splice(i,1)
-
-// 🔥 falls raus aus Kader → auch aus lineup/bench entfernen
-match.lineup = match.lineup.filter(p=>p!==name)
-match.bench = match.bench.filter(p=>p!==name)
-
-}else{
-match.squad.push(name)
-}
-
-save()
-renderMatches()
-
-}
-
 /* =========================
 EVENTS
 ========================= */
