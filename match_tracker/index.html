@@ -2968,14 +2968,14 @@ let teamPlayers = players.filter(p =>
   list.includes(p.name) && p.team === match.team
 )
 
-let gk
+let gk = null
 
 if(match.twOverride){
-gk = players.find(p =>
-  p.name === match.twOverride && p.team === match.team
-)
+  gk = players.find(p =>
+    p.name === match.twOverride && p.team === match.team
+  ) || null
 }else{
-gk = teamPlayers.find(p=>p.pos==='TW')
+  gk = teamPlayers.find(p => p.pos === 'TW') || null
 }
   
 let lv = teamPlayers.find(p=>p.pos==="LV")
