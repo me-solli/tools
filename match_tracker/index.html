@@ -1574,6 +1574,56 @@ box-shadow:
 0 0 14px rgba(255,107,107,0.35);
 }
 
+  #liveMode{
+  position:fixed;
+  inset:0;
+
+  background:#0f0f0f;
+
+  z-index:5000;
+
+  display:flex;
+  flex-direction:column;
+
+  padding:10px;
+}
+
+#liveMode.hidden{
+  display:none;
+}
+
+.live-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  margin-bottom:10px;
+}
+
+.live-body{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  overflow:auto;
+}
+
+.live-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.live-player{
+  padding:12px;
+  border-radius:10px;
+
+  background:#1a1a1a;
+  text-align:center;
+
+  font-size:14px;
+}
+
 </style>
 </head>
 <body>
