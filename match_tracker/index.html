@@ -1749,7 +1749,10 @@ input.setAttribute("name","no-autofill")
 input.setAttribute("data-form-type","other")
 
 if(isPassword){
-  input.type = "password"
+  // 🔥 Trick: erst später auf password setzen
+  setTimeout(()=>{
+    input.type = "password"
+  },10)
 }else{
   input.type = "number"
   input.min = 0
