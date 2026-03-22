@@ -3737,6 +3737,41 @@ btn.disabled = !(date && opponent)
 
 }
 
+  function openLiveMode(matchId){
+
+  if(!isUnlocked){
+    showToast("🔒 Kein Zugriff","info")
+    return
+  }
+
+  let match = matches.find(m=>m.id===matchId)
+  if(!match) return
+
+  let box = document.getElementById("liveMode")
+
+  box.innerHTML = `
+    <div class="live-header">
+      <div>LIVE: ${match.opponent}</div>
+      <button onclick="closeLiveMode()">✖</button>
+    </div>
+
+    <div class="live-body">
+      <div class="live-grid">
+        <button class="success">⚽ Tor</button>
+        <button class="secondary">🥅 Gegentor</button>
+        <button class="yellow">🟨 Gelb</button>
+        <button class="red">🟥 Rot</button>
+      </div>
+    </div>
+  `
+
+  box.classList.remove("hidden")
+}
+
+function closeLiveMode(){
+  document.getElementById("liveMode").classList.add("hidden")
+}
+
 document.getElementById("date").addEventListener("input",validateMatchForm)
 document.getElementById("opponent").addEventListener("input",validateMatchForm)
 
