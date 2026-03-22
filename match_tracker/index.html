@@ -2970,6 +2970,7 @@ box.innerHTML = `<h3>Spieler wählen</h3>`
 
 teamPlayers.forEach(p=>{
 let btn = document.createElement("button")
+  btn.type = "button"
 
 btn.innerText = p.name
 btn.classList.add("secondary")
