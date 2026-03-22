@@ -3772,6 +3772,72 @@ function closeLiveMode(){
   document.getElementById("liveMode").classList.add("hidden")
 }
 
+ function openLiveMode(matchId){
+
+  if(!isUnlocked){
+    showToast("🔒 Kein Zugriff","info")
+    return
+  }
+
+  let match = matches.find(m=>m.id===matchId)
+  if(!match) return
+
+  let box = document.getElementById("liveMode")
+
+  // 🔥 Spieler holen
+  let teamPlayers = players.filter(p => p.team === match.team)
+
+  box.innerHTML = `
+    <div class="live-header">
+      <div>LIVE: ${match.opponent}</div>
+      <button onclick="closeLiveMode()">✖</button>
+    </div>
+
+    <div class="live-body">
+
+      <!-- EVENTS -->
+      <div class="live-grid">
+        <button class="success" onclick="setLiveEvent('goal')">⚽ Tor</button>
+        <button class="secondary" onclick="setLiveEvent('goalAgainst')">🥅 Gegner</button>
+        <button class="yellow" onclick="setLiveEvent('yellow')">🟨 Gelb</button>
+        <button class="red" onclick="setLiveEvent('red')">🟥 Rot</button>
+      </div>
+
+      <!-- SPIELER -->
+      <div id="livePlayers" class="live-grid">
+        ${teamPlayers.map(p => `
+          <div class="live-player"
+            onclick="selectLivePlayer('${p.name}')">
+            ${p.pos} ${p.name}
+          </div>
+        `).join("")}
+      </div>
+
+    </div>
+  `
+
+  // 🔥 STATE
+  window.liveMatchId = matchId
+  window.liveEventType = null
+
+  box.classList.remove("hidden")
+} 
+
+ function setLiveEvent(type){
+  window.liveEventType = type
+  showToast("Event: " + type,"info")
+}
+
+function selectLivePlayer(name){
+
+  if(!window.liveEventType){
+    showToast("⚠️ Erst Event wählen","info")
+    return
+  }
+
+  showToast(name + " gewählt","info")
+} 
+
 document.getElementById("date").addEventListener("input",validateMatchForm)
 document.getElementById("opponent").addEventListener("input",validateMatchForm)
 
