@@ -3871,28 +3871,6 @@ function selectLivePlayer(name){
   return
 }
 
-  if(window.liveEventType === "goalAgainst"){
-
-  let match = matches.find(m => m.id === window.liveMatchId)
-  if(!match) return
-
-  let minute = getLiveMinute()
-
-  match.events.push({
-    type:"goalAgainst",
-    minute:minute
-  })
-
-  save()
-  renderMatches()
-
-  window.liveEventType = null
-
-  showToast("🥅 Gegentor (" + minute + "')","red")
-
-  return
-}
-
   if(!window.liveEventType){
     showToast("⚠️ Erst Event wählen","info")
     return
