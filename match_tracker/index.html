@@ -3828,13 +3828,19 @@ box.classList.remove("hidden")
 
 function setLiveEvent(type){
 
-  // 🔒 Spiel muss laufen
   if(!liveStartTime){
     showToast("▶ Erst Spiel starten","info")
     return
   }
 
-  // 🔥 GEGNER DIREKT SPEICHERN
+  // 🔥 BUTTON RESET
+  document.querySelectorAll(".live-grid button")
+    .forEach(b => b.classList.remove("active"))
+
+  // 🔥 AKTIVEN BUTTON MARKIEREN
+  event.target.classList.add("active")
+
+  // 🔥 GEGNER DIREKT
   if(type === "goalAgainst"){
 
     let match = matches.find(m => m.id === window.liveMatchId)
@@ -3855,7 +3861,6 @@ function setLiveEvent(type){
     return
   }
 
-  // 🔥 NORMALER FLOW (z.B. Tor, Gelb, Rot)
   window.liveEventType = type
 
   showToast("Event: " + type,"info")
