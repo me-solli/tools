@@ -3840,6 +3840,16 @@ function selectLivePlayer(name){
     return
   }
 
+  // 🔥 alle reset
+  document.querySelectorAll(".live-player")
+    .forEach(el => el.classList.remove("active"))
+
+  // 🔥 aktiven markieren
+  let el = [...document.querySelectorAll(".live-player")]
+    .find(x => x.innerText.includes(name))
+
+  if(el) el.classList.add("active")
+
   showToast(name + " gewählt","info")
 } 
 
