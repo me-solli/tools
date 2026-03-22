@@ -3121,16 +3121,20 @@ ${goals} : ${against}
 </span>
 
 ${match.location ? `
-<a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(match.location)}"
-   target="_blank"
-   onclick="event.stopPropagation()"
-   class="map-link">
-  🗺️ Route
-</a>
+<div class="meta-location-row">
 
-<span class="location">
-  📍 ${match.location}
-</span>
+  <a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(match.location)}"
+     target="_blank"
+     onclick="event.stopPropagation()"
+     class="map-link">
+    🗺️ Route
+  </a>
+
+  <span class="location">
+    📍 ${match.location}
+  </span>
+
+</div>
 ` : ""}
 
   </div>
