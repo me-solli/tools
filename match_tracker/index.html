@@ -1748,7 +1748,9 @@ input.setAttribute("spellcheck","false")
 input.setAttribute("name","no-autofill")
 input.setAttribute("data-form-type","other")
 
-if(!isPassword){
+if(isPassword){
+  input.type = "password"
+}else{
   input.type = "number"
   input.min = 0
   input.max = 120
