@@ -3937,11 +3937,16 @@ function getLiveMinute(){
   return Math.min(minutes, 60)
 }
 
-  function pauseLiveGame(){
+function pauseLiveGame(){
 
   if(livePausedAt) return
 
   livePausedAt = Date.now()
+
+  // 🔥 TIMER STOPPEN
+  if(liveTimerInterval){
+    clearInterval(liveTimerInterval)
+  }
 
   showToast("⏸ Pause","info")
 }
