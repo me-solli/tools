@@ -3828,15 +3828,14 @@ box.classList.remove("hidden")
 
 function setLiveEvent(type){
 
-  window.liveEventType = type
+  // 🔒 Spiel muss laufen
+  if(!liveStartTime){
+    showToast("▶ Erst Spiel starten","info")
+    return
+  }
 
   // 🔥 GEGNER DIREKT SPEICHERN
   if(type === "goalAgainst"){
-
-    if(!liveStartTime){
-      showToast("▶ Erst Spiel starten","info")
-      return
-    }
 
     let match = matches.find(m => m.id === window.liveMatchId)
     if(!match) return
@@ -3851,14 +3850,14 @@ function setLiveEvent(type){
     save()
     renderMatches()
 
-    window.liveEventType = null
-
     showToast("🥅 Gegentor (" + minute + "')","red")
 
     return
   }
 
-  // 🔥 NORMALER FLOW
+  // 🔥 NORMALER FLOW (z.B. Tor, Gelb, Rot)
+  window.liveEventType = type
+
   showToast("Event: " + type,"info")
 }
 
