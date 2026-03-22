@@ -3787,8 +3787,11 @@ function openLiveMode(matchId){
   let teamPlayers = players.filter(p => p.team === match.team)
 
   box.innerHTML = `
-    <div class="live-header">
-      <div>LIVE: ${match.opponent}</div>
+<div class="live-header">
+  <div>
+    LIVE: ${match.opponent}
+    <span id="liveTimer" style="margin-left:10px;opacity:.7">⏱ 0'</span>
+  </div>
       <button onclick="closeLiveMode()">✖</button>
     </div>
 
