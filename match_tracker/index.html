@@ -1918,6 +1918,10 @@ function getVisiblePlayers(){
 let matches = []
 let activeTeam = null
   let isUnlocked = false
+  let liveStartTime = null
+let livePausedAt = null
+let livePausedTotal = 0
+let liveMatchId = null
 
 function loadFromServer(){
 
