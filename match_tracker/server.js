@@ -89,8 +89,7 @@ app.post("/check-team-access", (req, res) => {
     }
   }
 
-  // 🔥 kein Passwort gesetzt → frei
-  return res.json({ ok: true })
+return res.json({ ok: false })
 })
 
 /* =========================
