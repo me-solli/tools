@@ -3840,8 +3840,9 @@ function closeLiveMode(){
       <!-- SPIELER -->
       <div id="livePlayers" class="live-grid">
         ${teamPlayers.map(p => `
-          <div class="live-player"
-            onclick="selectLivePlayer('${p.name}')">
+<div class="live-player"
+  data-name="${p.name}"
+  onclick="selectLivePlayer('${p.name}')">
             ${p.pos} ${p.name}
           </div>
         `).join("")}
