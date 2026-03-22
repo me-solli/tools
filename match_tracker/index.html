@@ -3960,6 +3960,26 @@ function getLiveMinute(){
   return Math.min(minutes, 60)
 }
 
+  function startLiveTimer(){
+
+  // alten Timer killen (wichtig!)
+  if(liveTimerInterval){
+    clearInterval(liveTimerInterval)
+  }
+
+  liveTimerInterval = setInterval(()=>{
+
+    let el = document.getElementById("liveTimer")
+    if(!el) return
+
+    let min = getLiveMinute()
+
+    el.innerText = "⏱ " + min + "'"
+
+  }, 1000)
+
+}
+
 function pauseLiveGame(){
 
   if(livePausedAt) return
