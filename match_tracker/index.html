@@ -3828,6 +3828,8 @@ box.classList.remove("hidden")
 
 function selectLivePlayer(name){
 
+  console.log("EVENT:", window.liveEventType) // 👈 HIER rein
+
   if(!window.liveEventType){
     showToast("⚠️ Erst Event wählen","info")
     return
@@ -3841,15 +3843,14 @@ function selectLivePlayer(name){
     .forEach(el => el.classList.remove("active"))
 
   // 🔥 AKTIVEN MARKIEREN
-let el = [...document.querySelectorAll(".live-player")]
-  .find(x => x.dataset.name === name)
+  let el = [...document.querySelectorAll(".live-player")]
+    .find(x => x.dataset.name === name)
 
   if(el) el.classList.add("active")
 
-  // 🔥 ECHTE MINUTE
+  // 🔥 MINUTE
   let minute = getLiveMinute()
 
-  // 🔥 EVENT SPEICHERN
   match.events.push({
     type: window.liveEventType,
     player: name,
@@ -3861,7 +3862,7 @@ let el = [...document.querySelectorAll(".live-player")]
 
   // 🔥 RESET
   window.liveEventType = null
-  
+
   showToast("⚡ " + name + " (" + minute + "')","goal")
 }
 
