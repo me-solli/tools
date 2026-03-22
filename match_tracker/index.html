@@ -3872,8 +3872,11 @@ function selectLivePlayer(name){
 
   // 🔥 RESET
   window.liveEventType = null
+  
+showToast("✅ " + name + " (" + minute + "')","goal")
 
-  showToast("✅ " + name + " (" + minute + "')","goal")
+// 🔥 LIVE MODE ZU → damit du das Ergebnis siehst
+closeLiveMode()
 }
 
 document.getElementById("date").addEventListener("input",validateMatchForm)
