@@ -3878,8 +3878,8 @@ function selectLivePlayer(name){
     .forEach(el => el.classList.remove("active"))
 
   // 🔥 AKTIVEN MARKIEREN
-  let el = [...document.querySelectorAll(".live-player")]
-    .find(x => x.innerText.includes(name))
+let el = [...document.querySelectorAll(".live-player")]
+  .find(x => x.dataset.name === name)
 
   if(el) el.classList.add("active")
 
