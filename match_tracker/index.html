@@ -3884,19 +3884,27 @@ function setLiveEvent(type, e){
 
 function selectLivePlayer(name){
 
-  console.log("EVENT:", window.liveEventType) // 👈 HIER rein
+  console.log("EVENT:", window.liveEventType)
 
+  // 🔒 Spiel muss laufen
   if(!liveStartTime){
-  showToast("▶ Erst Spiel starten","info")
-  return
-}
+    showToast("▶ Erst Spiel starten","info")
+    return
+  }
 
+  // ⏸ PAUSE BLOCK
+  if(livePausedAt){
+    showToast("⏸ Spiel pausiert","info")
+    return
+  }
+
+  // ⚠️ Event gewählt?
   if(!window.liveEventType){
     showToast("⚠️ Erst Event wählen","info")
     return
   }
-  
-let match = matches.find(m => m.id === window.liveMatchId)
+
+  let match = matches.find(m => m.id === window.liveMatchId)
   if(!match) return
 
   // 🔥 VISUAL RESET
@@ -3924,7 +3932,16 @@ let match = matches.find(m => m.id === window.liveMatchId)
   // 🔥 RESET
   window.liveEventType = null
 
-  showToast("⚡ " + name + " (" + minute + "')","goal")
+  // 🔥 BESSERE TOASTS
+  if(window.liveEventType === "goal"){
+    showToast("⚽ " + name + " (" + minute + "')","goal")
+  } else if(window.liveEventType === "yellow"){
+    showToast("🟨 " + name + " (" + minute + "')","yellow")
+  } else if(window.liveEventType === "red"){
+    showToast("🟥 " + name + " (" + minute + "')","red")
+  } else {
+    showToast("⚡ " + name + " (" + minute + "')","info")
+  }
 }
 
 function getLiveMinute(){
