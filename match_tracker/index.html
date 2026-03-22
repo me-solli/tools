@@ -3276,6 +3276,11 @@ ${match.location ? `
 <div class="match-actions-right">
 
 <button class="secondary"
+onclick="event.stopPropagation();openLiveMode(${match.id})">
+▶
+</button>
+
+<button class="secondary"
 ${!isUnlocked ? "disabled" : ""}
 onclick="event.stopPropagation();editMatch(${match.id})">
 ✏️
