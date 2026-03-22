@@ -2765,7 +2765,7 @@ renderAll()
 
 }
 
-  function toggleMatch(id){
+function toggleMatch(id){
 
   matches.forEach(m => {
     if(m.id === id){
@@ -2774,19 +2774,18 @@ renderAll()
       m.open = false
     }
   })
-    
-match.open = true
 
-save()
-renderMatches()
+  save()
+  renderMatches()
 
-// 🔥 AUTO SCROLL AUF DAS MATCH
-setTimeout(()=>{
-  document.querySelector(".match.open")?.scrollIntoView({
-    behavior:"smooth",
-    block:"start"
-  })
-},100)
+  // 🔥 AUTO SCROLL
+  setTimeout(()=>{
+    document.querySelector(".match.open")?.scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    })
+  },100)
+}
 
 function toggleLineup(matchId,name){
 
