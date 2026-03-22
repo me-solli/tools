@@ -3954,6 +3954,8 @@ function resumeLiveGame(){
     livePausedTotal = 0
     livePausedAt = null
 
+    startLiveTimer() // 🔥 HIER
+
     showToast("▶ Spiel gestartet","info")
     return
   }
@@ -3964,6 +3966,8 @@ function resumeLiveGame(){
   livePausedTotal += pauseDuration
 
   livePausedAt = null
+
+  startLiveTimer() // 🔥 UND HIER
 
   showToast("▶ Weiter","info")
 }
