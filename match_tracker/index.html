@@ -3767,7 +3767,7 @@ btn.disabled = !(date && opponent)
   document.getElementById("liveMode").classList.add("hidden")
 }
 
- function openLiveMode(matchId){
+function openLiveMode(matchId){
 
   if(!isUnlocked){
     showToast("🔒 Kein Zugriff","info")
@@ -3798,19 +3798,19 @@ btn.disabled = !(date && opponent)
         <button class="red" onclick="setLiveEvent('red')">🟥 Rot</button>
       </div>
 
-          <div class="live-grid">
-      <button onclick="pauseLiveGame()">⏸ Pause</button>
-      <button onclick="resumeLiveGame()">▶ Weiter</button>
-    </div>
+      <div class="live-grid">
+        <button onclick="pauseLiveGame()">⏸ Pause</button>
+        <button onclick="resumeLiveGame()">▶ Weiter</button>
+      </div>
 
       <!-- SPIELER -->
       <div id="livePlayers" class="live-grid">
         ${teamPlayers.map(p => `
 <div class="live-player"
   data-name="${p.name}"
- onclick='selectLivePlayer(${JSON.stringify(p.name)})'>
-            ${p.pos} ${p.name}
-          </div>
+  onclick='selectLivePlayer(${JSON.stringify(p.name)})'>
+  ${p.pos} ${p.name}
+</div>
         `).join("")}
       </div>
 
@@ -3821,8 +3821,13 @@ btn.disabled = !(date && opponent)
   window.liveMatchId = matchId
   window.liveEventType = null
 
+  // 🔥 WICHTIG: LIVE TIMER STARTEN
+  liveStartTime = Date.now()
+  livePausedAt = null
+  livePausedTotal = 0
+
   box.classList.remove("hidden")
-} 
+}
 
  function setLiveEvent(type){
   window.liveEventType = type
