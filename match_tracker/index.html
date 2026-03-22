@@ -3758,6 +3758,11 @@ btn.disabled = !(date && opponent)
 
   let box = document.getElementById("liveMode")
 
+    liveMatchId = matchId
+liveStartTime = Date.now()
+livePausedAt = null
+livePausedTotal = 0
+
   box.innerHTML = `
     <div class="live-header">
       <div>LIVE: ${match.opponent}</div>
