@@ -3844,6 +3844,11 @@ function selectLivePlayer(name){
 
   console.log("EVENT:", window.liveEventType) // 👈 HIER rein
 
+  if(!liveStartTime){
+  showToast("▶ Erst Spiel starten","info")
+  return
+}
+
   if(!window.liveEventType){
     showToast("⚠️ Erst Event wählen","info")
     return
