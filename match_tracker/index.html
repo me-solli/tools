@@ -3830,13 +3830,35 @@ function setLiveEvent(type){
 
   window.liveEventType = type
 
-  // 🔥 ALLE BUTTONS RESET
-  document.querySelectorAll(".live-grid button")
-    .forEach(b => b.classList.remove("active"))
+  // 🔥 GEGNER DIREKT SPEICHERN
+  if(type === "goalAgainst"){
 
-  // 🔥 AKTIVEN BUTTON MARKIEREN
-  event.target.classList.add("active")
+    if(!liveStartTime){
+      showToast("▶ Erst Spiel starten","info")
+      return
+    }
 
+    let match = matches.find(m => m.id === window.liveMatchId)
+    if(!match) return
+
+    let minute = getLiveMinute()
+
+    match.events.push({
+      type:"goalAgainst",
+      minute:minute
+    })
+
+    save()
+    renderMatches()
+
+    window.liveEventType = null
+
+    showToast("🥅 Gegentor (" + minute + "')","red")
+
+    return
+  }
+
+  // 🔥 NORMALER FLOW
   showToast("Event: " + type,"info")
 }
 
