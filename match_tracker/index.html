@@ -777,20 +777,14 @@ overflow:hidden;
 }
 
 .team-name{
-display:-webkit-box;
--webkit-line-clamp:2;
--webkit-box-orient:vertical;
-
 overflow:hidden;
+text-overflow:ellipsis;
+white-space:nowrap;   /* 🔥 KEY FIX */
 
-line-height:1.2;
-
-font-size:15px;     /* 🔥 größer */
-font-weight:600;    /* 🔥 stärker */
+font-size:15px;
+font-weight:600;
 
 opacity:.95;
-
-word-break:break-word;
 }
 
 /* LINKS */
