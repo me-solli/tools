@@ -3924,6 +3924,49 @@ box.classList.remove("hidden")
   updateLiveScore() 
   }
 
+  function updateLiveFeed(){
+
+  let match = matches.find(m => m.id === window.liveMatchId)
+  if(!match) return
+
+  let box = document.getElementById("liveFeed")
+  if(!box) return
+
+  let html = ""
+
+  let events = [...match.events].sort((a,b)=>b.minute-a.minute)
+
+  events.slice(0,10).forEach(e=>{
+
+    let text = ""
+
+    if(e.type==="goal"){
+      text = "⚽ " + e.player
+    }
+    else if(e.type==="goalAgainst"){
+      text = "🥅 Gegner"
+    }
+    else if(e.type==="yellow"){
+      text = "🟨 " + e.player
+    }
+    else if(e.type==="red"){
+      text = "🟥 " + e.player
+    }
+    else if(e.type==="sub"){
+      text = "🔁 " + e.player + " → " + e.in
+    }
+
+    html += `
+<div class="live-feed-item ${e.type}">
+  <span>${text}</span>
+  <span>${String(e.minute).padStart(2,"0")}'</span>
+</div>
+`
+  })
+
+  box.innerHTML = html || "<div style='opacity:.5'>Noch keine Events</div>"
+}
+
 function setLiveEvent(type, e){
 
   // 🔒 Spiel muss laufen
