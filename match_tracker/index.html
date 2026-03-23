@@ -4005,7 +4005,8 @@ function setLiveEvent(type, e){
 
     match.events.push({
       type:"goalAgainst",
-      minute:minute
+      minute:minute,
+      time: Date.now()      
     })
 
     save()
