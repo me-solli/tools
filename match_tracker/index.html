@@ -1707,6 +1707,117 @@ box-shadow:
 .live-feed-item.sub{
   background:rgba(108,99,255,0.15);
 }
+
+  /* =========================
+📱 MOBILE FIX (STEP 1)
+========================= */
+
+@media (max-width: 768px){
+
+  /* 🔥 APP wird vertikal */
+  .app{
+    flex-direction:column;
+    gap:14px;
+  }
+
+  /* 🔥 Sidebar oben wie Panel */
+  .sidebar{
+    width:100%;
+    position:relative;
+    top:0;
+  }
+
+  /* 🔥 Content weniger Padding */
+  body{
+    padding:12px;
+  }
+
+  .content-wrap{
+    padding:12px;
+  }
+
+  /* 🔥 Header kompakter */
+  .topbar-inner{
+    flex-wrap:wrap;
+    gap:8px;
+  }
+
+  .topbar-right{
+    width:100%;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:6px;
+    font-size:11px;
+  }
+
+  /* 🔥 Match Header kleiner */
+  .match-main{
+    font-size:15px;
+  }
+
+  .score{
+    font-size:20px;
+  }
+
+  /* 🔥 Location nicht Layout zerstören */
+  .meta-top{
+    grid-template-columns: 1fr 1fr;
+    gap:6px;
+  }
+
+  .meta-location-row{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:4px;
+  }
+
+  .location{
+    font-size:11px;
+  }
+
+  /* 🔥 Buttons größer (Finger!) */
+  button{
+    min-height:42px;
+  }
+
+  /* =========================
+  🔥 LIVE MODE MOBILE FIX
+  ========================= */
+
+  .live-grid{
+    grid-template-columns:1fr;   /* 🔥 EINSPALTIG */
+  }
+
+  .live-player{
+    padding:14px;
+    font-size:15px;
+  }
+
+  .live-feed{
+    max-height:120px;
+  }
+
+  .live-header{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:6px;
+  }
+
+  .live-score{
+    font-size:14px;
+  }
+
+  .live-timer{
+    font-size:12px;
+  }
+
+  .live-close{
+    position:absolute;
+    top:10px;
+    right:10px;
+  }
+
+}
   
 </style>
 </head>
