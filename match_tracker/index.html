@@ -1762,10 +1762,13 @@ box-shadow:
     overflow:hidden; /* 🔥 verhindert rausziehen */
   }
 
-  .match-main{
-    grid-template-columns: minmax(0,1fr) auto minmax(0,1fr);
-    gap:6px;
-  }
+.match-main{
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto auto;
+
+  text-align:center;
+  gap:4px;
+}
 
   .team-name{
     white-space:nowrap;
