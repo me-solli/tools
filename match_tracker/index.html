@@ -3925,25 +3925,20 @@ box.classList.remove("hidden")
   updateLiveFeed()
   }
 
-  function updateLiveFeed(){
+function updateLiveFeed(){
 
-let match = matches.find(m => m.id === window.liveMatchId)
-
-if(!match){
-  console.log("❌ Kein Match im Feed")
-  return
-}
-
-// 🔥 FORCE CLONE (fix für UI lag)
-match = JSON.parse(JSON.stringify(match))
+  let match = matches.find(m => m.id === window.liveMatchId)
   if(!match) return
 
   let box = document.getElementById("liveFeed")
   if(!box) return
 
-  let html = ""
+  // 🔥 IMMER RESET (wichtig für sofortiges Update)
+  box.innerHTML = ""
 
   let events = [...match.events].sort((a,b)=>b.minute-a.minute)
+
+  let html = ""
 
   events.slice(0,10).forEach(e=>{
 
@@ -3974,6 +3969,9 @@ match = JSON.parse(JSON.stringify(match))
   })
 
   box.innerHTML = html || "<div style='opacity:.5'>Noch keine Events</div>"
+
+  // 🔥 optional nice UX
+  box.scrollTop = 0
 }
 
 function setLiveEvent(type, e){
