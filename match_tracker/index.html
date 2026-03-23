@@ -3937,7 +3937,14 @@ function updateLiveFeed(){
   // 🔥 IMMER RESET (wichtig für sofortiges Update)
   box.innerHTML = ""
 
-  let events = [...match.events].sort((a,b)=>b.minute-a.minute)
+let events = [...match.events].sort((a,b)=>{
+
+  if(b.minute !== a.minute){
+    return b.minute - a.minute
+  }
+
+  return (b.time || 0) - (a.time || 0)
+})
 
   let html = ""
 
