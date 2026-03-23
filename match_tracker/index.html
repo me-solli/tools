@@ -1730,11 +1730,102 @@ box-shadow:
 
   body{
     padding:12px;
+    overflow-x:hidden; /* 🔥 verhindert Seiten-Scroll */
   }
 
   .content-wrap{
     padding:12px;
   }
+
+  /* =========================
+  🎯 HERO FIX
+  ========================= */
+
+  .hero-wrap{
+    padding:0 6px;
+    max-width:420px;
+    margin:10px auto;
+  }
+
+  .hero-banner-img{
+    height:90px;
+    border-radius:10px;
+    background-size:contain;
+    background-position:center;
+  }
+
+  /* =========================
+  🔥 MATCH FIX (WICHTIG)
+  ========================= */
+
+  .match-header{
+    overflow:hidden; /* 🔥 verhindert rausziehen */
+  }
+
+  .match-main{
+    grid-template-columns: minmax(0,1fr) auto minmax(0,1fr);
+    gap:6px;
+  }
+
+  .team-name{
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  .score{
+    font-size:20px;
+    min-width:55px;
+  }
+
+  /* 🔥 BUTTONS kleiner */
+  .match-actions-right{
+    gap:4px;
+  }
+
+  .match-actions-right button{
+    width:28px;
+    height:28px;
+  }
+
+  /* =========================
+  🔥 LIVE MODE MOBILE FIX
+  ========================= */
+
+  .live-grid{
+    grid-template-columns:1fr;
+  }
+
+  .live-player{
+    padding:14px;
+    font-size:15px;
+  }
+
+  .live-feed{
+    max-height:120px;
+  }
+
+  .live-header{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:6px;
+  }
+
+  .live-score{
+    font-size:14px;
+  }
+
+  .live-timer{
+    font-size:12px;
+  }
+
+  .live-close{
+    position:absolute;
+    top:10px;
+    right:10px;
+  }
+
+}
 
   /* =========================
   🎯 HERO FIX
