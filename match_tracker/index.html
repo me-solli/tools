@@ -1962,7 +1962,7 @@ box.innerHTML = `
 <input type="text" autocomplete="username" style="position:absolute;opacity:0;">
 <input type="password" autocomplete="current-password" style="position:absolute;opacity:0;">
 
-<!-- 🔐 ECHTES PASSWORT -->
+<!-- 🔐 ECHTES INPUT -->
 <input id="modalInput"
    type="text"
    placeholder=""
@@ -1972,11 +1972,11 @@ box.innerHTML = `
    data-1p-ignore="true"
    data-bwignore="true"
    data-form-type="other"
-   inputmode="numeric">
+   inputmode="text">   <!-- 🔥 FIX -->
 
 <div class="modal-actions">
   <button class="primary" onclick="confirmModal()">OK</button>
-<button class="danger-outline" onclick="closeModal()">Abbrechen</button>
+  <button class="danger-outline" onclick="closeModal()">Abbrechen</button>
 </div>
 `
 
