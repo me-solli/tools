@@ -3975,10 +3975,10 @@ function getLiveMinute(){
     let el = document.getElementById("liveTimer")
     if(!el) return
 
-    let min = getLiveMinute()
+let min = getLiveMinute()
 
 let formatted = String(min).padStart(2, "0")
-el.innerText = "⏱ " + formatted
+el.innerText = "⏱ " + formatted + "'"
 
   }, 1000)
 
