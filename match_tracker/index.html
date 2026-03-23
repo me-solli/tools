@@ -4062,7 +4062,8 @@ function selectLivePlayer(name){
   match.events.push({
     type: type,
     player: name,
-    minute: minute
+    minute: minute,
+    time: Date.now()
   })
 save()
 
