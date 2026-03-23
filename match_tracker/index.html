@@ -1716,12 +1716,10 @@ box-shadow:
 
 @media (max-width: 768px){
 
-    /* 🔥 3. Icon (Matches) komplett ausblenden */
+  /* 🔥 3. Icon (Matches) komplett ausblenden */
   #topMatches{
     display:none;
   }
-
-}
 
   /* 🔥 APP Layout */
   .app{
@@ -1737,7 +1735,7 @@ box-shadow:
 
   body{
     padding:12px;
-    overflow-x:hidden; /* 🔥 verhindert Seiten-Scroll */
+    overflow-x:hidden;
   }
 
   .content-wrap{
@@ -1766,16 +1764,16 @@ box-shadow:
   ========================= */
 
   .match-header{
-    overflow:hidden; /* 🔥 verhindert rausziehen */
+    overflow:hidden;
   }
 
-.match-main{
-  grid-template-columns: 1fr;
-  grid-template-rows: auto auto auto;
+  .match-main{
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
 
-  text-align:center;
-  gap:4px;
-}
+    text-align:center;
+    gap:4px;
+  }
 
   .team-name{
     white-space:nowrap;
@@ -1783,19 +1781,18 @@ box-shadow:
     text-overflow:ellipsis;
   }
 
-.score{
-  font-size:22px;
-  margin:2px 0;
-}
+  .score{
+    font-size:22px;
+    margin:2px 0;
+  }
 
-  /* 🔥 BUTTONS kleiner */
-.match-actions-right{
-  grid-column:1 / -1;
-  grid-row:auto;
+  .match-actions-right{
+    grid-column:1 / -1;
+    grid-row:auto;
 
-  justify-content:center;
-  margin-top:6px;
-}
+    justify-content:center;
+    margin-top:6px;
+  }
 
   .match-actions-right button{
     width:28px;
@@ -1839,8 +1836,8 @@ box-shadow:
     right:10px;
   }
 
-}
-
+} /* ✅ EINZIGE KLAMMER */
+  
   /* =========================
   🔥 LIVE MODE MOBILE FIX
   ========================= */
