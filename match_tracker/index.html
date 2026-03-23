@@ -1665,6 +1665,48 @@ box-shadow:
   outline:2px solid #3a7cff;
   background:#222;
 }
+
+  .live-feed{
+  background:#141414;
+  border:1px solid rgba(255,255,255,0.05);
+  border-radius:10px;
+
+  padding:10px;
+  max-height:140px;
+  overflow:auto;
+
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+
+  font-size:13px;
+}
+
+.live-feed-item{
+  padding:6px 8px;
+  border-radius:6px;
+
+  background:#1f1f1f;
+
+  display:flex;
+  justify-content:space-between;
+}
+
+.live-feed-item.goal{
+  background:rgba(47,158,68,0.15);
+}
+
+.live-feed-item.yellow{
+  background:rgba(212,160,23,0.15);
+}
+
+.live-feed-item.red{
+  background:rgba(201,42,42,0.15);
+}
+
+.live-feed-item.sub{
+  background:rgba(108,99,255,0.15);
+}
   
 </style>
 </head>
