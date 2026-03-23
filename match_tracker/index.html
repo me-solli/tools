@@ -3536,9 +3536,18 @@ ${!isUnlocked ? "disabled" : ""}
 onclick="copyReport(${match.id})">📋 Bericht kopieren</button>
 `
 
-match.events.sort((a,b)=>a.minute-b.minute)
+match.events
+.sort((a,b)=>{
 
-match.events.forEach((e,i)=>{
+  // 🔥 zuerst nach Minute
+  if(a.minute !== b.minute){
+    return a.minute - b.minute
+  }
+
+  // 🔥 dann nach echter Zeit (Fallback 0)
+  return (a.time || 0) - (b.time || 0)
+})
+.forEach((e,i)=>{
 
 let txt
 
