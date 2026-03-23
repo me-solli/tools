@@ -3977,7 +3977,8 @@ function getLiveMinute(){
 
     let min = getLiveMinute()
 
-    el.innerText = "⏱ " + min + "'"
+let formatted = String(min).padStart(2, "0")
+el.innerText = "⏱ " + formatted
 
   }, 1000)
 
