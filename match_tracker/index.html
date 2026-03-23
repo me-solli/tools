@@ -4058,12 +4058,12 @@ function selectLivePlayer(name){
     player: name,
     minute: minute
   })
+save()
 
-  updateLiveScore()
-  updateLiveFeed()
+updateLiveScore()
+updateLiveFeed()
 
-  save()
-  renderMatches()
+renderMatches()
 
   // 🔥 TOAST
   if(type === "goal"){
