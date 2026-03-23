@@ -3067,7 +3067,8 @@ closeModal()
 m.events.push({
 type:type,
 player:p.name,
-minute:minute
+minute:minute,
+  time: Date.now()
 })
 
 save()
