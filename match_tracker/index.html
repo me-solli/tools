@@ -1708,26 +1708,24 @@ box-shadow:
   background:rgba(108,99,255,0.15);
 }
 
-  /* =========================
+/* =========================
 📱 MOBILE FIX (STEP 1)
 ========================= */
 
 @media (max-width: 768px){
 
-  /* 🔥 APP wird vertikal */
+  /* 🔥 APP Layout */
   .app{
     flex-direction:column;
     gap:14px;
   }
 
-  /* 🔥 Sidebar oben wie Panel */
   .sidebar{
     width:100%;
     position:relative;
     top:0;
   }
 
-  /* 🔥 Content weniger Padding */
   body{
     padding:12px;
   }
@@ -1736,48 +1734,21 @@ box-shadow:
     padding:12px;
   }
 
-  /* 🔥 Header kompakter */
-  .topbar-inner{
-    flex-wrap:wrap;
-    gap:8px;
+  /* =========================
+  🎯 HERO FIX
+  ========================= */
+
+  .hero-wrap{
+    padding:0 6px;
+    max-width:500px;
+    margin:10px auto;
   }
 
-  .topbar-right{
-    width:100%;
-    justify-content:space-between;
-    flex-wrap:wrap;
-    gap:6px;
-    font-size:11px;
-  }
-
-  /* 🔥 Match Header kleiner */
-  .match-main{
-    font-size:15px;
-  }
-
-  .score{
-    font-size:20px;
-  }
-
-  /* 🔥 Location nicht Layout zerstören */
-  .meta-top{
-    grid-template-columns: 1fr 1fr;
-    gap:6px;
-  }
-
-  .meta-location-row{
-    flex-direction:column;
-    align-items:flex-start;
-    gap:4px;
-  }
-
-  .location{
-    font-size:11px;
-  }
-
-  /* 🔥 Buttons größer (Finger!) */
-  button{
-    min-height:42px;
+  .hero-banner-img{
+    height:90px;
+    border-radius:10px;
+    background-size:cover;
+    background-position:center;
   }
 
   /* =========================
@@ -1785,7 +1756,7 @@ box-shadow:
   ========================= */
 
   .live-grid{
-    grid-template-columns:1fr;   /* 🔥 EINSPALTIG */
+    grid-template-columns:1fr;
   }
 
   .live-player{
@@ -1817,7 +1788,7 @@ box-shadow:
     right:10px;
   }
 
-}
+} /* 🔥 DIESE KLAMMER IST WICHTIG */
   
 </style>
 </head>
