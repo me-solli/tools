@@ -3914,9 +3914,8 @@ function setLiveEvent(type, e){
       minute:minute
     })
 
-    updateLiveScore()
-
     save()
+    updateLiveScore()
     renderMatches()
 
     showToast("🥅 Gegentor (" + minute + "')","red")
