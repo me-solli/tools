@@ -1782,9 +1782,13 @@ box-shadow:
 }
 
   /* 🔥 BUTTONS kleiner */
-  .match-actions-right{
-    gap:4px;
-  }
+.match-actions-right{
+  grid-column:1 / -1;
+  grid-row:auto;
+
+  justify-content:center;
+  margin-top:6px;
+}
 
   .match-actions-right button{
     width:28px;
