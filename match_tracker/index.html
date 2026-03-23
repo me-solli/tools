@@ -3927,7 +3927,15 @@ box.classList.remove("hidden")
 
   function updateLiveFeed(){
 
-  let match = matches.find(m => m.id === window.liveMatchId)
+let match = matches.find(m => m.id === window.liveMatchId)
+
+if(!match){
+  console.log("❌ Kein Match im Feed")
+  return
+}
+
+// 🔥 FORCE CLONE (fix für UI lag)
+match = JSON.parse(JSON.stringify(match))
   if(!match) return
 
   let box = document.getElementById("liveFeed")
