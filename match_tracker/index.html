@@ -2255,12 +2255,23 @@ function save(){
     },
     body: JSON.stringify(data)
   })
-  .then(() => {
-    if(status){
-      status.innerText = "✓ gespeichert"
-      setTimeout(()=> status.innerText = "", 1500)
-    }
-  })
+.then(res => res.json())
+.then(res => {
+
+  if(res.error){
+    showToast(res.error,"info")
+
+    // 🔥 WICHTIG → Daten neu laden
+    loadFromServer()
+
+    return
+  }
+
+  if(status){
+    status.innerText = "✓ gespeichert"
+    setTimeout(()=> status.innerText = "", 1500)
+  }
+})
   .catch(() => {
     if(status) status.innerText = "⚠️ nur lokal gespeichert"
   })
