@@ -70,6 +70,10 @@ app.post("/save", (req, res) => {
 
     const incoming = req.body
 
+    if(!incoming || typeof incoming !== "object"){
+  return res.status(400).json({ error: "Ungültige Daten" })
+}
+
     // 🔥 aktuelle Daten laden
     const current = JSON.parse(fs.readFileSync(FILE, "utf-8"))
 
