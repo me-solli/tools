@@ -1642,7 +1642,11 @@ box-shadow:
   display:flex;
   flex-direction:column;
   gap:10px;
-  overflow:auto;
+
+  overflow-y:auto;      /* 🔥 nur vertikal */
+  overflow-x:hidden;
+
+  min-height:0;         /* 🔥 CRITICAL FIX */
 }
 
 .live-grid{
