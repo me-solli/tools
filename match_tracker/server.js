@@ -58,11 +58,63 @@ app.get("/data", (req, res) => {
 })
 
 // 👉 Daten speichern
+// 🔥 IP TRACKING
+const ipLog = {}
+
+function getIP(req){
+  return req.headers["x-forwarded-for"]?.split(",")[0] || req.socket.remoteAddress
+}
+
 app.post("/save", (req, res) => {
   try {
-    fs.writeFileSync(FILE, JSON.stringify(req.body, null, 2))
+
+    const incoming = req.body
+
+    // 🔥 aktuelle Daten laden
+    const current = JSON.parse(fs.readFileSync(FILE, "utf-8"))
+
+    const oldTeams = current.teams?.length || 0
+    const newTeams = incoming.teams?.length || 0
+
+    // 🔥 nur prüfen wenn neue Teams dazu kommen
+    if(newTeams > oldTeams){
+
+      const ip = getIP(req)
+      const now = Date.now()
+
+      if(!ipLog[ip]){
+        ipLog[ip] = {
+          timestamps: [],
+          last: 0
+        }
+      }
+
+      let entry = ipLog[ip]
+
+      // ⏱ Cooldown (5 Sekunden)
+      if(now - entry.last < 5000){
+        return res.json({ error: "⏳ Bitte kurz warten" })
+      }
+
+      entry.last = now
+
+      // 🧹 alte Einträge entfernen (1h)
+      entry.timestamps = entry.timestamps.filter(t => now - t < 3600000)
+
+      // 🚫 Limit
+      if(entry.timestamps.length >= 5){
+        return res.json({ error: "🚫 Limit erreicht (max 5 Teams / Stunde)" })
+      }
+
+      entry.timestamps.push(now)
+    }
+
+    // 💾 speichern
+    fs.writeFileSync(FILE, JSON.stringify(incoming, null, 2))
+
     console.log("💾 Daten gespeichert")
     res.json({ status: "ok" })
+
   } catch (err) {
     console.error("SAVE ERROR:", err)
     res.status(500).json({ error: "Fehler beim Speichern" })
