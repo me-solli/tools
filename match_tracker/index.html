@@ -4137,7 +4137,7 @@ box.classList.remove("hidden")
 
 function updateLiveFeed(){
 
-  let match = matches.find(m => m.id === window.liveMatchId)
+  let match = matches.find(m => m.id === liveMatchId)
   if(!match) return
 
   let box = document.getElementById("liveFeed")
