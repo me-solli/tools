@@ -4053,11 +4053,6 @@ function openLiveMode(matchId){
 
   document.body.style.overflow = "hidden";
 
-  if(!isUnlocked){
-    showToast("🔒 Kein Zugriff","info")
-    return
-  }
-
   let match = matches.find(m=>m.id===matchId)
   if(!match) return
 
