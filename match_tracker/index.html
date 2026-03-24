@@ -3991,6 +3991,8 @@ function closeLiveMode(){
 
 function openLiveMode(matchId){
 
+  document.body.style.overflow = "hidden";
+
   if(!isUnlocked){
     showToast("🔒 Kein Zugriff","info")
     return
