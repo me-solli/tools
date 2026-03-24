@@ -4157,13 +4157,6 @@ function setLiveEvent(type, e){
     return
   }
 
-  // 🔥 BUTTON RESET
-  document.querySelectorAll(".live-grid button")
-    .forEach(b => b.classList.remove("active"))
-
-  // 🔥 AKTIVEN BUTTON MARKIEREN
-  if(e) e.target.classList.add("active")
-
   // 🔥 GEGNER DIREKT
   if(type === "goalAgainst"){
 
