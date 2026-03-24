@@ -4462,18 +4462,6 @@ setTimeout(()=>{
   checkLiveFromURL()
 },1000)
 
-// ❌ AUTO-RELOAD AUS (überschreibt deine Eingaben)
-setInterval(() => {
-
-  // ❌ NICHT im Live-Modus refreshen
-  if(liveMatchId){
-    return
-  }
-
-  loadFromServer()
-
-}, 30000)
-
 </script>
 
 <div id="modal" class="modal hidden">
