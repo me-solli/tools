@@ -4193,6 +4193,11 @@ let events = [...match.events].sort((a,b)=>{
 
 function setLiveEvent(type, e){
 
+  if(!isUnlocked){
+  showToast("👀 Zuschauer-Modus","info")
+  return
+}
+
   // 🔒 Spiel muss laufen
   if(!liveStartTime){
     showToast("▶ Erst Spiel starten","info")
