@@ -111,8 +111,10 @@ if(diff > 0){
 if(entry.timestamps.length + diff > 1){
   return res.json({ error: "🚫 Limit erreicht (max 1 Team / Stunde)" })
 }
-
-      entry.timestamps.push(now)
+  
+for(let i = 0; i < diff; i++){
+  entry.timestamps.push(now)
+}
     }
 
     // 💾 speichern
