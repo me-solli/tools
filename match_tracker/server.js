@@ -102,8 +102,8 @@ app.post("/save", (req, res) => {
       entry.timestamps = entry.timestamps.filter(t => now - t < 3600000)
 
       // 🚫 Limit
-      if(entry.timestamps.length >= 5){
-        return res.json({ error: "🚫 Limit erreicht (max 5 Teams / Stunde)" })
+      if(entry.timestamps.length >= 1){
+        return res.json({ error: "🚫 Limit erreicht (max 1 Team / Stunde)" })
       }
 
       entry.timestamps.push(now)
