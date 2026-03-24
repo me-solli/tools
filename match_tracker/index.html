@@ -1684,14 +1684,18 @@ box-shadow:
   background:#222;
 }
 
-  .live-feed{
- position:relative;
-  z-index:5;   /* 🔥 NEU */
+.live-feed{
+  position:relative;
+
+  /* ❌ z-index raus (war Ursache für Überlappung) */
+  z-index:1;
+
   background:#141414;
   border:1px solid rgba(255,255,255,0.05);
   border-radius:10px;
 
   padding:10px;
+
   max-height:140px;
   overflow:auto;
 
@@ -1700,6 +1704,9 @@ box-shadow:
   gap:6px;
 
   font-size:13px;
+
+  /* 🔥 CRITICAL FIXES */
+  flex-shrink:0;     /* verhindert dass er "zerdrückt" wird */
 }
 
 .live-feed-item{
