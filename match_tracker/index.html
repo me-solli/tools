@@ -4030,19 +4030,23 @@ btn.disabled = !(date && opponent)
 
 function closeLiveMode(){
 
-  document.body.style.overflow = "";
+  // 🔥 Sicherheits-Save
+  save()
+
+  document.body.style.overflow = ""
 
   if(liveTimerInterval){
     clearInterval(liveTimerInterval)
   }
 
-  // 🔥 reset
   liveStartTime = null
   livePausedAt = null
   livePausedTotal = 0
   liveMatchId = null
 
   document.getElementById("liveMode").classList.add("hidden")
+
+  showToast("Spiel verlassen ✅","info")
 }
 
 function openLiveMode(matchId){
