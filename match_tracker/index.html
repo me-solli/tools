@@ -4260,7 +4260,7 @@ function getLiveMinute(){
 
   function updateLiveScore(){
 
-  let match = matches.find(m => m.id === window.liveMatchId)
+  let match = matches.find(m => m.id === liveMatchId)
   if(!match) return
 
   let goals = match.events.filter(e=>e.type==="goal").length
