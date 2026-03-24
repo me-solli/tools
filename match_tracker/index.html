@@ -1597,10 +1597,13 @@ box-shadow:
 .live-header{
   display:flex;
   justify-content:space-between;
-  align-items:center;
+  align-items:flex-start;   /* 🔥 statt center */
 
-  margin-bottom:10px;
-  gap:10px; /* 🔥 neu */
+  margin-bottom:12px;
+  gap:10px;
+
+  position:relative;        /* 🔥 wichtig */
+  padding-right:50px;       /* 🔥 Platz für X Button */
 }
 
   .live-left{
