@@ -2363,33 +2363,23 @@ TEAMS
 
 function addTeam(name){
 
-if(!name) return
+  if(!name) return
 
-// 🔐 Passwort optional setzen
-let pw = prompt("Passwort für Team (optional):","")
+  teams.push(name)
 
-teams.push(name)
+  activeTeam = name
+  isUnlocked = true
 
-// 🔥 Passwort speichern
-if(pw && pw.trim() !== ""){
-  if(!data.teamPasswords) data.teamPasswords = {}
-  data.teamPasswords[name] = pw.trim()
+  save()
+  renderAll()
 }
 
-activeTeam = name
-isUnlocked = true
+function openPlayerModal(){
 
-save()
-renderAll()
-
-}
-
-  function openPlayerModal(){
-
-if(!activeTeam){
-alert("Kein Team ausgewählt")
-return
-}
+  if(!activeTeam){
+    alert("Kein Team ausgewählt")
+    return
+  }
 
 openModal("Spieler hinzufügen","Name eingeben",(name)=>{
 
