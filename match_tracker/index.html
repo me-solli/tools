@@ -4350,6 +4350,68 @@ function resumeLiveGame(){
   showToast("▶ Weiter","info")
 }
 
+  function openLivePlayerSelect(type){
+
+  let match = matches.find(m => m.id === window.liveMatchId)
+  if(!match) return
+
+  let teamPlayers = players.filter(p => p.team === match.team)
+
+  let modal = document.getElementById("modal")
+  let box = modal.querySelector(".modal-box")
+
+  box.innerHTML = `<h3>Spieler wählen</h3>`
+
+  teamPlayers.forEach(p=>{
+
+    let btn = document.createElement("button")
+    btn.type = "button"
+    btn.classList.add("secondary")
+
+    btn.innerText = p.pos + " " + p.name
+
+    btn.onclick = ()=>{
+
+      let minute = getLiveMinute()
+
+      match.events.push({
+        type: type,
+        player: p.name,
+        minute: minute,
+        time: Date.now()
+      })
+
+      save()
+      updateLiveScore()
+      updateLiveFeed()
+      renderMatches()
+
+      closeModal()
+
+      if(type==="goal"){
+        showToast("⚽ " + p.name + " (" + minute + "')","goal")
+      } 
+      else if(type==="yellow"){
+        showToast("🟨 " + p.name + " (" + minute + "')","yellow")
+      } 
+      else if(type==="red"){
+        showToast("🟥 " + p.name + " (" + minute + "')","red")
+      }
+
+    }
+
+    box.appendChild(btn)
+  })
+
+  let cancel = document.createElement("button")
+  cancel.innerText = "Abbrechen"
+  cancel.onclick = closeModal
+
+  box.appendChild(cancel)
+
+  modal.classList.remove("hidden")
+}
+
 document.getElementById("date").addEventListener("input",validateMatchForm)
 document.getElementById("opponent").addEventListener("input",validateMatchForm)
 
