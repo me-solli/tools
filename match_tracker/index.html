@@ -4335,7 +4335,7 @@ function resumeLiveGame(){
 
   function openLivePlayerSelect(type){
 
-  let match = matches.find(m => m.id === window.liveMatchId)
+  let match = matches.find(m => m.id === liveMatchId)
   if(!match) return
 
   let teamPlayers = players.filter(p => p.team === match.team)
