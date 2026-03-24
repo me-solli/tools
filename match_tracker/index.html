@@ -4447,9 +4447,16 @@ setTimeout(()=>{
 },1000)
 
 // ❌ AUTO-RELOAD AUS (überschreibt deine Eingaben)
-// setInterval(() => {
-//   loadFromServer()
-// }, 5000)
+setInterval(() => {
+
+  // ❌ NICHT im Live-Modus refreshen
+  if(liveMatchId){
+    return
+  }
+
+  loadFromServer()
+
+}, 60000)
 
 </script>
 
