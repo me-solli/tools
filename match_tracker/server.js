@@ -73,11 +73,13 @@ app.post("/save", (req, res) => {
     // 🔥 aktuelle Daten laden
     const current = JSON.parse(fs.readFileSync(FILE, "utf-8"))
 
-    const oldTeams = current.teams?.length || 0
-    const newTeams = incoming.teams?.length || 0
+const oldTeams = current.teams?.length || 0
+const newTeams = incoming.teams?.length || 0
 
-    // 🔥 nur prüfen wenn neue Teams dazu kommen
-    if(newTeams > oldTeams){
+const diff = newTeams - oldTeams
+
+// 🔥 nur prüfen wenn neue Teams dazu kommen
+if(diff > 0){
 
       const ip = getIP(req)
       const now = Date.now()
