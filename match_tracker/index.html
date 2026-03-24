@@ -2571,6 +2571,11 @@ teams = teams.filter(t=>t!==name)
 players = players.filter(p=>p.team!==name)
 matches = matches.filter(m=>m.team!==name)
 
+// 🔥 HIER rein → Passwort löschen
+if(data.teamPasswords){
+  delete data.teamPasswords[name]
+}
+
 activeTeam = teams[0] || null
 
 save()
