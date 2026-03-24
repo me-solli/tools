@@ -4405,7 +4405,10 @@ function shareLiveMatch(){
 document.getElementById("date").addEventListener("input",validateMatchForm)
 document.getElementById("opponent").addEventListener("input",validateMatchForm)
 
-setTimeout(loadFromServer, 1000)
+setTimeout(()=>{
+  loadFromServer()
+  checkLiveFromURL()
+},1000)
 
 // ❌ AUTO-RELOAD AUS (überschreibt deine Eingaben)
 // setInterval(() => {
