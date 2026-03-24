@@ -2363,23 +2363,33 @@ TEAMS
 
 function addTeam(name){
 
-  if(!name) return
+if(!name) return
 
-  teams.push(name)
+// 🔐 Passwort optional setzen
+let pw = prompt("Passwort für Team (optional):","")
 
-  activeTeam = name
-  isUnlocked = true
+teams.push(name)
 
-  save()
-  renderAll()
+// 🔥 Passwort speichern
+if(pw && pw.trim() !== ""){
+  if(!data.teamPasswords) data.teamPasswords = {}
+  data.teamPasswords[name] = pw.trim()
 }
 
-function openPlayerModal(){
+activeTeam = name
+isUnlocked = true
 
-  if(!activeTeam){
-    alert("Kein Team ausgewählt")
-    return
-  }
+save()
+renderAll()
+
+}
+
+  function openPlayerModal(){
+
+if(!activeTeam){
+alert("Kein Team ausgewählt")
+return
+}
 
 openModal("Spieler hinzufügen","Name eingeben",(name)=>{
 
@@ -2447,18 +2457,44 @@ function unlockTeam(){
 
 }
 
-function unlockTeamFromList(team){
+  function unlockTeamFromList(team){
 
   activeTeam = team
 
-  // 🔥 HARD UNLOCK (temporär)
-  accessCache[team] = true
-  isUnlocked = true
+  openModal("🔐 Passwort für " + team, "Passwort eingeben", (pw)=>{
 
-  save()
-  renderAll()
+    if(!pw) return
 
-  showToast("🔓 Temporär freigeschaltet","info")
+    fetch(API + "/check-team-access", {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({
+        team:team,
+        password:pw
+      })
+    })
+    .then(res=>res.json())
+    .then(data=>{
+
+      if(!data.ok){
+        showToast("❌ Falsches Passwort","info")
+        return
+      }
+
+      accessCache[team] = true
+      isUnlocked = true
+
+      save()
+      renderAll()
+
+      showToast("🔓 Freigeschaltet","info")
+
+    })
+
+  }, true)
+
 }
   
 function ensureTeamAccessOnLoad(){
