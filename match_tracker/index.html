@@ -2039,18 +2039,15 @@ input.setAttribute("spellcheck","false")
 input.setAttribute("name","no-autofill")
 input.setAttribute("data-form-type","other")
 
-if(isPassword){
-  // 🔥 Trick: erst später auf password setzen
-  setTimeout(()=>{
-    input.type = "password"
-  },10)
-}else{
-  input.type = "text"
-}
-
 setTimeout(()=>{
   input.focus()
 },50)
+
+  if(isPassword){
+  input.type = "text"
+
+  input.style.webkitTextSecurity = "disc" // 🔥 maskiert wie Passwort
+}
 
 // 🔥 ENTER = BESTÄTIGEN
 input.addEventListener("keydown", function(e){
