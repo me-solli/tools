@@ -1627,14 +1627,34 @@ box-shadow:
 }
 
 .live-close{
-  width:34px;
+  position:absolute;
+  top:0;
+  right:0;
+
   height:34px;
+  padding:0 12px;
 
   display:flex;
   align-items:center;
   justify-content:center;
+  gap:6px;
 
-  border-radius:8px;
+  border-radius:10px;
+
+  background:#1a1a1a;
+  color:#ccc;
+
+  border:1px solid rgba(255,255,255,0.08);
+
+  font-size:13px;
+  white-space:nowrap;   /* 🔥 verhindert Umbruch */
+
+  transition:.2s;
+}
+
+.live-close:hover{
+  background:#222;
+  color:#fff;
 }
 
 .live-body{
