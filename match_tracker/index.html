@@ -2193,10 +2193,18 @@ function loadFromServer(){
       matches.forEach(m => {
   if(m.open === undefined) m.open = false
 })
-activeTeam = teams[0] || null
+// 🔥 gespeichertes Team holen
+let savedTeam = localStorage.getItem("activeTeam")
+
+if(savedTeam && teams.includes(savedTeam)){
+  activeTeam = savedTeam
+}else{
+  activeTeam = teams[0] || null
+}
+
 isUnlocked = false
 
-      renderAll()
+renderAll()
     })
 .catch(() => {
 
