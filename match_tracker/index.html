@@ -3982,6 +3982,8 @@ btn.disabled = !(date && opponent)
 
 function closeLiveMode(){
 
+  document.body.style.overflow = "";
+
   if(liveTimerInterval){
     clearInterval(liveTimerInterval)
   }
