@@ -2365,9 +2365,20 @@ function addTeam(name){
 
 if(!name) return
 
+// 🔐 Passwort optional setzen
+let pw = prompt("Passwort für Team (optional):","")
+
 teams.push(name)
+
+// 🔥 Passwort speichern
+if(pw && pw.trim() !== ""){
+  if(!data.teamPasswords) data.teamPasswords = {}
+  data.teamPasswords[name] = pw.trim()
+}
+
 activeTeam = name
 isUnlocked = true
+
 save()
 renderAll()
 
