@@ -4379,6 +4379,21 @@ function resumeLiveGame(){
   modal.classList.remove("hidden")
 }
 
+function shareLiveMatch(){
+
+  if(!liveMatchId){
+    showToast("Kein Spiel aktiv","info")
+    return
+  }
+
+  let url = window.location.origin + window.location.pathname
+    + "?live=" + liveMatchId + "&view=1"
+
+  navigator.clipboard.writeText(url)
+
+  showToast("🔗 Link kopiert","info")
+}
+  
   function goBack(){
   if(history.length > 1){
     history.back()
