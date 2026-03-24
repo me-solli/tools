@@ -4402,6 +4402,26 @@ function shareLiveMatch(){
   }
 }
 
+  function checkLiveFromURL(){
+
+  let params = new URLSearchParams(window.location.search)
+
+  let liveId = params.get("live")
+  let viewOnly = params.get("view")
+
+  if(!liveId) return
+
+  // 👀 Zuschauer-Modus
+  if(viewOnly){
+    isUnlocked = false
+  }
+
+  // warten bis Daten geladen sind
+  setTimeout(()=>{
+    openLiveMode(Number(liveId))
+  },600)
+}
+
 document.getElementById("date").addEventListener("input",validateMatchForm)
 document.getElementById("opponent").addEventListener("input",validateMatchForm)
 
