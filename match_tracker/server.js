@@ -28,7 +28,8 @@ if (!fs.existsSync(FILE)) {
     teams: [],
     players: [],
     matches: [],
-    activeTeam: null
+activeTeam: null,
+teamPasswords: {}
   }, null, 2))
   console.log("📁 data.json wurde im Volume erstellt")
 }
