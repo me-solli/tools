@@ -2219,12 +2219,7 @@ renderAll()
     players = data.players || []
     matches = data.matches || []
 
-    // 🔥 WICHTIG: gespeichertes Team wiederherstellen
-    let savedTeam = localStorage.getItem("activeTeam")
-
-    if(savedTeam && teams.includes(savedTeam)){
-      activeTeam = savedTeam
-      
+// 🔥 WICHTIG: gespeichertes Team wiederherstellen
 let savedTeam = localStorage.getItem("activeTeam")
 
 if(savedTeam && teams.includes(savedTeam)){
@@ -2233,13 +2228,9 @@ if(savedTeam && teams.includes(savedTeam)){
   activeTeam = teams[0] || null
 }
 
-    isUnlocked = false
+isUnlocked = false
 
-    renderAll()
-  }
-
-})
-}
+renderAll()
 
 function save(){
 
