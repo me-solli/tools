@@ -142,15 +142,19 @@ app.post("/check-team-access", (req, res) => {
     return res.json({ ok: false })
   }
 
-  if (TEAM_PASSWORDS[team]) {
-    if (TEAM_PASSWORDS[team] === password) {
-      return res.json({ ok: true })
-    } else {
-      return res.json({ ok: false })
-    }
-  }
+const current = JSON.parse(fs.readFileSync(FILE, "utf-8"))
+const passwords = current.teamPasswords || {}
 
-return res.json({ ok: false })
+if (passwords[team]) {
+  if (passwords[team] === password) {
+    return res.json({ ok: true })
+  } else {
+    return res.json({ ok: false })
+  }
+}
+
+// 🔥 KEIN PASSWORT GESETZT → Zugriff erlauben
+return res.json({ ok: true })
 })
 
 /* =========================
