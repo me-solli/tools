@@ -4213,7 +4213,7 @@ function setLiveEvent(type, e){
   // 🔥 GEGNER DIREKT
   if(type === "goalAgainst"){
 
-    let match = matches.find(m => m.id === window.liveMatchId)
+    let match = matches.find(m => m.id === liveMatchId)
     if(!match) return
 
     let minute = getLiveMinute()
