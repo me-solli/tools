@@ -2506,6 +2506,9 @@ function selectTeam(name){
 
   activeTeam = name
 
+  // 🔥 SPEICHERN
+  localStorage.setItem("activeTeam", name)
+
   // 🔓 schon freigeschaltet → direkt rein
   if(accessCache[name]){
     isUnlocked = true
@@ -2514,10 +2517,9 @@ function selectTeam(name){
     return
   }
 
-  // 👀 Besucher-Modus (kein Passwort!)
+  // 👀 Besucher-Modus
   isUnlocked = false
   renderAll()
-
 }
 
 function deleteTeam(name){
