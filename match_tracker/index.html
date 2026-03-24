@@ -2004,9 +2004,11 @@ box.innerHTML = `
   <div id="modalTitle" class="modal-title"></div>
 </div>
 
-<!-- 🔥 FAKE INPUT (killt Passwort-Manager Fokus) -->
-<input type="text" autocomplete="username" style="position:absolute;opacity:0;">
-<input type="password" autocomplete="current-password" style="position:absolute;opacity:0;">
+<!-- 🔥 HARDCORE FIX gegen Passwort-Manager -->
+<input type="text" name="fakeuser" autocomplete="username"
+  style="position:absolute; opacity:0; pointer-events:none;">
+<input type="password" name="fakepass" autocomplete="current-password"
+  style="position:absolute; opacity:0; pointer-events:none;">
 
 <!-- 🔐 ECHTES INPUT -->
 <input id="modalInput"
@@ -2014,11 +2016,12 @@ box.innerHTML = `
   placeholder=""
   autocomplete="off"
   name="nope"
-  data-form-type="other"
   data-lpignore="true"
   data-1p-ignore="true"
   data-bwignore="true"
+  data-form-type="other"
   inputmode="none"
+  spellcheck="false"
 >
 
 <div class="modal-actions">
