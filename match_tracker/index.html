@@ -2457,44 +2457,18 @@ function unlockTeam(){
 
 }
 
-  function unlockTeamFromList(team){
+function unlockTeamFromList(team){
 
   activeTeam = team
 
-  openModal("🔐 Passwort für " + team, "Passwort eingeben", (pw)=>{
+  // 🔥 HARD UNLOCK (temporär)
+  accessCache[team] = true
+  isUnlocked = true
 
-    if(!pw) return
+  save()
+  renderAll()
 
-    fetch(API + "/check-team-access", {
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body: JSON.stringify({
-        team:team,
-        password:pw
-      })
-    })
-    .then(res=>res.json())
-    .then(data=>{
-
-      if(!data.ok){
-        showToast("❌ Falsches Passwort","info")
-        return
-      }
-
-      accessCache[team] = true
-      isUnlocked = true
-
-      save()
-      renderAll()
-
-      showToast("🔓 Freigeschaltet","info")
-
-    })
-
-  }, true)
-
+  showToast("🔓 Temporär freigeschaltet","info")
 }
   
 function ensureTeamAccessOnLoad(){
