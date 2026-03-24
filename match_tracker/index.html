@@ -4343,6 +4343,14 @@ function resumeLiveGame(){
   modal.classList.remove("hidden")
 }
 
+  function goBack(){
+  if(history.length > 1){
+    history.back()
+  }else{
+    window.location.href = "/"
+  }
+}
+
 document.getElementById("date").addEventListener("input",validateMatchForm)
 document.getElementById("opponent").addEventListener("input",validateMatchForm)
 
