@@ -4016,6 +4016,12 @@ function closeLiveMode(){
     clearInterval(liveTimerInterval)
   }
 
+  // 🔥 reset
+  liveStartTime = null
+  livePausedAt = null
+  livePausedTotal = 0
+  liveMatchId = null
+
   document.getElementById("liveMode").classList.add("hidden")
 }
 
