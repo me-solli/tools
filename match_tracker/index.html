@@ -4086,18 +4086,34 @@ box.innerHTML = `
 
     <div class="live-body">
 
-      <!-- EVENTS -->
-      <div class="live-grid">
-<button class="success" onclick="setLiveEvent('goal', event)">⚽ Tor</button>
-<button class="secondary" onclick="setLiveEvent('goalAgainst', event)">🥅 Gegner</button>
-<button class="yellow" onclick="setLiveEvent('yellow', event)">🟨 Gelb</button>
-<button class="red" onclick="setLiveEvent('red', event)">🟥 Rot</button>
-      </div>
+<!-- EVENTS -->
+<div class="live-grid">
+  <button class="success"
+    ${!isUnlocked ? "disabled" : ""}
+    onclick="setLiveEvent('goal', event)">⚽ Tor</button>
 
-      <div class="live-grid">
-        <button onclick="pauseLiveGame()">⏸ Pause</button>
-        <button onclick="resumeLiveGame()">▶ Weiter</button>
-      </div>
+  <button class="secondary"
+    ${!isUnlocked ? "disabled" : ""}
+    onclick="setLiveEvent('goalAgainst', event)">🥅 Gegner</button>
+
+  <button class="yellow"
+    ${!isUnlocked ? "disabled" : ""}
+    onclick="setLiveEvent('yellow', event)">🟨 Gelb</button>
+
+  <button class="red"
+    ${!isUnlocked ? "disabled" : ""}
+    onclick="setLiveEvent('red', event)">🟥 Rot</button>
+</div>
+
+<div class="live-grid">
+  <button
+    ${!isUnlocked ? "disabled" : ""}
+    onclick="pauseLiveGame()">⏸ Pause</button>
+
+  <button
+    ${!isUnlocked ? "disabled" : ""}
+    onclick="resumeLiveGame()">▶ Weiter</button>
+</div>
 
 <div id="liveFeed" class="live-feed"></div>
 
