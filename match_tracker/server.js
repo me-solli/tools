@@ -42,6 +42,7 @@ const TEAM_PASSWORDS = {
   "SV Riedmoos U10-II": "u10-2",
   "SV Riedmoos U10-III": "u10-3",
   "SV Testhausen": "test"
+  "test": "test"
 }
 
 /* =========================
