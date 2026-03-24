@@ -4356,11 +4356,15 @@ setTimeout(loadFromServer, 1000)
 </script>
 
 <div id="modal" class="modal hidden">
-<div class="modal-box">
-<h3 id="modalTitle"></h3>
-<button onclick="confirmModal()">OK</button>
-<button onclick="closeModal()">Abbrechen</button>
-</div>
+  <div class="modal-box">
+
+    <!-- 🔥 Fake Felder direkt im DOM (extrem wichtig!) -->
+    <input type="text" name="fakeuser" autocomplete="username"
+      style="position:absolute; opacity:0; pointer-events:none;">
+    <input type="password" name="fakepass" autocomplete="current-password"
+      style="position:absolute; opacity:0; pointer-events:none;">
+
+  </div>
 </div>
 
 <div id="toast" class="toast"></div>
