@@ -1607,6 +1607,23 @@ box-shadow:
   padding-right:120px;
 }
 
+  .live-header-actions{
+  position:absolute;
+  top:0;
+  right:0;
+
+  display:flex;
+  gap:6px;
+}
+
+/* Mobile → untereinander statt nebeneinander */
+@media (max-width: 400px){
+  .live-header-actions{
+    flex-direction:column;
+    align-items:flex-end;
+  }
+}
+
   .live-left{
   display:flex;
   flex-direction:column;
