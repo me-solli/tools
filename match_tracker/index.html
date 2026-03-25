@@ -4462,7 +4462,7 @@ function shareLiveMatch(){
   }
 }
 
-  function checkLiveFromURL(){
+function checkLiveFromURL(){
 
   let params = new URLSearchParams(window.location.search)
 
@@ -4471,8 +4471,9 @@ function shareLiveMatch(){
 
   if(!liveId) return
 
-  // 👀 Zuschauer-Modus
+  // 👀 Zuschauer-Modus aktivieren
   if(viewOnly){
+    isViewerMode = true
     isUnlocked = false
   }
 
@@ -4480,6 +4481,11 @@ function shareLiveMatch(){
   setTimeout(()=>{
     openLiveMode(Number(liveId))
   },600)
+
+  // 🔥 NUR Zuschauer bekommen Auto-Update
+  if(isViewerMode){
+    startLiveAutoUpdate()
+  }
 }
 
 document.getElementById("date").addEventListener("input",validateMatchForm)
