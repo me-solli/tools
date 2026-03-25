@@ -2064,11 +2064,9 @@ input.setAttribute("data-form-type","other")
 setTimeout(()=>{
   input.focus()
 },50)
-
-  if(isPassword){
-  input.type = "text"
-
-  input.style.webkitTextSecurity = "disc" // 🔥 maskiert wie Passwort
+  
+if(isPassword){
+  input.type = "password"
 }
 
 // 🔥 ENTER = BESTÄTIGEN
