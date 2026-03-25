@@ -4276,18 +4276,6 @@ liveBox.ontouchend = (e)=>{
   handleSwipe()
 }
 
-
-// 👉 Swipe Hint beim Öffnen anzeigen  ✅ HIER REIN
-let hint = document.getElementById("swipeHint")
-
-setTimeout(()=>{
-  hint?.classList.add("show")
-}, 300)
-
-setTimeout(()=>{
-  hint?.classList.remove("show")
-}, 2500)  
-
 function updateLiveFeed(){
 
   let match = matches.find(m => m.id === liveMatchId)
