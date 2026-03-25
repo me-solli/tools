@@ -4121,6 +4121,17 @@ function closeLiveMode(){
   showToast("Spiel verlassen ✅","info")
 }
 
+  function handleSwipe(){
+
+  let diff = touchEndX - touchStartX
+
+  // 👉 nur nach rechts wischen
+  if(diff > 80){
+    closeLiveMode()
+  }
+
+}
+
 function openLiveMode(matchId){
 
   document.body.style.overflow = "hidden";
@@ -4209,6 +4220,19 @@ box.classList.remove("hidden")
 
   updateLiveScore() 
   updateLiveFeed()
+
+  // 👉 SWIPE DETECTION
+let liveBox = document.getElementById("liveMode")
+
+liveBox.addEventListener("touchstart", (e)=>{
+  touchStartX = e.changedTouches[0].screenX
+})
+
+liveBox.addEventListener("touchend", (e)=>{
+  touchEndX = e.changedTouches[0].screenX
+  handleSwipe()
+})
+  
   }
 
 function updateLiveFeed(){
