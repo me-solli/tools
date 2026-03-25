@@ -4222,18 +4222,17 @@ box.classList.remove("hidden")
   updateLiveFeed()
 
   // 👉 SWIPE DETECTION
+// 👉 SWIPE DETECTION (clean)
 let liveBox = document.getElementById("liveMode")
 
-liveBox.addEventListener("touchstart", (e)=>{
+liveBox.ontouchstart = (e)=>{
   touchStartX = e.changedTouches[0].screenX
-})
+}
 
-liveBox.addEventListener("touchend", (e)=>{
+liveBox.ontouchend = (e)=>{
   touchEndX = e.changedTouches[0].screenX
   handleSwipe()
-})
-  
-  }
+}
 
 function updateLiveFeed(){
 
