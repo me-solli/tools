@@ -4439,6 +4439,45 @@ function resumeLiveGame(){
   modal.classList.remove("hidden")
 }
 
+  function startLiveAutoUpdate(){
+
+  // 🔥 kein doppeltes Interval
+  if(window.liveAutoInterval){
+    clearInterval(window.liveAutoInterval)
+  }
+
+  window.liveAutoInterval = setInterval(()=>{
+
+    if(!liveMatchId) return
+
+    fetch(API + "/data")
+      .then(res => res.json())
+      .then(serverData => {
+
+        let serverMatches = serverData.matches || []
+
+        let updatedMatch = serverMatches.find(m => m.id === liveMatchId)
+        if(!updatedMatch) return
+
+        let localMatch = matches.find(m => m.id === liveMatchId)
+        if(!localMatch) return
+
+        // 🔥 nur updaten wenn sich Events geändert haben
+        if(updatedMatch.events.length === localMatch.events.length){
+          return
+        }
+
+        Object.assign(localMatch, updatedMatch)
+
+        updateLiveScore()
+        updateLiveFeed()
+        renderMatches()
+
+      })
+
+  }, 4000)
+}
+
 function shareLiveMatch(){
 
   if(!liveMatchId){
