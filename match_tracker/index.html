@@ -1727,9 +1727,6 @@ box-shadow:
 .live-feed{
   position:relative;
 
-  /* ❌ z-index raus (war Ursache für Überlappung) */
-  z-index:1;
-
   background:#141414;
   border:1px solid rgba(255,255,255,0.05);
   border-radius:10px;
@@ -1745,8 +1742,9 @@ box-shadow:
 
   font-size:13px;
 
-  /* 🔥 CRITICAL FIXES */
-  flex-shrink:0;     /* verhindert dass er "zerdrückt" wird */
+  flex-shrink:0;
+
+  pointer-events:auto; /* ok */
 }
 
 .live-feed-item{
