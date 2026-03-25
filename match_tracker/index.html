@@ -1673,10 +1673,13 @@ box-shadow:
   flex-direction:column;
   gap:10px;
 
-  overflow-y:auto;      /* 🔥 nur vertikal */
+  overflow-y:auto;
   overflow-x:hidden;
 
-  min-height:0;         /* 🔥 CRITICAL FIX */
+  min-height:0;
+
+  position:relative;
+  z-index:1;   /* 🔥 WICHTIG */
 }
 
 .live-grid{
