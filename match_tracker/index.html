@@ -4251,7 +4251,6 @@ box.classList.remove("hidden")
   updateLiveScore() 
   updateLiveFeed()
 
-  // 👉 SWIPE DETECTION
 // 👉 SWIPE DETECTION (clean)
 let liveBox = document.getElementById("liveMode")
 
@@ -4264,17 +4263,16 @@ liveBox.ontouchend = (e)=>{
   handleSwipe()
 }
 
-  // 👉 SWIPE DETECTION (clean)
-let liveBox = document.getElementById("liveMode")
+// 👉 Swipe Hint beim Öffnen anzeigen
+let hint = document.getElementById("swipeHint")
 
-liveBox.ontouchstart = (e)=>{
-  touchStartX = e.changedTouches[0].screenX
-}
+setTimeout(()=>{
+  hint?.classList.add("show")
+}, 300)
 
-liveBox.ontouchend = (e)=>{
-  touchEndX = e.changedTouches[0].screenX
-  handleSwipe()
-}
+setTimeout(()=>{
+  hint?.classList.remove("show")
+}, 2500)
 
 function updateLiveFeed(){
 
