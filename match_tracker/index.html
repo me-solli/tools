@@ -4264,6 +4264,30 @@ liveBox.ontouchend = (e)=>{
   handleSwipe()
 }
 
+  // 👉 SWIPE DETECTION (clean)
+let liveBox = document.getElementById("liveMode")
+
+liveBox.ontouchstart = (e)=>{
+  touchStartX = e.changedTouches[0].screenX
+}
+
+liveBox.ontouchend = (e)=>{
+  touchEndX = e.changedTouches[0].screenX
+  handleSwipe()
+}
+
+
+// 👉 Swipe Hint beim Öffnen anzeigen  ✅ HIER REIN
+let hint = document.getElementById("swipeHint")
+
+setTimeout(()=>{
+  hint?.classList.add("show")
+}, 300)
+
+setTimeout(()=>{
+  hint?.classList.remove("show")
+}, 2500)  
+
 function updateLiveFeed(){
 
   let match = matches.find(m => m.id === liveMatchId)
