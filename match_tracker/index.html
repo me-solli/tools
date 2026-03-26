@@ -3087,7 +3087,20 @@ function handleEditMatch(id){
   if(!match) return
 
   requireMatchUnlock(match, ()=>{
-    editMatch(id)
+
+    // 🔥 automatisch öffnen
+    matches.forEach(m => {
+      m.open = (m.id === id)
+    })
+
+    save()
+    renderMatches()
+
+    // 🔥 dann edit modal
+    setTimeout(()=>{
+      editMatch(id)
+    },100)
+
   })
 }
 
