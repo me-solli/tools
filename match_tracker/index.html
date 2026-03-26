@@ -3004,6 +3004,28 @@ return p[2]+"-"+p[1]+"-"+p[0]
 
 }
 
+  function isPastMatch(match){
+
+  if(!match.date) return false
+
+  let matchDate = new Date(match.date + " " + (match.time || "23:59"))
+  let now = new Date()
+
+  return matchDate < now
+}
+
+function requireMatchUnlock(match, callback){
+
+  if(!isPastMatch(match)){
+    callback()
+    return
+  }
+
+  confirmDeleteAction(() => {
+    callback()
+  })
+}
+
 function editMatch(id){
 
 if(!isUnlocked){
