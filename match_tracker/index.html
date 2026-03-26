@@ -4537,14 +4537,39 @@ function getLiveMinute(){
   }
 }
 
-  function updateLiveAccessStatus(){
+function updateLiveAccessStatus(){
 
   let el = document.getElementById("liveAccessStatus")
   if(!el) return
 
-  if(liveAccessGranted){
-    el.innerText = "🔓 Namen sichtbar"
-  }else{
+  let stored = localStorage.getItem("liveAccess")
+
+  if(!stored){
+    el.innerText = "👀 Zuschauer-Modus"
+    return
+  }
+
+  try{
+    let obj = JSON.parse(stored)
+
+    if(!obj.granted || obj.expires < Date.now()){
+      el.innerText = "👀 Zuschauer-Modus"
+      return
+    }
+
+    let diff = obj.expires - Date.now()
+
+    let days = Math.floor(diff / (1000 * 60 * 60 * 24))
+
+    if(days <= 0){
+      el.innerText = "🔓 läuft heute ab"
+    }else if(days === 1){
+      el.innerText = "🔓 läuft morgen ab"
+    }else{
+      el.innerText = "🔓 sichtbar (" + days + " Tage)"
+    }
+
+  }catch{
     el.innerText = "👀 Zuschauer-Modus"
   }
 
