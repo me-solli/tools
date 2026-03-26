@@ -3073,6 +3073,26 @@ modal.classList.remove("hidden")
 
 }
 
+  function handleLiveClick(id){
+
+  let match = matches.find(m=>m.id===id)
+  if(!match) return
+
+  requireMatchUnlock(match, ()=>{
+    openLiveMode(id)
+  })
+}
+
+function handleEditMatch(id){
+
+  let match = matches.find(m=>m.id===id)
+  if(!match) return
+
+  requireMatchUnlock(match, ()=>{
+    editMatch(id)
+  })
+}
+
   function saveMatchEdit(id){
 
 let m = matches.find(x => x.id === id)
