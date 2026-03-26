@@ -142,13 +142,10 @@ app.post("/check-team-access", (req, res) => {
     return res.json({ ok: false })
   }
 
-  const current = JSON.parse(fs.readFileSync(FILE, "utf-8"))
-  const passwords = current.teamPasswords || {}
+  const saved = TEAM_PASSWORDS[team]
 
-  const saved = passwords[team]
-
-  // 🔒 Wenn Passwort existiert → MUSS es stimmen
-  if (saved !== undefined && saved !== "") {
+  // 🔒 Team hat Passwort → prüfen
+  if (saved !== undefined) {
     if (password === saved) {
       return res.json({ ok: true })
     } else {
@@ -156,8 +153,8 @@ app.post("/check-team-access", (req, res) => {
     }
   }
 
-  // 🟢 Nur wenn wirklich KEIN Passwort gesetzt ist → offen
-  return res.json({ ok: true })
+  // ❌ Team existiert aber ohne Passwort → KEIN Zugriff
+  return res.json({ ok: false })
 })
 
 /* =========================
