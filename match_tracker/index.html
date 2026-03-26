@@ -3782,7 +3782,7 @@ ${isPastMatch(match) ? "🕘" : "▶"}
 <button class="secondary"
 ${!isUnlocked ? "disabled" : ""}
 onclick="event.stopPropagation();handleEditMatch(${match.id})">
-✏️
+${isPastMatch(match) ? "🛠" : "✏️"}
 </button>
 
 <button class="danger"
