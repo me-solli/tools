@@ -4725,7 +4725,8 @@ function enterLiveCode(){
   localStorage.setItem("liveAccess", "true")
       
       showToast("🔓 Namen sichtbar","info")
-      updateLiveFeed()
+updateLiveFeed()
+updateLiveAccessStatus()
     }else{
       showToast("❌ Falscher Code","info")
     }
