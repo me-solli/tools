@@ -4705,6 +4705,10 @@ function enterLiveCode(){
 
     if(code === "team123"){   // ← dein Code
       liveAccessGranted = true
+      
+  // 🔥 NEU: speichern (persist)
+  localStorage.setItem("liveAccess", "true")
+      
       showToast("🔓 Namen sichtbar","info")
       updateLiveFeed()
     }else{
