@@ -2,70 +2,160 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>Meph Run Helper</title>
+<title>Meph Smart Arrow</title>
+
 <style>
 body{
-  background:#111;
-  color:#eee;
+  margin:0;
+  background:transparent;
+  overflow:hidden;
   font-family:Arial;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
 }
 
-.box{
-  background:#1b1b1b;
-  padding:30px;
-  border-radius:12px;
-  text-align:center;
-  width:300px;
-  box-shadow:0 0 20px rgba(0,0,0,0.5);
+.container{
+  position:fixed;
+  top:35%;
+  left:30px;
+  text-align:left;
+  color:white;
 }
 
-button{
-  width:100%;
-  padding:12px;
+.arrow{
+  font-size:90px;
+  opacity:0.7;
+  animation:pulse 1.2s infinite;
+}
+
+.info{
   margin-top:10px;
-  border:none;
-  border-radius:8px;
-  background:#444;
-  color:#fff;
-  cursor:pointer;
+  font-size:14px;
+  opacity:0.7;
 }
 
-button:hover{
-  background:#666;
+.warn{
+  color:#ffcc00;
 }
 
-.result{
-  margin-top:20px;
-  font-size:20px;
+.danger{
+  color:#ff4444;
+  font-weight:bold;
+}
+
+@keyframes pulse{
+  0%{opacity:0.3}
+  50%{opacity:1}
+  100%{opacity:0.3}
 }
 </style>
 </head>
+
 <body>
 
-<div class="box">
-  <h2>🧭 Meph Helper</h2>
-  <p>Wo gehst du zuerst?</p>
-
-  <button onclick="go('left')">← ich gehe LINKS</button>
-  <button onclick="go('right')">→ ich gehe RECHTS</button>
-
-  <div class="result" id="result"></div>
+<div class="container">
+  <div class="arrow" id="arrow">←</div>
+  <div class="info" id="info">LEFT RULE</div>
 </div>
 
 <script>
-function go(dir){
-  let result = document.getElementById("result")
 
-  if(dir === "left"){
-    result.innerHTML = "👉 Perfekt. Jetzt:<br><b>IMMER LINKS HALTEN</b>"
-  }else{
-    result.innerHTML = "👉 Wechsel!<br><b>DREH UM → LINKS HALTEN</b>"
-  }
+let state = {
+  dir:"LEFT",
+  start:Date.now(),
+  switched:false,
+  warned:false,
+  runs:0,
+  goodRuns:0
 }
+
+// -------------------
+// START AUTOMATISCH
+// -------------------
+
+startRun()
+
+function startRun(){
+  state.start = Date.now()
+  state.switched = false
+  state.warned = false
+  state.dir = "LEFT"
+
+  updateUI()
+  speak("left")
+}
+
+// -------------------
+// LOOP
+// -------------------
+
+setInterval(()=>{
+  let t = (Date.now() - state.start)/1000
+
+  // 🔥 nach 8s: leichter Hinweis
+  if(t > 8 && !state.warned){
+    setInfo("hmm… könnte falsch sein", "warn")
+    state.warned = true
+  }
+
+  // 🔥 nach 14s: switch empfehlen
+  if(t > 14 && !state.switched){
+    switchDir()
+  }
+
+},500)
+
+// -------------------
+// SWITCH LOGIK
+// -------------------
+
+function switchDir(){
+  state.dir = (state.dir === "LEFT") ? "RIGHT" : "LEFT"
+  state.switched = true
+
+  setInfo("SWITCH!", "danger")
+  updateUI()
+
+  speak("switch")
+}
+
+// -------------------
+// UI
+// -------------------
+
+function updateUI(){
+  document.getElementById("arrow").innerText =
+    state.dir === "LEFT" ? "←" : "→"
+}
+
+function setInfo(text, type){
+  let el = document.getElementById("info")
+  el.innerText = text
+
+  el.className = "info"
+
+  if(type === "warn") el.classList.add("warn")
+  if(type === "danger") el.classList.add("danger")
+}
+
+// -------------------
+// HOTKEY RESET
+// -------------------
+
+document.addEventListener("keydown",(e)=>{
+  if(e.key === "r"){
+    startRun()
+  }
+})
+
+// -------------------
+// SOUND
+// -------------------
+
+function speak(text){
+  let msg = new SpeechSynthesisUtterance(text)
+  msg.volume = 0.2
+  speechSynthesis.speak(msg)
+}
+
 </script>
 
 </body>
