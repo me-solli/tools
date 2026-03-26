@@ -4745,6 +4745,11 @@ function shareLiveMatch(){
 
 function checkLiveFromURL(){
 
+    // 🔥 NEU: gespeicherten Zugriff laden
+  if(localStorage.getItem("liveAccess") === "true"){
+    liveAccessGranted = true
+  }
+
   let params = new URLSearchParams(window.location.search)
 
   let liveId = params.get("live")
