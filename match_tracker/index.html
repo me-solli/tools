@@ -3258,8 +3258,8 @@ function toggleMatch(id){
   let match = matches.find(m => m.id === id)
   if(!match) return
 
-  // 🔒 Vergangenheit blockieren
-  if(isPastMatch(match)){
+  // 🔒 Wenn vergangenes Spiel UND aktuell zu → blockieren
+  if(isPastMatch(match) && !match.open){
     showToast("🔒 Spiel abgeschlossen – über ✏️ bearbeiten öffnen","info")
     return
   }
