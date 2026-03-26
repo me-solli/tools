@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Meph Run Helper</title>
+<style>
+body{
+  background:#111;
+  color:#eee;
+  font-family:Arial;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+.box{
+  background:#1b1b1b;
+  padding:30px;
+  border-radius:12px;
+  text-align:center;
+  width:300px;
+  box-shadow:0 0 20px rgba(0,0,0,0.5);
+}
+
+button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border:none;
+  border-radius:8px;
+  background:#444;
+  color:#fff;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#666;
+}
+
+.result{
+  margin-top:20px;
+  font-size:20px;
+}
+</style>
+</head>
+<body>
+
+<div class="box">
+  <h2>🧭 Meph Helper</h2>
+  <p>Wo gehst du zuerst?</p>
+
+  <button onclick="go('left')">← ich gehe LINKS</button>
+  <button onclick="go('right')">→ ich gehe RECHTS</button>
+
+  <div class="result" id="result"></div>
+</div>
+
+<script>
+function go(dir){
+  let result = document.getElementById("result")
+
+  if(dir === "left"){
+    result.innerHTML = "👉 Perfekt. Jetzt:<br><b>IMMER LINKS HALTEN</b>"
+  }else{
+    result.innerHTML = "👉 Wechsel!<br><b>DREH UM → LINKS HALTEN</b>"
+  }
+}
+</script>
+
+</body>
+</html>
