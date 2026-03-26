@@ -4366,9 +4366,10 @@ window.liveEventType = null
 // (Start passiert erst bei ▶ Weiter)
 
 box.classList.remove("hidden")
-
-  updateLiveScore() 
-  updateLiveFeed()
+  
+updateLiveScore() 
+updateLiveFeed()
+updateLiveAccessStatus()
 
 // 👉 SWIPE DETECTION (clean)
 let liveBox = document.getElementById("liveMode")
