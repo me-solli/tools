@@ -144,7 +144,7 @@ app.post("/check-team-access", (req, res) => {
 
   const saved = TEAM_PASSWORDS[team]
 
-  // 🔒 Team hat Passwort → prüfen
+  // 🔒 Team existiert → Passwort prüfen
   if (saved !== undefined) {
     if (password === saved) {
       return res.json({ ok: true })
@@ -153,7 +153,7 @@ app.post("/check-team-access", (req, res) => {
     }
   }
 
-  // ❌ Team existiert aber ohne Passwort → KEIN Zugriff
+  // ❌ unbekanntes Team → KEIN Zugriff
   return res.json({ ok: false })
 })
 
