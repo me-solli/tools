@@ -2558,9 +2558,11 @@ function unlockTeam(){
       })
     })
     .then(res=>res.json())
-    .then(data=>{
+.then(data=>{
 
-      if(!data.ok){
+      isUnlocked = false   // 🔥 IMMER reset
+
+      if(!data || data.ok !== true){
         showToast("❌ Falsches Passwort","info")
         return
       }
