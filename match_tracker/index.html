@@ -2191,48 +2191,46 @@ cb(value)
 
 }
 
-  function confirmDeleteAction(callback){
+function confirmEditAction(callback){
 
-let modal = document.getElementById("modal")
-let box = modal.querySelector(".modal-box")
+  let modal = document.getElementById("modal")
+  let box = modal.querySelector(".modal-box")
 
-box.innerHTML = `
-<h3 style="grid-column:1/-1">Löschen bestätigen</h3>
+  box.innerHTML = `
+    <h3>Änderung bestätigen</h3>
 
-<input id="modalInput" placeholder="LÖSCHEN eingeben" style="grid-column:1/-1">
+    <input id="modalInput" placeholder="BEARBEITEN eingeben" style="grid-column:1/-1">
 
-<button class="danger" onclick="confirmDeleteModal()">Löschen</button>
-<button onclick="closeModal()">Abbrechen</button>
-`
+    <button class="primary" onclick="confirmEditModal()">Bestätigen</button>
+    <button onclick="closeModal()">Abbrechen</button>
+  `
 
-modalCallback = callback
+  modalCallback = callback
 
-modal.classList.remove("hidden")
+  modal.classList.remove("hidden")
 
-setTimeout(()=>{
-document.getElementById("modalInput").focus()
-},50)
-
+  setTimeout(()=>{
+    document.getElementById("modalInput").focus()
+  },50)
 }
 
-function confirmDeleteModal(){
+function confirmEditModal(){
 
-let value = document.getElementById("modalInput").value
+  let value = document.getElementById("modalInput").value
 
-if(value.trim().toUpperCase() !== "LÖSCHEN"){
-alert("Falsche Eingabe ❌")
-return
-}
+  if(value.trim().toUpperCase() !== "BEARBEITEN"){
+    alert("Falsche Eingabe ❌")
+    return
+  }
 
-let cb = modalCallback
-modalCallback = null
+  let cb = modalCallback
+  modalCallback = null
 
-closeModal()
+  closeModal()
 
-setTimeout(()=>{
-cb()
-},50)
-
+  setTimeout(()=>{
+    cb()
+  },50)
 }
 
 /* ========================= */
