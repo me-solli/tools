@@ -3236,6 +3236,15 @@ renderAll()
 
 function toggleMatch(id){
 
+  let match = matches.find(m => m.id === id)
+  if(!match) return
+
+  // 🔒 Vergangenheit blockieren
+  if(isPastMatch(match)){
+    showToast("🔒 Spiel abgeschlossen – über ✏️ bearbeiten öffnen","info")
+    return
+  }
+
   matches.forEach(m => {
     if(m.id === id){
       m.open = !m.open
@@ -3247,7 +3256,6 @@ function toggleMatch(id){
   save()
   renderMatches()
 
-  // 🔥 AUTO SCROLL
   setTimeout(()=>{
     document.querySelector(".match.open")?.scrollIntoView({
       behavior:"smooth",
