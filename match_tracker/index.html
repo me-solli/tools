@@ -1933,27 +1933,49 @@ box-shadow:
   opacity:1;
 }
 
-  .team-header{
-  text-align:center;
-
-  font-size:20px;
-  font-weight:700;
-
-  margin-bottom:6px;
-
-  color:#fff;
-  opacity:.9;
-
-  letter-spacing:.5px;
-
-  text-shadow:0 0 10px rgba(60,255,122,0.15);
+.team-header{
+  margin-bottom:12px;
 }
 
-  .team-sub{
+.team-header-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+
+  padding:10px 14px;
+
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.05);
+
+  border-radius:10px;
+
+  backdrop-filter:blur(6px);
+}
+
+/* 🔥 TEAM NAME */
+.team-title{
+  font-size:18px;
+  font-weight:700;
+  color:#fff;
+
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+/* 🔥 META (Saison + Mode) */
+.team-meta{
+  display:flex;
+  align-items:center;
+  gap:6px;
+
   font-size:12px;
-  opacity:.6;
-  margin-top:2px;
-  letter-spacing:.3px;
+  color:#aaa;
+}
+
+.team-meta .dot{
+  opacity:.5;
 }
 
 }
