@@ -3774,8 +3774,9 @@ ${match.location ? `
 <div class="match-actions-right">
 
 <button class="secondary"
-onclick="event.stopPropagation();handleLiveClick(${match.id})">
-▶
+onclick="event.stopPropagation();handleLiveClick(${match.id})"
+title="${isPastMatch(match) ? 'Vergangenes Spiel – Live nachtragen' : 'Live starten'}">
+${isPastMatch(match) ? "🕘" : "▶"}
 </button>
 
 <button class="secondary"
