@@ -3020,6 +3020,46 @@ closeModal()
 showToast("Spiel aktualisiert ✅","info")
 
 }
+
+function openCreateMatchModal(){
+
+  if(!activeTeam){
+    showToast("⚠️ Kein Team ausgewählt","info")
+    return
+  }
+
+  openModal("Neues Spiel", "Gegner eingeben", (opponent)=>{
+
+    if(!opponent) return
+
+    let date = prompt("Datum (YYYY-MM-DD)")
+    if(!date) return
+
+    let time = prompt("Uhrzeit (optional)")
+
+    matches.push({
+      id: Date.now(),
+      team: activeTeam,
+      date: date,
+      time: time || "",
+      opponent: opponent,
+      mode: "7",
+      homeAway: "home",
+      location: "",
+      squad:[],
+      lineup:[],
+      bench:[],
+      events:[],
+      open:false
+    })
+
+    save()
+    renderAll()
+    showToast("Spiel erstellt ✅","info")
+
+  })
+
+}
   
 function createMatch(){
 
