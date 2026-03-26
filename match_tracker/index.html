@@ -4559,7 +4559,7 @@ function updateLiveAccessStatus(){
 
     let diff = obj.expires - Date.now()
 
-    let days = Math.floor(diff / (1000 * 60 * 60 * 24))
+    let days = Math.ceil(diff / (1000 * 60 * 60 * 24))
 
     if(days <= 0){
 el.innerText = "🔓 Namen laufen heute ab"
