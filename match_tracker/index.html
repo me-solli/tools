@@ -4181,12 +4181,14 @@ if(header){
 
   let mode = lastMatch ? (lastMatch.mode + "vs" + lastMatch.mode) : "7vs7"
 
-  header.innerHTML = `
-    <div>${name}</div>
-    <div class="team-sub">
-      Saison 2026 · ${mode}
-    </div>
-  `
+let year = new Date().getFullYear()
+
+header.innerHTML = `
+  <div>${name}</div>
+  <div class="team-sub">
+    Saison ${year} · ${mode}
+  </div>
+`
 }
 
 }
