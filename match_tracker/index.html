@@ -4161,6 +4161,13 @@ function renderAll(){
     box.style.display = (isUnlocked && activeTeam) ? "block" : "none"
   }
 
+  let header = document.getElementById("teamHeader")
+
+if(header){
+  let name = !isUnlocked ? "👀 Besucher" : (activeTeam || "Kein Team")
+  header.innerText = name
+}
+
 }
 
   function validateMatchForm(){
