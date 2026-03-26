@@ -2670,8 +2670,14 @@ function editTeamName(oldName){
 
 function renderTopbar(){
 
-document.getElementById("topTeam").innerText =
-!isUnlocked ? "👀 Besucher" : (activeTeam || "Kein Team")
+let teamName = !isUnlocked ? "👀 Besucher" : (activeTeam || "Kein Team")
+
+document.getElementById("topTeam").innerText = teamName
+
+let big = document.getElementById("topTeamBig")
+if(big){
+  big.innerText = teamName
+}
 
 let matchCount = matches
 .filter(m=>m.team===activeTeam && m.events.length > 0)
