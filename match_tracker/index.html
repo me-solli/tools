@@ -4659,8 +4659,20 @@ function checkLiveFromURL(){
   }
 }
 
-document.getElementById("date").addEventListener("input",validateMatchForm)
-document.getElementById("opponent").addEventListener("input",validateMatchForm)
+window.addEventListener("DOMContentLoaded", () => {
+
+  let dateInput = document.getElementById("date")
+  let opponentInput = document.getElementById("opponent")
+
+  if(dateInput){
+    dateInput.addEventListener("input", validateMatchForm)
+  }
+
+  if(opponentInput){
+    opponentInput.addEventListener("input", validateMatchForm)
+  }
+
+})
 
 setTimeout(()=>{
   loadFromServer()
