@@ -4767,9 +4767,22 @@ function shareLiveMatch(){
 function checkLiveFromURL(){
 
     // 🔥 NEU: gespeicherten Zugriff laden
-  if(localStorage.getItem("liveAccess") === "true"){
-    liveAccessGranted = true
+let stored = localStorage.getItem("liveAccess")
+
+if(stored){
+  try{
+    let obj = JSON.parse(stored)
+
+    if(obj.granted && obj.expires > Date.now()){
+      liveAccessGranted = true
+    }else{
+      localStorage.removeItem("liveAccess")
+      liveAccessGranted = false
+    }
+  }catch{
+    localStorage.removeItem("liveAccess")
   }
+}
 
   let params = new URLSearchParams(window.location.search)
 
