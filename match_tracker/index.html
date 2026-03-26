@@ -4722,7 +4722,12 @@ function enterLiveCode(){
       liveAccessGranted = true
       
   // 🔥 NEU: speichern (persist)
-  localStorage.setItem("liveAccess", "true")
+let expires = Date.now() + (10 * 24 * 60 * 60 * 1000)
+
+localStorage.setItem("liveAccess", JSON.stringify({
+  granted: true,
+  expires: expires
+}))
       
       showToast("🔓 Namen sichtbar","info")
 updateLiveFeed()
