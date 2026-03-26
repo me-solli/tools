@@ -4184,9 +4184,13 @@ if(header){
 let year = new Date().getFullYear()
 
 header.innerHTML = `
-  <div>${name}</div>
-  <div class="team-sub">
-    Saison ${year} · ${mode}
+  <div class="team-header-inner">
+    <div class="team-title">${name}</div>
+    <div class="team-meta">
+      <span>Saison ${year}</span>
+      <span class="dot">•</span>
+      <span>${mode}</span>
+    </div>
   </div>
 `
 }
