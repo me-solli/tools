@@ -4129,12 +4129,19 @@ function renderTools(){
   
 function renderAll(){
 
-renderTeams()
-renderPlayers()
-renderMatches()
-renderRankings()
+  renderTeams()
+  renderPlayers()
+  renderMatches()
+  renderRankings()
   renderTopbar()
   renderTools()
+
+  // 🔥 CREATE MATCH BUTTON VISIBILITY
+  let box = document.getElementById("createMatchBox")
+
+  if(box){
+    box.style.display = (isUnlocked && activeTeam) ? "block" : "none"
+  }
 
 }
 
