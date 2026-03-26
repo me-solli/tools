@@ -4693,7 +4693,6 @@ function resumeLiveGame(){
   }, 4000)
 }
 
-function shareLiveMatch(){
 function enterLiveCode(){
 
   openModal("Zugriffscode", "Code eingeben", (code)=>{
@@ -4711,6 +4710,9 @@ function enterLiveCode(){
   })
 
 }
+
+
+function shareLiveMatch(){
 
   if(!liveMatchId){
     showToast("Kein Spiel aktiv","info")
