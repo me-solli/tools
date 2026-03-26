@@ -4695,6 +4695,24 @@ function resumeLiveGame(){
 
 function shareLiveMatch(){
 
+  function enterLiveCode(){
+
+  openModal("Zugriffscode", "Code eingeben", (code)=>{
+
+    if(!code) return
+
+    if(code === "team123"){   // ← kannst du später ändern
+      liveAccessGranted = true
+      showToast("🔓 Namen sichtbar","info")
+      updateLiveFeed()
+    }else{
+      showToast("❌ Falscher Code","info")
+    }
+
+  })
+
+}
+
   if(!liveMatchId){
     showToast("Kein Spiel aktiv","info")
     return
