@@ -4420,21 +4420,25 @@ let events = [...match.events].sort((a,b)=>{
 
     let text = ""
 
-    if(e.type==="goal"){
-      text = "⚽ " + e.player
-    }
-    else if(e.type==="goalAgainst"){
-      text = "🥅 Gegner"
-    }
-    else if(e.type==="yellow"){
-      text = "🟨 " + e.player
-    }
-    else if(e.type==="red"){
-      text = "🟥 " + e.player
-    }
-    else if(e.type==="sub"){
-      text = "🔁 " + e.player + " → " + e.in
-    }
+let showName = isUnlocked || liveAccessGranted
+
+if(e.type==="goal"){
+  text = "⚽ " + (showName ? e.player : "Spieler")
+}
+else if(e.type==="goalAgainst"){
+  text = "🥅 Gegner"
+}
+else if(e.type==="yellow"){
+  text = "🟨 " + (showName ? e.player : "Spieler")
+}
+else if(e.type==="red"){
+  text = "🟥 " + (showName ? e.player : "Spieler")
+}
+else if(e.type==="sub"){
+  text = showName
+    ? "🔁 " + e.player + " → " + e.in
+    : "🔁 Wechsel"
+}
 
     html += `
 <div class="live-feed-item ${e.type}">
