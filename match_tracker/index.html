@@ -4536,6 +4536,19 @@ function getLiveMinute(){
   }
 }
 
+  function updateLiveAccessStatus(){
+
+  let el = document.getElementById("liveAccessStatus")
+  if(!el) return
+
+  if(liveAccessGranted){
+    el.innerText = "🔓 Namen sichtbar"
+  }else{
+    el.innerText = "👀 Zuschauer-Modus"
+  }
+
+}
+
   function startLiveTimer(){
 
   // alten Timer killen (wichtig!)
