@@ -4161,11 +4161,25 @@ function renderAll(){
     box.style.display = (isUnlocked && activeTeam) ? "block" : "none"
   }
 
-  let header = document.getElementById("teamHeader")
+let header = document.getElementById("teamHeader")
 
 if(header){
-  let name = !isUnlocked ? "👀 Besucher" : (activeTeam || "Kein Team")
-  header.innerText = name
+
+  let name = activeTeam || "Kein Team"
+
+  // 🔥 Modus aus letztem Spiel ziehen (optional fallback)
+  let lastMatch = matches
+    .filter(m => m.team === activeTeam)
+    .slice(-1)[0]
+
+  let mode = lastMatch ? (lastMatch.mode + "vs" + lastMatch.mode) : "7vs7"
+
+  header.innerHTML = `
+    <div>${name}</div>
+    <div class="team-sub">
+      Saison 2026 · ${mode}
+    </div>
+  `
 }
 
 }
