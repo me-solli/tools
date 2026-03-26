@@ -4694,14 +4694,13 @@ function resumeLiveGame(){
 }
 
 function shareLiveMatch(){
-
-  function enterLiveCode(){
+function enterLiveCode(){
 
   openModal("Zugriffscode", "Code eingeben", (code)=>{
 
     if(!code) return
 
-    if(code === "team123"){   // ← kannst du später ändern
+    if(code === "team123"){   // ← dein Code
       liveAccessGranted = true
       showToast("🔓 Namen sichtbar","info")
       updateLiveFeed()
