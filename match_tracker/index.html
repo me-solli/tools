@@ -2305,8 +2305,8 @@ function loadFromServer(){
       teams = data.teams || []
       players = data.players || []
       matches = data.matches || []
-      matches.forEach(m => {
-  if(m.open === undefined) m.open = false
+matches.forEach(m => {
+  m.open = false   // 🔥 IMMER RESET
 })
 // 🔥 gespeichertes Team holen
 let savedTeam = localStorage.getItem("activeTeam")
