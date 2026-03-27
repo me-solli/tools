@@ -288,14 +288,18 @@ overflow:hidden;
 }
 
 .match-header{
-display:flex;
-flex-direction:column;
+display:grid;
+grid-template-columns: 1fr auto;
+grid-template-rows: auto auto;
+
 gap:6px;
 
 cursor:pointer;
 padding:10px 12px;
 border-radius:10px;
 background:#202020;
+
+align-items:center;
 }
 
 /* 🔥 PLAYER CHIP – GAME STYLE (FINAL) */
