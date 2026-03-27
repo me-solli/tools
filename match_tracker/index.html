@@ -1880,45 +1880,65 @@ box-shadow:
     background-position:center;
   }
 
-  /* =========================
-  🔥 MATCH FIX (WICHTIG)
-  ========================= */
+/* =========================
+🔥 MATCH FIX (WICHTIG)
+========================= */
 
-  .match-header{
-    overflow:hidden;
-  }
+.match-header{
+  overflow:hidden;
+}
 
-  .match-main{
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto;
+.match-main{
+  display:flex;                 /* 🔥 statt grid */
+  flex-direction:column;
 
-    text-align:center;
-    gap:4px;
-  }
+  align-items:center;
+  justify-content:center;
 
-  .team-name{
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-  }
+  text-align:center;
+  gap:4px;
 
-  .score{
-    font-size:22px;
-    margin:2px 0;
-  }
+  height:auto;                  /* 🔥 überschreibt Desktop */
+}
 
-  .match-actions-right{
-    grid-column:1 / -1;
-    grid-row:auto;
+/* 🔥 TEAM NAMEN */
+.team-left,
+.team-right{
+  justify-content:center !important;
+  text-align:center !important;
+  width:100%;
+}
 
-    justify-content:center;
-    margin-top:6px;
-  }
+/* 🔥 NAME CLEAN */
+.team-name{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
 
-  .match-actions-right button{
-    width:28px;
-    height:28px;
-  }
+/* 🔥 SCORE */
+.score{
+  font-size:22px;
+  margin:2px 0;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* 🔥 BUTTONS */
+.match-actions-right{
+  grid-column:1 / -1;
+  grid-row:auto;
+
+  justify-content:center;
+  margin-top:6px;
+}
+
+.match-actions-right button{
+  width:28px;
+  height:28px;
+}
 
   /* =========================
   🔥 LIVE MODE MOBILE FIX
