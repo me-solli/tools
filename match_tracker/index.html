@@ -791,70 +791,61 @@ text-overflow:ellipsis;
 }
   
 .match-main{
-display:grid;
-grid-template-columns: 1fr auto 1fr;
+  display:grid;
+  grid-template-columns: 1fr auto 1fr;
 
-/* 🔥 FIX */
-align-items:center;
+  align-items:center;
+  gap:16px;
 
-gap:16px;
+  font-weight:600;
+  font-size:17px;
 
-font-weight:600;
-font-size:17px;
+  height:32px; /* 🔥 FIX → sorgt für echtes vertikales Centering */
 }
 
 .team-left,
 .team-right{
-display:flex;
-align-items:center;
+  display:flex;
+  align-items:center;
 
-min-height:28px;       /* 🔥 weniger Höhe */
-min-width:0;
+  min-width:0;
 
-font-size:14px;
-line-height:1;         /* 🔥 wichtig */
+  font-size:14px;
+  line-height:1;
 
-overflow:hidden;
+  overflow:hidden;
 }
 
+/* 🔥 TEAM NAME */
 .team-name{
-overflow:hidden;
-text-overflow:ellipsis;
-white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
 
-min-width:0;
+  min-width:0;
 
-font-size:15px;
-font-weight:600;
+  font-size:15px;
+  font-weight:600;
 
-opacity:.95;
+  opacity:.95;
 
-display:block;
-line-height:1;          /* 🔥 FIX */
+  display:block;
+  line-height:1;
 }
 
 /* LINKS */
 .team-left{
-flex:1;
-justify-content:flex-end;   /* 🔥 sauber rechts ausrichten */
-text-align:right;
-
-overflow:hidden;
-white-space:nowrap;
-text-overflow:ellipsis;
+  justify-content:flex-end;
+  text-align:right;
 }
 
 /* RECHTS */
 .team-right{
-flex:1;
-justify-content:flex-start;  /* 🔥 sauber links */
-text-align:left;
-
-overflow:hidden;
-white-space:nowrap;
-text-overflow:ellipsis;
+  justify-content:flex-start;
+  text-align:left;
 }
 
+/* 🔥 SCORE */
 .score{
   font-size:22px;
   font-weight:bold;
