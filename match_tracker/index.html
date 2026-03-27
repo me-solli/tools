@@ -3851,11 +3851,11 @@ ${goals} : ${against}
 
   <div class="meta-top">
 
-    <span>📅 ${formatDate(match.date)}</span>
+<span class="meta-date">📅 ${formatDate(match.date)}</span>
 
-    ${match.time ? `<span>🕒 ${match.time}</span>` : ""}
+${match.time ? `<span class="meta-time">🕒 ${match.time}</span>` : ""}
 
-<span>
+<span class="meta-type">
   ${match.homeAway === "away" ? "🚗 Auswärtsspiel" : "🏠 Heimspiel"}
 </span>
 
