@@ -846,16 +846,26 @@ opacity:.95;
 
 /* LINKS */
 .team-left{
-justify-content:center;
-text-align:center;
+display:flex;
+align-items:center;
+justify-content:flex-end;   /* 🔥 FIX */
+text-align:right;           /* 🔥 FIX */
 padding:0;
+
+min-height:44px;
+min-width:0;
 }
 
 /* RECHTS */
 .team-right{
-justify-content:center;
-text-align:center;
+display:flex;
+align-items:center;
+justify-content:flex-start; /* 🔥 FIX */
+text-align:left;            /* 🔥 FIX */
 padding:0;
+
+min-height:44px;
+min-width:0;
 }
 
 .score{
