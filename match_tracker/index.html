@@ -835,26 +835,22 @@ opacity:.95;
 
 /* LINKS */
 .team-left{
-display:flex;
-align-items:center;
-justify-content:flex-end;   /* 🔥 FIX */
-text-align:right;           /* 🔥 FIX */
-padding:0;
+flex:1;
+text-align:right;
 
-min-height:44px;
-min-width:0;
+overflow:hidden;
+white-space:nowrap;
+text-overflow:ellipsis;
 }
 
 /* RECHTS */
 .team-right{
-display:flex;
-align-items:center;
-justify-content:flex-start; /* 🔥 FIX */
-text-align:left;            /* 🔥 FIX */
-padding:0;
+flex:1;
+text-align:left;
 
-min-height:44px;
-min-width:0;
+overflow:hidden;
+white-space:nowrap;
+text-overflow:ellipsis;
 }
 
 .score{
