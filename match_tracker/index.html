@@ -1864,6 +1864,53 @@ box-shadow:
   }
 
   /* =========================
+📱 META FIX (ORT UNTEREINANDER)
+========================= */
+
+.meta-top{
+  grid-template-columns: 1fr 1fr;
+  gap:6px;
+}
+
+.meta-top span{
+  font-size:11px;
+}
+
+/* Datum */
+.meta-top span:nth-child(1){
+  grid-column:1;
+}
+
+/* Uhrzeit */
+.meta-top span:nth-child(2){
+  grid-column:2;
+}
+
+/* Heim/Auswärts */
+.meta-top span:nth-child(3){
+  grid-column:1 / -1;
+}
+
+/* 🔥 Ort + Route in eigene Zeile */
+.meta-location-row{
+  grid-column:1 / -1;
+
+  flex-direction:column;
+  align-items:flex-start;
+
+  gap:4px;
+  margin-top:2px;
+}
+
+.map-link{
+  margin-left:0;
+}
+
+.location{
+  white-space:normal;
+}
+
+  /* =========================
   🎯 HERO FIX
   ========================= */
 
