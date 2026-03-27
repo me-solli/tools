@@ -289,7 +289,7 @@ overflow:hidden;
 
 .match-header{
 display:grid;
-grid-template-columns: 1fr auto;
+grid-template-columns: minmax(0,1fr) auto; /* 🔥 FIX */
 grid-template-rows: auto auto;
 
 gap:6px 10px;
@@ -300,6 +300,9 @@ cursor:pointer;
 padding:10px 12px;
 border-radius:10px;
 background:#202020;
+
+/* 🔥 EXTRA SAFETY (optional, aber gut) */
+overflow:hidden;
 }
 
 /* 🔥 PLAYER CHIP – GAME STYLE (FINAL) */
