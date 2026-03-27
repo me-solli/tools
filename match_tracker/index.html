@@ -797,9 +797,8 @@ text-overflow:ellipsis;
 grid-column:1 / 2;
 
 display:grid;
-grid-template-columns: minmax(0,1fr) auto minmax(0,1fr);
-
-min-width:0; /* 🔥 CRITICAL FIX */
+grid-template-columns: 1fr auto 1fr; /* 🔥 FIX */
+min-width:0;
 
 align-items:center;
 gap:10px;
