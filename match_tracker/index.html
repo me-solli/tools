@@ -1257,7 +1257,7 @@ body::before{
 
   background:url("./img/bg_pitch_bw.png") center/cover no-repeat;
 
-  transform:scale(1.05);        /* 🔥 KEIN ROTATE MEHR */
+  transform:rotate(-6deg) scale(1.1);
 
   opacity:0.12;
   filter:contrast(1.1) brightness(0.9);
@@ -1265,7 +1265,8 @@ body::before{
   z-index:-1;
   pointer-events:none;
 
-  width:100%;
+  width:100vw;
+  overflow:hidden;
 }
 
 .hero-wrap{
