@@ -5123,6 +5123,11 @@ setTimeout(()=>{
   checkLiveFromURL()
 },1000)
 
+  /* 🔥 HIER EINFÜGEN */
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js')
+}
+
 </script>
 
 <div id="modal" class="modal hidden">
