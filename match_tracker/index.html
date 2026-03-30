@@ -820,13 +820,11 @@ text-overflow:ellipsis;
 
 .team-left,
 .team-right{
-  display:flex;
-  align-items:center;
-
-  min-width:0;
+  display:block;        /* 🔥 kein flex mehr */
+  text-align:center;    /* 🔥 mittig */
 
   font-size:14px;
-  line-height:1;
+  line-height:1.2;
 
   overflow:hidden;
 }
