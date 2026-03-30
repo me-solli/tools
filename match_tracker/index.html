@@ -4972,6 +4972,26 @@ function resumeLiveGame(){
   }, 4000)
 }
 
+  function toggleMatchForm(){
+
+  let form = document.getElementById("matchForm")
+
+  if(!form) return
+
+  form.classList.toggle("hidden")
+
+  // optional: rein scrollen wenn geöffnet
+  if(!form.classList.contains("hidden")){
+    setTimeout(()=>{
+      form.scrollIntoView({
+        behavior:"smooth",
+        block:"center"
+      })
+    },100)
+  }
+
+}
+
 function enterLiveCode(){
 
   openModal("Zugriffscode", "Code eingeben", (code)=>{
