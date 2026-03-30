@@ -3120,7 +3120,7 @@ confirmEditAction(() => {
 
 function editMatch(id){
 
-if(!isUnlocked){
+if(!hasAccess(activeTeam)){
   showToast("🔒 Kein Zugriff","info")
   return
 }
