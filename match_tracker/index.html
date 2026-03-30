@@ -2299,6 +2299,56 @@ function confirmEditAction(callback){
   },50)
 }
 
+  function confirmDeleteAction(callback){
+
+  let modal = document.getElementById("modal")
+  let box = modal.querySelector(".modal-box")
+
+  box.innerHTML = `
+    <div class="modal-header">
+      <div class="modal-title">⚠️ Löschen bestätigen</div>
+    </div>
+
+    <div style="font-size:13px;opacity:.8">
+      Zum Löschen bitte <b>LÖSCHEN</b> eingeben
+    </div>
+
+    <input id="modalInput" placeholder="LÖSCHEN eingeben">
+
+    <div class="modal-actions">
+      <button class="danger-outline" onclick="confirmDeleteModal()">Löschen</button>
+      <button onclick="closeModal()">Abbrechen</button>
+    </div>
+  `
+
+  modalCallback = callback
+
+  modal.classList.remove("hidden")
+
+  setTimeout(()=>{
+    document.getElementById("modalInput").focus()
+  },50)
+}
+
+function confirmDeleteModal(){
+
+  let value = document.getElementById("modalInput").value
+
+  if(value.trim().toUpperCase() !== "LÖSCHEN"){
+    alert("Falsche Eingabe ❌")
+    return
+  }
+
+  let cb = modalCallback
+  modalCallback = null
+
+  closeModal()
+
+  setTimeout(()=>{
+    cb()
+  },50)
+}
+
 function confirmEditModal(){
 
   let value = document.getElementById("modalInput").value
