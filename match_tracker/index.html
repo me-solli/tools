@@ -1016,19 +1016,22 @@ transform:translateY(0);
 }
 
 .section-banner{
-  height:36px;              /* 🔥 kleiner */
+  height:28px;              /* 🔽 ~20% kleiner */
   border-radius:6px;
-  margin-bottom:14px;
+  margin-bottom:12px;       /* 🔽 minimal kompakter */
 
   background-repeat:no-repeat;
   background-size:contain;
   background-position:left center;
 
-  /* 🔥 entschärfen */
   opacity:0.85;
   filter:brightness(0.9) contrast(0.95);
 
   padding-left:4px;
+
+  /* 🔥 feiner Look */
+  transform:scale(0.9);
+  transform-origin:left center;
 }
 
 /* 🔵 TEAMS BANNER */
