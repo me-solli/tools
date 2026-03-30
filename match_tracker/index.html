@@ -5161,5 +5161,11 @@ setTimeout(()=>{
   <a href="datenschutz.html">Datenschutz</a>
 </footer>
 
+  <script>
+if ("serviceWorker" in navigator){
+  navigator.serviceWorker.register("./sw.js")
+}
+</script>
+
 </body>
 </html>
