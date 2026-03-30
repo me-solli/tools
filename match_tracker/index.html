@@ -805,16 +805,17 @@ text-overflow:ellipsis;
 }
   
 .match-main{
-  display:grid;
-  grid-template-columns: 1fr auto 1fr;
-
+  display:flex;
+  flex-direction:column;   /* 🔥 STACK */
   align-items:center;
-  gap:16px;
+  justify-content:center;
+
+  gap:4px;
 
   font-weight:600;
-  font-size:17px;
+  text-align:center;
 
-  min-height:32px; /* ✅ statt height */
+  min-height:60px;
 }
 
 .team-left,
