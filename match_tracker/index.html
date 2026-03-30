@@ -2581,8 +2581,11 @@ renderAll()
 
 let accessCache = {}
 
+function hasAccess(team){
+  return accessCache[team] === true
+}
+
 function unlockTeam(){
-  isUnlocked = false
 
   if(!activeTeam){
     showToast("⚠️ Kein Team ausgewählt","info")
@@ -2604,16 +2607,17 @@ function unlockTeam(){
       })
     })
     .then(res=>res.json())
-.then(data=>{
-
-      isUnlocked = false   // 🔥 IMMER reset
+    .then(data=>{
 
       if(!data || data.ok !== true){
         showToast("❌ Falsches Passwort","info")
         return
       }
 
+      // 🔥 EINZIGE WAHRHEIT
       accessCache[activeTeam] = true
+
+      // 🔥 optional (für UI)
       isUnlocked = true
 
       save()
@@ -2624,7 +2628,6 @@ function unlockTeam(){
     })
 
   }, true)
-
 }
 
   function unlockTeamFromList(team){
