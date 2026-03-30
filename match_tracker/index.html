@@ -5139,17 +5139,11 @@ setTimeout(()=>{
   <a href="datenschutz.html">Datenschutz</a>
 </footer>
 
-  <script>
-if ("serviceWorker" in navigator){
-  navigator.serviceWorker.register("./sw.js")
-}
-</script>
-
-  <script>
+<script>
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/sw.js")
-    .then(() => console.log("SW registriert"))
-    .catch(err => console.log("SW Fehler", err))
+  navigator.serviceWorker.register("./sw.js")
+    .then(() => console.log("✅ Service Worker registriert"))
+    .catch(err => console.log("❌ SW Fehler:", err))
 }
 </script>
 
