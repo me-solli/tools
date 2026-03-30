@@ -2078,22 +2078,25 @@ box-shadow:
   pointer-events:none;
 }
 
-  .logo{
+.logo{
   display:flex;
   align-items:center;
-  justify-content:center;
+  justify-content:flex-start;
 
-  height:32px;          /* 🔥 kontrollierte Höhe */
+  height:28px;
 }
 
 .logo img{
   height:100%;
   width:auto;
 
+  display:block;
+
   object-fit:contain;
 
-  /* 🔥 optional smoother Look */
-  filter:drop-shadow(0 0 6px rgba(60,255,122,0.15));
+  border-radius:6px;
+
+  box-shadow:0 2px 8px rgba(0,0,0,0.4);
 }
 
 }
