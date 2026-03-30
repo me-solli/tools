@@ -3495,7 +3495,7 @@ modal.classList.remove("hidden")
 
 function addEvent(matchId,type){
 
-  if(!isUnlocked){
+if(!hasAccess(activeTeam)){
   showToast("🔒 Kein Zugriff","info")
   return
 }
