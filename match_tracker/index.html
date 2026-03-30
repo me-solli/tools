@@ -1799,6 +1799,89 @@ box-shadow:
   background:rgba(108,99,255,0.15);
 }
 
+  /* =========================
+📱 MOBILE FIX (STEP 1)
+========================= */
+
+@media (max-width: 768px){
+
+  /* 🔥 3. Icon (Matches) komplett ausblenden */
+  #topMatches{
+    display:none;
+  }
+
+  /* 🔥 APP Layout */
+  .app{
+    flex-direction:column;
+    gap:14px;
+  }
+
+  .sidebar{
+    width:100%;
+    position:relative;
+    top:0;
+  }
+
+  body{
+    padding:12px;
+    overflow-x:hidden;
+  }
+
+  .content-wrap{
+    padding:12px;
+  }
+
+/* =========================
+📱 META 3-ROW LAYOUT (ROBUST)
+========================= */
+
+.meta-top{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items:center;
+  gap:6px;
+}
+
+.meta-top span{
+  font-size:11px;
+  justify-content:center;
+}
+
+/* 📅 Datum */
+.meta-date{
+  grid-column:1;
+}
+
+/* 🕒 Uhrzeit */
+.meta-time{
+  grid-column:2;
+}
+
+/* 🏠 Heim/Auswärts */
+.meta-type{
+  grid-column:1;
+}
+
+/* 🗺️ Route */
+.map-link{
+  grid-column:2;
+  margin-left:0;
+  justify-self:center;
+}
+
+/* 📍 Ort */
+.meta-location-row{
+  grid-column:1 / -1;
+  display:flex;
+  justify-content:center;
+  margin-top:4px;
+}
+
+.location{
+  white-space:normal;
+  text-align:center;
+}
+
 /* =========================
 📱 MOBILE FIX (STEP 1)
 ========================= */
