@@ -2934,7 +2934,7 @@ PLAYERS
 
 function deletePlayer(name){
 
-if(!isUnlocked){
+if(!hasAccess(activeTeam)){
   showToast("🔒 Kein Zugriff","info")
   return
 }
