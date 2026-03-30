@@ -3262,7 +3262,7 @@ function openCreateMatchModal(){
   
 function createMatch(){
 
-  if(!isUnlocked){
+if(!hasAccess(activeTeam)){
   showToast("🔒 Kein Zugriff","info")
   return
 }
