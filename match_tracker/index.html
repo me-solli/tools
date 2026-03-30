@@ -3616,7 +3616,7 @@ renderAll()
 
 function addSubstitution(matchId){
 
-  if(!isUnlocked){
+if(!hasAccess(activeTeam)){
   showToast("🔒 Kein Zugriff","info")
   return
 }
