@@ -1008,14 +1008,16 @@ transform:translateY(0);
   width:100%;
   max-width:100%;
 
-  aspect-ratio: 16 / 5;   /* 🔥 WICHTIG */
+  aspect-ratio: 16 / 3;   /* 🔥 deutlich flacher */
   height:auto;
 
-  background:url("./img/matchtracker_banner.png") center/contain no-repeat;
+  background:url("./img/matchtracker_banner.png") center/cover no-repeat;
 
   border-radius:14px;
 
   box-shadow:0 10px 30px rgba(0,0,0,0.6);
+
+  margin-bottom:10px;   /* 🔥 weniger Abstand */
 }
 
 .section-banner{
