@@ -5153,11 +5153,56 @@ setTimeout(()=>{
 </footer>
 
 <script>
+
+// 🔥 SERVICE WORKER
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("./sw.js")
     .then(() => console.log("✅ Service Worker registriert"))
     .catch(err => console.log("❌ SW Fehler:", err))
 }
+
+// 🔥 INSTALL BUTTON LOGIK
+let deferredPrompt = null
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault()
+
+  deferredPrompt = e
+
+  const btn = document.getElementById("installBtn")
+  if(btn) btn.style.display = "inline-flex"
+})
+
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("installBtn")
+
+  if(!btn) return
+
+  btn.addEventListener("click", async () => {
+
+    if(!deferredPrompt) return
+
+    deferredPrompt.prompt()
+
+    const result = await deferredPrompt.userChoice
+
+    if(result.outcome === "accepted"){
+      showToast("App installiert ✅","info")
+    }else{
+      showToast("Installation abgebrochen","info")
+    }
+
+    deferredPrompt = null
+    btn.style.display = "none"
+  })
+})
+
+// 🔥 NACH INSTALLATION AUSBLENDEN
+window.addEventListener("appinstalled", () => {
+  const btn = document.getElementById("installBtn")
+  if(btn) btn.style.display = "none"
+})
+
 </script>
 
 </body>
