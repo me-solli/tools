@@ -3766,32 +3766,34 @@ ${goals} : ${against}
 
 <div class="match-sub">
 
-  <div class="meta-top">
-
-<span class="meta-date">📅 ${formatDate(match.date)}</span>
-
-${match.time ? `<span class="meta-time">🕒 ${match.time}</span>` : ""}
-
-<span class="meta-type">
-  ${match.homeAway === "away" ? "🚗 Auswärtsspiel" : "🏠 Heimspiel"}
-</span>
-
-${match.location ? `
-<a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(match.location)}"
-   target="_blank"
-   onclick="event.stopPropagation()"
-   class="map-link">
-  🗺️ Route
-</a>
-
-<div class="meta-location-row">
-  <span class="location">
-    📍 ${match.location}
-  </span>
-</div>
-` : ""}
-
+  <!-- 📅 + 🕒 -->
+  <div class="meta-row">
+    <span>📅 ${formatDate(match.date)}</span>
+    ${match.time ? `<span>🕒 ${match.time}</span>` : ""}
   </div>
+
+  <!-- 🏠 + 🗺️ -->
+  <div class="meta-row">
+    <span>
+      ${match.homeAway === "away" ? "🚗 Auswärtsspiel" : "🏠 Heimspiel"}
+    </span>
+
+    ${match.location ? `
+      <a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(match.location)}"
+         target="_blank"
+         onclick="event.stopPropagation()"
+         class="map-link">
+        🗺️ Route
+      </a>
+    ` : ""}
+  </div>
+
+  <!-- 📍 -->
+  ${match.location ? `
+    <div class="meta-location">
+      📍 ${match.location}
+    </div>
+  ` : ""}
 
 </div>
 
