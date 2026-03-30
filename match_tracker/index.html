@@ -2952,7 +2952,7 @@ renderAll()
 
 function editPlayer(name){
 
-if(!isUnlocked){
+if(!hasAccess(activeTeam)){
   showToast("🔒 Kein Zugriff","info")
   return
 }
