@@ -5,10 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Match Tracker – Spiel & Torschützen</title>
 
-  <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0f0f0f">
-<link rel="icon" href="img/icon.png">
-
 <style>
 
 .topbar{
@@ -30,16 +26,6 @@
   box-shadow:0 10px 30px rgba(0,0,0,0.6);
 }
 
-  .logo-img{
-  height:32px;
-  width:32px;
-
-  object-fit:contain;
-  border-radius:6px;
-
-  box-shadow:0 0 8px rgba(60,255,122,0.15);
-}
-
 .topbar-left{
 font-weight:bold;
 font-size:18px;
@@ -54,15 +40,15 @@ opacity:.8;
 
 body{
   font-family:Arial,Helvetica,sans-serif;
+
   background:#0f0f0f;
+
   color:#eee;
 
   margin:0;
-  padding:0;              /* 🔥 FIX */
+  padding:30px;
 
   min-height:100vh;
-
-  overflow-x:hidden;      /* 🔥 EXTRA SICHER */
 }
 
 h1,h2{
@@ -805,26 +791,27 @@ text-overflow:ellipsis;
 }
   
 .match-main{
-  display:flex;
-  flex-direction:column;   /* 🔥 STACK */
-  align-items:center;
-  justify-content:center;
+  display:grid;
+  grid-template-columns: 1fr auto 1fr;
 
-  gap:4px;
+  align-items:center;
+  gap:16px;
 
   font-weight:600;
-  text-align:center;
+  font-size:17px;
 
-  min-height:60px;
+  min-height:32px; /* ✅ statt height */
 }
 
 .team-left,
 .team-right{
-  display:block;        /* 🔥 kein flex mehr */
-  text-align:center;    /* 🔥 mittig */
+  display:flex;
+  align-items:center;
+
+  min-width:0;
 
   font-size:14px;
-  line-height:1.2;
+  line-height:1;
 
   overflow:hidden;
 }
@@ -1005,37 +992,29 @@ transform:translateY(0);
 
 .hero-banner-img{
   width:100%;
-  max-width:100%;
-
-  aspect-ratio: 16 / 3;   /* 🔥 deutlich flacher */
-  height:auto;
+  height:120px;
 
   background:url("./img/matchtracker_banner.png") center/cover no-repeat;
 
   border-radius:14px;
 
   box-shadow:0 10px 30px rgba(0,0,0,0.6);
-
-  margin-bottom:10px;   /* 🔥 weniger Abstand */
 }
 
 .section-banner{
-  height:28px;              /* 🔽 ~20% kleiner */
+  height:36px;              /* 🔥 kleiner */
   border-radius:6px;
-  margin-bottom:12px;       /* 🔽 minimal kompakter */
+  margin-bottom:14px;
 
   background-repeat:no-repeat;
   background-size:contain;
   background-position:left center;
 
+  /* 🔥 entschärfen */
   opacity:0.85;
   filter:brightness(0.9) contrast(0.95);
 
   padding-left:4px;
-
-  /* 🔥 feiner Look */
-  transform:scale(0.9);
-  transform-origin:left center;
 }
 
 /* 🔵 TEAMS BANNER */
@@ -1185,6 +1164,64 @@ margin-top:6px;
   opacity:.8;
 }
 
+.meta-top{
+display:grid;
+grid-template-columns: 110px 80px 120px 80px 1fr;
+align-items:center;
+gap:10px;
+}
+
+.meta-top span{
+white-space:nowrap;
+font-size:12px;
+opacity:.85;
+display:flex;
+align-items:center;
+gap:4px;
+}
+
+.meta-bottom{
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.location{
+overflow:hidden;
+text-overflow:ellipsis;
+white-space:nowrap;
+
+font-size:13px;
+opacity:.95;
+
+display:flex;
+align-items:center;
+gap:6px;
+
+justify-self:end;
+
+/* 🔥 NEU */
+flex:1;
+}
+
+  .meta-location-row{
+  grid-column:1 / -1;
+
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  margin-top:4px;
+
+  min-width:0;
+}
+
+.meta-right{
+justify-self:end;   /* 🔥 statt margin-left */
+white-space:nowrap;
+font-size:10px;
+}
+
   .topbar-inner{
   width:100%;
   max-width:1400px;
@@ -1196,29 +1233,26 @@ margin-top:6px;
   padding:0 16px;
 }
 
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
+  body::before{
+content:"";
+position:fixed;
+inset:0;
 
-  background:url("./img/bg_pitch_bw.png") center/cover no-repeat;
+background:url("./img/bg_pitch_bw.png") center/cover no-repeat;
 
-  transform:rotate(-6deg) scale(1.1);
+transform:rotate(-6deg) scale(1.2);
 
-  opacity:0.12;
-  filter:contrast(1.1) brightness(0.9);
+opacity:0.12;
+      filter:contrast(1.1) brightness(0.9);
 
-  z-index:-1;
-  pointer-events:none;
-
-  width:100vw;
-  overflow:hidden;
+z-index:-1;
+pointer-events:none;
 }
 
 .hero-wrap{
-  max-width:1200px;
-  margin:10px auto 10px auto;   /* 🔥 halbiert */
-  padding:0 20px;
+  max-width:1000px;
+  margin:14px auto;
+  padding:0 12px;
 }
 
   .content-wrap{
@@ -1492,7 +1526,7 @@ display:flex;
 align-items:center;
 gap:4px;
 
-margin-left:6px;
+margin-left:auto;   /* 🔥 DAS IST DER KEY */
 
 padding:2px 6px;
 
@@ -1798,7 +1832,7 @@ box-shadow:
   background:rgba(108,99,255,0.15);
 }
 
-  /* =========================
+/* =========================
 📱 MOBILE FIX (STEP 1)
 ========================= */
 
@@ -1881,72 +1915,167 @@ box-shadow:
   text-align:center;
 }
 
+  /* =========================
+  🎯 HERO FIX
+  ========================= */
+
+  .hero-wrap{
+    padding:0 6px;
+    max-width:420px;
+    margin:10px auto;
+  }
+
+  .hero-banner-img{
+    height:90px;
+    border-radius:10px;
+    background-size:contain;
+    background-position:center;
+  }
+
 /* =========================
-📱 MOBILE FIX (STEP 1)
+🔥 MATCH FIX (WICHTIG)
 ========================= */
 
-@media (max-width: 768px){
-
-  /* 🔥 3. Icon (Matches) komplett ausblenden */
-  #topMatches{
-    display:none;
-  }
-
-  #topYellow,
-  #topRed{
-    display:none;
-  }
-
-  /* 🔥 APP Layout */
-  .app{
-    flex-direction:column;
-    gap:14px;
-  }
-
-  .sidebar{
-    width:100%;
-    position:relative;
-    top:0;
-  }
-
-  .logo-img{
-    height:40px;
-    width:40px;
-  }
-
-  /* ❌ BODY PADDING ENTFERNEN */
-  body{
-    padding:0;                /* 🔥 WICHTIG */
-    overflow-x:hidden;
-  }
-
-  /* ✅ EINDEUTIG NUR EINMAL */
-  .content-wrap{
-    padding:12px 10px 20px 10px;   /* 🔥 sauber & kontrolliert */
-  }
-
-.meta-row{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:12px;
-
-  font-size:12px;
-  opacity:.85;
-
-  margin-top:4px;
-
-  flex-wrap:wrap;        /* 🔥 DAS FIXT MOBILE FINAL */
+.match-header{
+  overflow:hidden;
 }
 
-.meta-location{
+.match-main{
+  display:flex;                 /* 🔥 statt grid */
+  flex-direction:column;
+
+  align-items:center;
+  justify-content:center;
+
   text-align:center;
+  gap:4px;
+
+  height:auto;                  /* 🔥 überschreibt Desktop */
+}
+
+/* 🔥 TEAM NAMEN */
+.team-left,
+.team-right{
+  justify-content:center !important;
+  text-align:center !important;
+  width:100%;
+}
+
+/* 🔥 NAME CLEAN */
+.team-name{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* 🔥 SCORE */
+.score{
+  font-size:22px;
+  margin:2px 0;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* 🔥 BUTTONS */
+.match-actions-right{
+  grid-column:1 / -1;
+  grid-row:auto;
+
+  justify-content:center;
+  margin-top:6px;
+}
+
+.match-actions-right button{
+  width:28px;
+  height:28px;
+}
+
+  /* =========================
+  🔥 LIVE MODE MOBILE FIX
+  ========================= */
+
+  .live-grid{
+    grid-template-columns:1fr;
+  }
+
+  .live-player{
+    padding:14px;
+    font-size:15px;
+  }
+
+  .live-feed{
+    max-height:120px;
+  }
+
+  .live-header{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:6px;
+  }
+
+  .live-score{
+    font-size:14px;
+  }
+
+  .live-timer{
+    font-size:12px;
+  }
+
+.live-close{
+  position:absolute;
+  top:0;
+  right:0;
+}
+
+  .swipe-hint{
+  position:absolute;
+  top:60px;
+  left:50%;
+  transform:translateX(-50%);
+
+  background:rgba(0,0,0,0.7);
+  color:#ccc;
+
+  padding:6px 10px;
+  border-radius:8px;
+
   font-size:12px;
-  opacity:.9;
+  white-space:nowrap;
 
-  margin-top:4px;
+  opacity:0;
+  pointer-events:none;
 
-  white-space:normal;
+  transition:.4s;
+  z-index:1000;
+}
+
+.swipe-hint.show{
+  opacity:1;
+}
+
+  /* 🔥 FIX: gleiche Schriftgröße für beide Teams */
+.team-left .team-name,
+.team-right .team-name{
+  font-size:16px;
+}
+
+  .match{
+  width:100%;
+  max-width:100%;   /* 🔥 verhindert JEGLICHES Ausbrechen */
+  box-sizing:border-box;
+}
+
+  #matchForm{
+  margin-top:10px;
+  transition: all .25s ease;
+}
+
+#matchForm.hidden{
+  opacity:0;
+  transform:translateY(-6px);
+  pointer-events:none;
 }
 
 }
@@ -1959,7 +2088,7 @@ box-shadow:
   <div class="topbar-inner">
 
 <div class="topbar-left">
-  <img src="img/icon.png" class="logo-img">
+  <div class="logo">MT</div>
 </div>
 
     <div class="topbar-right">
@@ -3816,34 +3945,32 @@ ${goals} : ${against}
 
 <div class="match-sub">
 
-  <!-- 📅 + 🕒 -->
-  <div class="meta-row">
-    <span>📅 ${formatDate(match.date)}</span>
-    ${match.time ? `<span>🕒 ${match.time}</span>` : ""}
+  <div class="meta-top">
+
+<span class="meta-date">📅 ${formatDate(match.date)}</span>
+
+${match.time ? `<span class="meta-time">🕒 ${match.time}</span>` : ""}
+
+<span class="meta-type">
+  ${match.homeAway === "away" ? "🚗 Auswärtsspiel" : "🏠 Heimspiel"}
+</span>
+
+${match.location ? `
+<a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(match.location)}"
+   target="_blank"
+   onclick="event.stopPropagation()"
+   class="map-link">
+  🗺️ Route
+</a>
+
+<div class="meta-location-row">
+  <span class="location">
+    📍 ${match.location}
+  </span>
+</div>
+` : ""}
+
   </div>
-
-  <!-- 🏠 + 🗺️ -->
-  <div class="meta-row">
-    <span>
-      ${match.homeAway === "away" ? "🚗 Auswärtsspiel" : "🏠 Heimspiel"}
-    </span>
-
-    ${match.location ? `
-      <a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(match.location)}"
-         target="_blank"
-         onclick="event.stopPropagation()"
-         class="map-link">
-        🗺️ Route
-      </a>
-    ` : ""}
-  </div>
-
-  <!-- 📍 -->
-  ${match.location ? `
-    <div class="meta-location">
-      📍 ${match.location}
-    </div>
-  ` : ""}
 
 </div>
 
@@ -4991,11 +5118,6 @@ setTimeout(()=>{
   loadFromServer()
   checkLiveFromURL()
 },1000)
-
-  /* 🔥 HIER EINFÜGEN */
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js')
-}
 
 </script>
 
