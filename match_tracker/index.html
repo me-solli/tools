@@ -2736,7 +2736,7 @@ function selectTeam(name){
 
 function deleteTeam(name){
 
-if(!isUnlocked){
+if(!hasAccess(activeTeam)){
   showToast("🔒 Kein Zugriff","info")
   return
 }
