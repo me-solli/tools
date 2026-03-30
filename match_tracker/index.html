@@ -3325,11 +3325,11 @@ if(!hasAccess(activeTeam)){
 
 function deleteMatch(id){
 
-if(!isUnlocked){
+if(!hasAccess(activeTeam)){
   showToast("🔒 Kein Zugriff","info")
   return
 }
-
+  
 confirmDeleteAction(()=>{
 
 matches = matches.filter(m=>m.id!==id)
