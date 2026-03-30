@@ -2630,8 +2630,7 @@ function unlockTeam(){
   }, true)
 }
 
-  function unlockTeamFromList(team){
-    isUnlocked = false
+function unlockTeamFromList(team){
 
   activeTeam = team
 
@@ -2650,16 +2649,17 @@ function unlockTeam(){
       })
     })
     .then(res=>res.json())
-.then(data=>{
-
-      isUnlocked = false   // 🔥 IMMER reset
+    .then(data=>{
 
       if(!data || data.ok !== true){
         showToast("❌ Falsches Passwort","info")
         return
       }
 
+      // 🔥 EINZIGE WAHRHEIT
       accessCache[team] = true
+
+      // optional UI
       isUnlocked = true
 
       save()
