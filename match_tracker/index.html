@@ -1863,9 +1863,10 @@ box-shadow:
     display:none;
   }
 
-  .content-wrap{
-  padding:12px 8px 20px 8px;   /* 🔥 weniger seitlich */
-}
+  #topYellow,
+  #topRed{
+    display:none;
+  }
 
   /* 🔥 APP Layout */
   .app{
@@ -1873,30 +1874,29 @@ box-shadow:
     gap:14px;
   }
 
-  #topYellow,
-#topRed{
-  display:none;
-}
-
-  .logo-img{
-  height:40px;
-  width:40px;
-}
-
   .sidebar{
     width:100%;
     position:relative;
     top:0;
   }
 
+  .logo-img{
+    height:40px;
+    width:40px;
+  }
+
+  /* ❌ BODY PADDING ENTFERNEN */
   body{
-    padding:12px;
+    padding:0;                /* 🔥 WICHTIG */
     overflow-x:hidden;
   }
 
+  /* ✅ EINDEUTIG NUR EINMAL */
   .content-wrap{
-    padding:12px;
+    padding:12px 10px 20px 10px;   /* 🔥 sauber & kontrolliert */
   }
+
+}
 
 /* =========================
 📱 META 3-ROW LAYOUT (ROBUST)
