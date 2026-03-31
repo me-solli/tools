@@ -4832,9 +4832,8 @@ el.innerText = "🔓 Namen freigeschaltet (" + days + " Tage)"
 
 }
 
-  function startLiveTimer(){
+function startLiveTimer(){
 
-  // alten Timer killen (wichtig!)
   if(liveTimerInterval){
     clearInterval(liveTimerInterval)
   }
@@ -4844,13 +4843,30 @@ el.innerText = "🔓 Namen freigeschaltet (" + days + " Tage)"
     let el = document.getElementById("liveTimer")
     if(!el) return
 
-let min = getLiveMinute()
+    if(!liveStartTime){
+      el.innerText = "⏱ 00:00"
+      return
+    }
 
-let formatted = String(min).padStart(2, "0")
-el.innerText = "⏱ " + formatted + "'"
+    let now = Date.now()
 
-  }, 1000)
+    if(livePausedAt){
+      now = livePausedAt
+    }
 
+    let diff = now - liveStartTime - livePausedTotal
+
+    let totalSeconds = Math.floor(diff / 1000)
+
+    let minutes = Math.floor(totalSeconds / 60)
+    let seconds = totalSeconds % 60
+
+    let m = String(minutes).padStart(2,"0")
+    let s = String(seconds).padStart(2,"0")
+
+    el.innerText = "⏱ " + m + ":" + s
+
+  }, 500) // 🔥 smoother als 1000ms
 }
 
 function pauseLiveGame(){
