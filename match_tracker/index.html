@@ -4638,13 +4638,13 @@ box.innerHTML = `
 </div>
 
 <div class="live-grid">
-  <button
-    ${!isUnlocked ? "disabled" : ""}
-    onclick="pauseLiveGame()">⏸ Pause</button>
-
-  <button
+  <button class="primary"
     ${!isUnlocked ? "disabled" : ""}
     onclick="resumeLiveGame()">▶ Weiter</button>
+
+  <button class="secondary"
+    ${!isUnlocked ? "disabled" : ""}
+    onclick="pauseLiveGame()">⏸ Pause</button>
 </div>
 
 <div id="liveFeed" class="live-feed"></div>
