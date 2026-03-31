@@ -1688,11 +1688,36 @@ box-shadow:
 }
 
 .live-timer{
-  font-size:13px;
-  opacity:.7;
+  display:flex;
+  align-items:center;
+  gap:6px;
 
-  font-variant-numeric: tabular-nums; /* 🔥 fix springende zahlen */
-  letter-spacing:1px;                 /* 🔥 cleaner look */
+  font-variant-numeric: tabular-nums;
+  letter-spacing:1px;
+}
+
+/* 🔴 Punkt */
+.live-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#ff3b3b;
+
+  animation:liveBlink 1s infinite;
+}
+
+/* 🔥 Blink Animation */
+@keyframes liveBlink{
+  0%{ opacity:1 }
+  50%{ opacity:0.2 }
+  100%{ opacity:1 }
+}
+
+/* LIVE Text */
+.live-text{
+  font-size:11px;
+  color:#ff6b6b;
+  font-weight:600;
 }
 
 .live-close{
