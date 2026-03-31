@@ -4896,7 +4896,7 @@ let el = document.getElementById("liveTimeValue")
     let m = String(minutes).padStart(2,"0")
     let s = String(seconds).padStart(2,"0")
 
-    el.innerText = "⏱ " + m + ":" + s
+el.innerText = m + ":" + s
 
   }, 500) // 🔥 smoother als 1000ms
 }
