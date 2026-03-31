@@ -1696,24 +1696,31 @@ box-shadow:
   letter-spacing:1px;
 }
 
-/* 🔴 Punkt */
+/* 🔴 LIVE DOT */
 .live-dot{
   width:8px;
   height:8px;
   border-radius:50%;
   background:#ff3b3b;
+}
 
+/* 🔥 blink nur wenn aktiv */
+.live-dot.blink{
   animation:liveBlink 1s infinite;
 }
 
-/* 🔥 Blink Animation */
 @keyframes liveBlink{
   0%{ opacity:1 }
   50%{ opacity:0.2 }
   100%{ opacity:1 }
 }
 
-/* LIVE Text */
+/* 🔥 pause / idle */
+.live-dot.paused{
+  opacity:0.3;
+}
+
+/* LIVE TEXT */
 .live-text{
   font-size:11px;
   color:#ff6b6b;
