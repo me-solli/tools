@@ -4872,6 +4872,8 @@ el.innerText = "🔓 Namen freigeschaltet (" + days + " Tage)"
 
 function startLiveTimer(){
 
+  updateLiveButton()
+
   if(liveTimerInterval){
     clearInterval(liveTimerInterval)
   }
