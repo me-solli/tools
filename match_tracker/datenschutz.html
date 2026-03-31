@@ -7,6 +7,8 @@
 
 <style>
 
+/* (DEIN STYLE UNVERÄNDERT) */
+
 body{
   font-family:Arial,Helvetica,sans-serif;
   background:#0f0f0f;
@@ -14,7 +16,7 @@ body{
   margin:0;
 }
 
-/* 🔥 TOPBAR (wie im Tool) */
+/* 🔥 TOPBAR */
 .topbar{
   position:sticky;
   top:0;
@@ -108,56 +110,31 @@ body{
   font-size:14px;
 }
 
-strong{
-  color:#fff;
-}
+strong{ color:#fff; }
+ul{ padding-left:18px; }
 
-ul{
-  padding-left:18px;
-}
+a{ color:#4a8cff; text-decoration:none; }
+a:hover{ text-decoration:underline; }
 
-/* 🔥 LINKS */
-a{
-  color:#4a8cff;
-  text-decoration:none;
-}
-
-a:hover{
-  text-decoration:underline;
-}
-
-/* 🔥 FOOTER */
 .footer{
   margin-top:40px;
-
   text-align:center;
   font-size:11px;
-
   color:#777;
-
   padding:14px 0;
-
   border-top:1px solid rgba(255,255,255,0.04);
-
   background:rgba(15,15,15,0.6);
   backdrop-filter:blur(6px);
 }
 
-.footer a{
-  color:#888;
-  margin:0 6px;
-}
-
-.footer a:hover{
-  color:#fff;
-}
+.footer a{ color:#888; margin:0 6px; }
+.footer a:hover{ color:#fff; }
 
 </style>
 </head>
 
 <body>
 
-<!-- 🔥 TOPBAR -->
 <div class="topbar">
   <div class="topbar-inner">
     <div class="logo">MT</div>
@@ -165,7 +142,6 @@ a:hover{
   </div>
 </div>
 
-<!-- 🔥 HERO -->
 <div class="hero-wrap">
   <div class="hero-banner">
     <div class="hero-title">Datenschutzerklärung</div>
@@ -173,37 +149,48 @@ a:hover{
 </div>
 
 <div class="wrapper">
-
 <div class="box">
 
 <strong>1. Allgemeine Hinweise</strong><br><br>
-Diese Website ist ein privates Tool zur Verwaltung von Spiel-, Team- und Statistikdaten (Match Tracker).  
+Diese Website ist ein privates Webtool zur Verwaltung von Spiel-, Team- und Statistikdaten („Match Tracker“).  
 Der Schutz deiner Daten ist uns wichtig. Personenbezogene Daten werden nur im technisch notwendigen Umfang verarbeitet.<br><br>
 
 <strong>2. Verantwortlicher</strong><br><br>
-Verantwortlich für die Datenverarbeitung auf dieser Website ist der Betreiber dieses Projekts.<br>
+Daniel Soll<br>
+Ingolstädter Straße 47<br>
+80807 München<br>
+Deutschland<br>
 E-Mail: kontakt@d2r-lootliste.de<br><br>
 
 <strong>3. Hosting über GitHub Pages</strong><br><br>
-Diese Website wird über GitHub Pages bereitgestellt. Beim Aufruf der Seite werden automatisch technische Daten erfasst (z. B. IP-Adresse, Datum und Uhrzeit, Browserinformationen).<br><br>
+Diese Website wird über GitHub Pages bereitgestellt (GitHub Inc., USA, Teil von Microsoft).  
+Beim Aufruf der Website werden automatisch technische Daten erfasst, z. B.:<br>
+<ul>
+<li>IP-Adresse</li>
+<li>Datum und Uhrzeit</li>
+<li>Browsertyp und Betriebssystem</li>
+</ul>
+Es kann nicht ausgeschlossen werden, dass Daten in die USA übertragen werden.  
+GitHub verwendet Standardvertragsklauseln gemäß DSGVO.<br><br>
 
 <strong>4. Lokale Datenspeicherung (LocalStorage)</strong><br><br>
 Die von dir eingegebenen Daten (z. B. Teams, Spieler, Spiele, Statistiken) werden lokal im Browser gespeichert (LocalStorage).  
 Diese Daten verbleiben auf deinem Gerät und werden nicht automatisch an Dritte übertragen.<br><br>
 
 <strong>5. Server-Speicherung und Synchronisation</strong><br><br>
-Zur optionalen Synchronisation können Daten an einen Server übertragen und dort gespeichert werden.<br>
-Server: https://rare-kindness-production.up.railway.app<br><br>
+Zur optionalen Synchronisation werden Daten an einen Server übertragen und dort gespeichert.  
+Die Verarbeitung erfolgt über einen externen Hosting-Dienst (Railway).<br><br>
 
 Dabei können folgende Daten verarbeitet werden:
 <ul>
 <li>Spiel- und Teamdaten</li>
-<li>technische Metadaten (z. B. IP-Adresse, Zeitstempel)</li>
+<li>IP-Adresse</li>
+<li>Zeitstempel</li>
 </ul>
 
 <strong>6. Zugriffsschutz (Passwort-Funktion)</strong><br><br>
 Einzelne Teams können durch ein Passwort geschützt werden.  
-Die Eingabe erfolgt clientseitig und wird zur Überprüfung an den Server übertragen.<br><br>
+Die Passwortprüfung erfolgt über eine Serveranfrage.<br><br>
 
 <strong>7. Keine Weitergabe an Dritte</strong><br><br>
 Es erfolgt keine Weitergabe deiner Daten an Dritte.<br><br>
@@ -211,17 +198,25 @@ Es erfolgt keine Weitergabe deiner Daten an Dritte.<br><br>
 <strong>8. Keine Tracking-Tools</strong><br><br>
 Es werden keine Tracking- oder Analyse-Tools eingesetzt.<br><br>
 
-<strong>9. Rechtsgrundlage</strong><br><br>
-Die Verarbeitung erfolgt gemäß Art. 6 Abs. 1 lit. f DSGVO.<br><br>
+<strong>9. Rechtsgrundlagen</strong><br><br>
+Die Verarbeitung erfolgt gemäß Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der Bereitstellung der Website).<br>
+Die Speicherung im Browser (LocalStorage) erfolgt gemäß § 25 Abs. 2 TTDSG.<br><br>
 
 <strong>10. Deine Rechte</strong><br><br>
-Du hast das Recht auf Auskunft, Berichtigung oder Löschung deiner Daten.<br><br>
+Du hast das Recht auf:
+<ul>
+<li>Auskunft</li>
+<li>Berichtigung</li>
+<li>Löschung</li>
+<li>Einschränkung der Verarbeitung</li>
+<li>Datenübertragbarkeit</li>
+</ul>
+Außerdem hast du das Recht, dich bei einer Datenschutz-Aufsichtsbehörde zu beschweren.<br><br>
 
 <strong>11. Änderungen</strong><br><br>
 Diese Datenschutzerklärung kann bei Änderungen des Projekts angepasst werden.
 
 </div>
-
 </div>
 
 <footer class="footer">
