@@ -4934,7 +4934,7 @@ function getLiveMinute(){
   return Math.min(minutes, 60)
 }
 
-  function updateLiveScore(){
+function updateLiveScore(){
 
   let match = matches.find(m => m.id === liveMatchId)
   if(!match) return
@@ -4942,9 +4942,16 @@ function getLiveMinute(){
   let goals = match.events.filter(e=>e.type==="goal").length
   let against = match.events.filter(e=>e.type==="goalAgainst").length
 
+  let text = goals + " : " + against
+
   let el = document.getElementById("liveScore")
   if(el){
-    el.innerText = goals + " : " + against
+    el.innerText = text
+  }
+
+  let big = document.getElementById("liveScoreBigValue")
+  if(big){
+    big.innerText = text
   }
 }
 
