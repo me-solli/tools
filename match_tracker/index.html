@@ -4932,12 +4932,13 @@ function pauseLiveGame(){
 
   livePausedAt = Date.now()
 
-  // 🔥 TIMER STOPPEN
   if(liveTimerInterval){
     clearInterval(liveTimerInterval)
   }
 
   showToast("⏸ Pause","info")
+
+  updateLiveButton() // 🔥 HIER
 }
 
   function toggleLiveState(){
