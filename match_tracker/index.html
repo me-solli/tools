@@ -4938,6 +4938,50 @@ function pauseLiveGame(){
   showToast("⏸ Pause","info")
 }
 
+  function toggleLiveState(){
+
+  // 🔥 noch nicht gestartet → starten
+  if(!liveStartTime){
+    resumeLiveGame()
+    return
+  }
+
+  // 🔥 läuft → pausieren
+  if(!livePausedAt){
+    pauseLiveGame()
+  }else{
+    // 🔥 pausiert → weiter
+    resumeLiveGame()
+  }
+
+}
+
+
+function updateLiveButton(){
+
+  let btn = document.getElementById("liveToggleBtn")
+  if(!btn) return
+
+  // ❌ noch nicht gestartet
+  if(!liveStartTime){
+    btn.innerText = "▶ Start"
+    btn.className = "primary"
+    return
+  }
+
+  // ⏸ pausiert
+  if(livePausedAt){
+    btn.innerText = "▶ Weiter"
+    btn.className = "primary"
+  }
+  else{
+    // ▶ läuft
+    btn.innerText = "⏸ Pause"
+    btn.className = "secondary"
+  }
+
+}
+
 function resumeLiveGame(){
 
   // 🔥 ERSTER START
