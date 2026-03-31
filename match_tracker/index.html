@@ -1716,7 +1716,7 @@ box-shadow:
 .live-score{
   display:flex;
   align-items:center;
-  justify-content:space-between; /* 🔥 WICHTIG */
+  justify-content:center;
 
   gap:10px;
 
@@ -1725,25 +1725,7 @@ box-shadow:
 
   width:100%;
 
-  margin-bottom:4px;
-}
-
-  .live-score span{
-  flex:1;
-}
-
-.live-score span:nth-child(1){
-  text-align:right;
-}
-
-.live-score span:nth-child(2){
-  text-align:center;
-  flex:0;
-  min-width:60px;
-}
-
-.live-score span:nth-child(3){
-  text-align:left;
+  margin-bottom:4px; /* 🔥 DAS HINZUFÜGEN */
 }
 
 .live-timer{
@@ -2057,8 +2039,8 @@ box-shadow:
 /* 🔥 TEAM NAMEN */
 .team-left,
 .team-right{
-  justify-content:center;
-  text-align:center;
+  justify-content:center !important;
+  text-align:center !important;
   width:100%;
 }
 
@@ -2244,18 +2226,6 @@ box-shadow:
 
   min-width:80px;
   text-align:center;
-}
-
-  @media (min-width: 769px){
-  .team-left{
-    justify-content:flex-end;
-    text-align:right;
-  }
-
-  .team-right{
-    justify-content:flex-start;
-    text-align:left;
-  }
 }
 
 }
