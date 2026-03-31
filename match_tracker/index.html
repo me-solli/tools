@@ -4572,7 +4572,8 @@ function renderTools(){
   let panel = document.getElementById("toolsPanel")
   if(!panel) return
 
-  if(activeTeam === "SV Testhausen"){
+  // 🔐 NUR sichtbar wenn SV Testhausen + wirklich eingeloggt
+  if(activeTeam === "SV Testhausen" && accessCache["SV Testhausen"]){
     panel.style.display = "block"
   }else{
     panel.style.display = "none"
