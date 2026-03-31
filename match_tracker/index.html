@@ -4872,11 +4872,25 @@ function startLiveTimer(){
 
   liveTimerInterval = setInterval(()=>{
 
-let el = document.getElementById("liveTimeValue")
+    let el = document.getElementById("liveTimeValue")
     if(!el) return
 
+    // 🔥 LIVE DOT holen
+    let dot = document.querySelector(".live-dot")
+
+    // 🔥 PAUSE STATUS VISUELL
+    if(dot){
+      if(livePausedAt){
+        dot.style.animation = "none"
+        dot.style.opacity = "0.3"
+      }else{
+        dot.style.animation = "liveBlink 1s infinite"
+        dot.style.opacity = "1"
+      }
+    }
+
     if(!liveStartTime){
-      el.innerText = "⏱ 00:00"
+      el.innerText = "00:00"
       return
     }
 
@@ -4896,9 +4910,9 @@ let el = document.getElementById("liveTimeValue")
     let m = String(minutes).padStart(2,"0")
     let s = String(seconds).padStart(2,"0")
 
-el.innerText = m + ":" + s
+    el.innerText = m + ":" + s
 
-  }, 500) // 🔥 smoother als 1000ms
+  }, 500)
 }
 
 function pauseLiveGame(){
