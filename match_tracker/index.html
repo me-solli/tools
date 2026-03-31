@@ -4638,13 +4638,12 @@ box.innerHTML = `
 </div>
 
 <div class="live-grid">
-  <button class="primary"
+  <button id="liveToggleBtn"
+    class="primary"
     ${!isUnlocked ? "disabled" : ""}
-    onclick="resumeLiveGame()">▶ Weiter</button>
-
-  <button class="secondary"
-    ${!isUnlocked ? "disabled" : ""}
-    onclick="pauseLiveGame()">⏸ Pause</button>
+    onclick="toggleLiveState()">
+    ▶ Start
+  </button>
 </div>
 
 <div id="liveFeed" class="live-feed"></div>
