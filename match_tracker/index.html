@@ -4882,17 +4882,20 @@ function startLiveTimer(){
     let el = document.getElementById("liveTimeValue")
     if(!el) return
 
-    // 🔥 LIVE DOT holen
     let dot = document.querySelector(".live-dot")
 
-    // 🔥 PAUSE STATUS VISUELL
+    // 🔥 DOT STATUS
     if(dot){
-      if(livePausedAt){
-        dot.style.animation = "none"
-        dot.style.opacity = "0.3"
+      if(!liveStartTime){
+        dot.classList.remove("blink")
+        dot.classList.add("paused")
+      }
+      else if(livePausedAt){
+        dot.classList.remove("blink")
+        dot.classList.add("paused")
       }else{
-        dot.style.animation = "liveBlink 1s infinite"
-        dot.style.opacity = "1"
+        dot.classList.remove("paused")
+        dot.classList.add("blink")
       }
     }
 
