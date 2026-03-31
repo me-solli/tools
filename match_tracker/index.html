@@ -4987,15 +4987,16 @@ function updateLiveButton(){
 
 function resumeLiveGame(){
 
-  // 🔥 ERSTER START
   if(!liveStartTime){
     liveStartTime = Date.now()
     livePausedTotal = 0
     livePausedAt = null
 
-    startLiveTimer() // 🔥 HIER
+    startLiveTimer()
 
     showToast("▶ Spiel gestartet","info")
+
+    updateLiveButton() // 🔥 HIER
     return
   }
 
@@ -5006,9 +5007,11 @@ function resumeLiveGame(){
 
   livePausedAt = null
 
-  startLiveTimer() // 🔥 UND HIER
+  startLiveTimer()
 
   showToast("▶ Weiter","info")
+
+  updateLiveButton() // 🔥 HIER
 }
 
   function openLivePlayerSelect(type){
