@@ -5396,27 +5396,33 @@ function startLiveAutoUpdate(){
       .then(res => res.json())
       .then(serverData => {
 
-        let serverMatches = serverData.matches || []
+        let serverMatch = (serverData.matches || [])
+          .find(m => m.id === liveMatchId)
 
-        let updatedMatch = serverMatches.find(m => m.id === liveMatchId)
-        if(!updatedMatch) return
+        let localMatch = matches
+          .find(m => m.id === liveMatchId)
 
-        let localMatch = matches.find(m => m.id === liveMatchId)
-        if(!localMatch) return
+        if(!serverMatch || !localMatch) return
 
-        // 🔥 BESSERER CHECK (vergleicht echte Events)
-        let hasChanged =
-          JSON.stringify(updatedMatch.events) !== JSON.stringify(localMatch.events)
+        // 🔥 STABILER VERGLEICH
+        let serverEvents = JSON.stringify(serverMatch.events || [])
+        let localEvents = JSON.stringify(localMatch.events || [])
 
-        if(!hasChanged) return
+        if(serverEvents === localEvents){
+          return
+        }
 
         // 🔥 UPDATE
-        Object.assign(localMatch, updatedMatch)
+        Object.assign(localMatch, serverMatch)
 
+        // 🔥 UI IMMER KOMPLETT REFRESHEN
         updateLiveScore()
         updateLiveFeed()
         renderMatches()
 
+      })
+      .catch(() => {
+        // optional: still silent fail
       })
 
   }, 1500)
