@@ -5654,6 +5654,15 @@ function startLiveAutoUpdate(){
         // 🔥 UPDATE
         Object.assign(localMatch, serverMatch)
 
+        // 🔥 TIMER SYNC FIX
+if(!isUnlocked){  // nur Zuschauer!
+
+  liveStartTime = serverMatch.liveState?.startTime || null
+  livePausedAt = serverMatch.liveState?.pausedAt || null
+  livePausedTotal = serverMatch.liveState?.pausedTotal || 0
+
+}
+
         // 🔥 UI IMMER KOMPLETT REFRESHEN
         updateLiveScore()
         updateLiveFeed()
