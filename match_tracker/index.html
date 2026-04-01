@@ -290,6 +290,63 @@ background:#2a2a2a;
 color:#aaa;
 }
 
+  /* =========================
+⚽ GOAL OVERLAY
+========================= */
+
+.goal-overlay{
+  position:fixed;
+  inset:0;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:48px;
+  font-weight:800;
+  letter-spacing:2px;
+
+  color:#fff;
+
+  background:rgba(0,0,0,0.65);
+  backdrop-filter:blur(4px);
+
+  z-index:99999;
+
+  opacity:0;
+  pointer-events:none;
+
+  transform:scale(0.9);
+}
+
+/* 🔥 AKTIV */
+.goal-overlay.show{
+  animation:goalPop 1.2s ease forwards;
+}
+
+@keyframes goalPop{
+
+  0%{
+    opacity:0;
+    transform:scale(0.8);
+  }
+
+  30%{
+    opacity:1;
+    transform:scale(1.1);
+  }
+
+  60%{
+    transform:scale(1);
+  }
+
+  100%{
+    opacity:0;
+    transform:scale(1);
+  }
+
+}
+
 .matches-grid{
 display:flex;
 flex-direction:column;
