@@ -4769,12 +4769,23 @@ btn.disabled = !(date && opponent)
 
 function closeLiveMode(){
 
-    if(window.liveAutoInterval){
+  if(window.liveAutoInterval){
     clearInterval(window.liveAutoInterval)
     window.liveAutoInterval = null
   }
 
-  // 🔥 Sicherheits-Save
+  // 🔥 WICHTIG: State vorher speichern
+  let match = matches.find(m => m.id === liveMatchId)
+
+  if(match){
+    ensureLiveState(match)
+
+    match.liveState.startTime = liveStartTime
+    match.liveState.pausedAt = livePausedAt
+    match.liveState.pausedTotal = livePausedTotal
+  }
+
+  // 🔥 speichern (server + lokal)
   save()
 
   document.body.style.overflow = ""
@@ -4783,6 +4794,7 @@ function closeLiveMode(){
     clearInterval(liveTimerInterval)
   }
 
+  // 👉 NUR GLOBAL RESETTEN (NICHT Match!)
   liveStartTime = null
   livePausedAt = null
   livePausedTotal = 0
