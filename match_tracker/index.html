@@ -4982,6 +4982,27 @@ function openLiveMode(matchId){
   if(!match) return
   ensureLiveState(match)
 
+  // 🔥🔥🔥 NEU: INITIAL STATE SETZEN (ANTI-SPAM)
+  lastGoalEventId = null
+
+  let matchEvents = match.events || []
+
+  if(matchEvents.length > 0){
+
+    let latest = [...matchEvents].sort((a,b)=>{
+
+      if(b.minute !== a.minute){
+        return b.minute - a.minute
+      }
+
+      return (b.time || 0) - (a.time || 0)
+    })[0]
+
+    if(latest){
+      lastGoalEventId = (latest.time || latest.minute) + "_" + latest.type
+    }
+  }
+
   // 🔥 STATE LADEN (FIX für Timer Reset)
   liveStartTime = match.liveState.startTime
   livePausedAt = match.liveState.pausedAt
