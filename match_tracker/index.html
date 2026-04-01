@@ -1030,7 +1030,7 @@ transform:translateY(0);
 }
 
 .section-banner{
-  height:30px;              /* 🔥 kleiner */
+  height:30px;
   border-radius:6px;
   margin-bottom:14px;
 
@@ -1038,11 +1038,19 @@ transform:translateY(0);
   background-size:contain;
   background-position:left center;
 
-  /* 🔥 entschärfen */
   opacity:0.85;
   filter:brightness(0.9) contrast(0.95);
 
   padding-left:4px;
+}
+
+/* 🔥 FIX: SPIELE identisch zu TEAMS skalieren */
+.section-banner.spiele{
+  height:38px;              /* 🔥 größer wie TEAMS wirkt */
+  padding-left:6px;         /* 🔥 gleiche optische Breite */
+
+  opacity:0.95;             /* 🔥 etwas kräftiger */
+  filter:brightness(1);     /* 🔥 nicht ausgewaschen */
 }
 
 /* 🔵 TEAMS BANNER */
