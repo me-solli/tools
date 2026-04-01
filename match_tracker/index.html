@@ -5528,9 +5528,16 @@ if(stored){
   }
 
   // warten bis Daten geladen sind
-  setTimeout(()=>{
-    openLiveMode(Number(liveId))
-  },600)
+setTimeout(()=>{
+
+  openLiveMode(Number(liveId))
+
+  if(isViewerMode){
+    startLiveTimer()
+    startLiveAutoUpdate()
+  }
+
+},600)
 
   // 🔥 NUR Zuschauer bekommen Auto-Update
 if(isViewerMode){
