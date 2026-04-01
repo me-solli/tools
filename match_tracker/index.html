@@ -5472,9 +5472,19 @@ if(stored){
   },600)
 
   // 🔥 NUR Zuschauer bekommen Auto-Update
-  if(isViewerMode){
-    startLiveAutoUpdate()
-  }
+if(isViewerMode){
+
+  // 🔥 Live Mode öffnen
+  openLiveMode(Number(liveId))
+
+  // 🔥 Timer starten (WICHTIG!)
+  setTimeout(()=>{
+    startLiveTimer()
+  },300)
+
+  // 🔥 Auto Updates starten
+  startLiveAutoUpdate()
+}
 }
 
 window.addEventListener("DOMContentLoaded", () => {
