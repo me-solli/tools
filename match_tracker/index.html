@@ -4804,6 +4804,16 @@ function closeLiveMode(){
 
 }
 
+  function ensureLiveState(match){
+  if(!match.liveState){
+    match.liveState = {
+      startTime: null,
+      pausedAt: null,
+      pausedTotal: 0
+    }
+  }
+}
+
 function openLiveMode(matchId){
 
   document.body.style.overflow = "hidden";
