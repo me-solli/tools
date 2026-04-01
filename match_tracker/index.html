@@ -5132,43 +5132,34 @@ function updateLiveFeed(){
   })
 
 
-  // 🔥🔥🔥 TOR GLOBAL ERKENNEN
-  let latestGoal = [...events]
-    .filter(e => e.type === "goal")
-    .sort((a,b)=> (b.time||0) - (a.time||0))[0]
+// 🔥🔥🔥 NUR DAS NEUESTE EVENT CHECKEN (FIX)
+let latestEvent = events[0]   // weil bereits sortiert!
 
-  if(latestGoal){
+if(latestEvent){
 
-    let id = latestGoal.time || latestGoal.minute
+  let id = (latestEvent.time || latestEvent.minute) + "_" + latestEvent.type
 
-    if(id !== lastGoalEventId){
+  if(id !== lastGoalEventId){
 
-      lastGoalEventId = id
+    lastGoalEventId = id
+
+    // ⚽ TOR
+    if(latestEvent.type === "goal"){
 
       let name = (isUnlocked || liveAccessGranted)
-        ? latestGoal.player
+        ? latestEvent.player
         : ""
 
       showGoalOverlay(name ? "⚽ TOR – " + name : "⚽ TOR")
     }
-  }
 
-
-  // 🔥 OPTIONAL: GEGENTOR
-  let latestAgainst = [...events]
-    .filter(e => e.type === "goalAgainst")
-    .sort((a,b)=> (b.time||0) - (a.time||0))[0]
-
-  if(latestAgainst){
-
-    let id = "A" + (latestAgainst.time || latestAgainst.minute)
-
-    if(id !== lastGoalEventId){
-
-      lastGoalEventId = id
+    // 🥅 GEGENTOR
+    if(latestEvent.type === "goalAgainst"){
       showGoalOverlay("🥅 GEGENTOR")
     }
+
   }
+}
 
 
   let html = ""
