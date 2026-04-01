@@ -4732,78 +4732,68 @@ box.innerHTML = `
 </div>
 
 <div class="live-header">
-
   <div class="live-left">
-    <div class="live-score">
-      <span>${match.team}</span>
-      <span id="liveScore">0 : 0</span>
-      <span>${match.opponent}</span>
+    <div id="liveTimer" class="live-timer">
+      <span class="live-dot paused"></span>
+      <span id="liveTimeValue">00:00</span>
     </div>
 
-<div id="liveTimer" class="live-timer">
-  <span class="live-dot paused"></span>
-  <span id="liveTimeValue">00:00</span>
-</div>
-<div id="liveAccessStatus" class="live-timer"></div>
+    <div id="liveAccessStatus" class="live-timer"></div>
   </div>
 
-<div class="live-header-actions">
-
-  <button class="secondary" onclick="enterLiveCode()">
-    🔓 Code
-  </button>
-
-  <button class="secondary" onclick="shareLiveMatch()">
-    🔗 Teilen
-  </button>
-
-  <button class="live-close" onclick="closeLiveMode()">
-    ← <span>Zurück</span>
-  </button>
-
+  <div class="live-header-actions">
+    <button class="secondary" onclick="enterLiveCode()">🔓 Code</button>
+    <button class="secondary" onclick="shareLiveMatch()">🔗</button>
+    <button class="live-close" onclick="closeLiveMode()">✖</button>
+  </div>
 </div>
 
-</div>
+<div class="live-body">
 
-    <div class="live-body">
+  <div id="liveFeed" class="live-feed"></div>
 
-    <div id="swipeHint" class="swipe-hint">
-  👉 Nach rechts wischen zum Zurückgehen
-</div>
+  <div class="live-events">
 
-<!-- EVENTS -->
-<div class="live-grid">
-  <button class="success"
-    ${!isUnlocked ? "disabled" : ""}
-    onclick="setLiveEvent('goal', event)">⚽ Tor</button>
+    <div class="live-row">
+      <button class="btn-live goal"
+        ${!isUnlocked ? "disabled" : ""}
+        onclick="setLiveEvent('goal')">
+        ⚽ Tor
+      </button>
 
-  <button class="secondary"
-    ${!isUnlocked ? "disabled" : ""}
-    onclick="setLiveEvent('goalAgainst', event)">🥅 Gegner</button>
-
-  <button class="yellow"
-    ${!isUnlocked ? "disabled" : ""}
-    onclick="setLiveEvent('yellow', event)">🟨 Gelb</button>
-
-  <button class="red"
-    ${!isUnlocked ? "disabled" : ""}
-    onclick="setLiveEvent('red', event)">🟥 Rot</button>
-</div>
-
-<div class="live-grid">
-  <button id="liveToggleBtn"
-    class="primary"
-    ${!isUnlocked ? "disabled" : ""}
-    onclick="toggleLiveState()">
-    ▶ Start
-  </button>
-</div>
-
-<div id="liveFeed" class="live-feed"></div>
-
-      <!-- SPIELER -->
-
+      <button class="btn-live against"
+        ${!isUnlocked ? "disabled" : ""}
+        onclick="setLiveEvent('goalAgainst')">
+        🥅 Gegner
+      </button>
     </div>
+
+    <div class="live-row">
+      <button class="btn-live yellow"
+        ${!isUnlocked ? "disabled" : ""}
+        onclick="setLiveEvent('yellow')">
+        🟨 Gelb
+      </button>
+
+      <button class="btn-live red"
+        ${!isUnlocked ? "disabled" : ""}
+        onclick="setLiveEvent('red')">
+        🟥 Rot
+      </button>
+    </div>
+
+  </div>
+
+  <div class="live-control">
+    <button id="liveToggleBtn"
+      class="primary"
+      ${!isUnlocked ? "disabled" : ""}
+      onclick="toggleLiveState()">
+      ▶ Start
+    </button>
+  </div>
+
+</div>
   `
 
 // 🔥 STATE
