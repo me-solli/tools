@@ -4820,6 +4820,7 @@ function openLiveMode(matchId){
 
   let match = matches.find(m=>m.id===matchId)
   if(!match) return
+  ensureLiveState(match)
 
   let box = document.getElementById("liveMode")
 
