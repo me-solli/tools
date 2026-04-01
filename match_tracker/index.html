@@ -4979,7 +4979,7 @@ else if(e.type==="sub"){
     html += `
 <div class="live-feed-item ${e.type}">
   <span>${text}</span>
-  <span>${String(e.minute).padStart(2,"0")}'</span>
+<span>${(e.minute ?? 0).toString().padStart(2,"0")}'</span>
 </div>
 `
   })
