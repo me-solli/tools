@@ -4101,7 +4101,10 @@ save()
 renderAll()
 
 // 🔥 TOAST
-if(type==="goal") showToast("⚽ Tor gespeichert","goal")
+if(type==="goal"){
+  showToast("⚽ Tor gespeichert","goal")
+  showGoalOverlay("⚽ TOR")
+}
 else if(type==="yellow") showToast("🟨 Gelbe Karte","yellow")
 else if(type==="red") showToast("🟥 Rote Karte","red")
 else if(type==="penalty") showToast("⏱ Zeitstrafe","info")
