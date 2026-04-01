@@ -5381,7 +5381,7 @@ function resumeLiveGame(){
   modal.classList.remove("hidden")
 }
 
-  function startLiveAutoUpdate(){
+function startLiveAutoUpdate(){
 
   // 🔥 kein doppeltes Interval
   if(window.liveAutoInterval){
@@ -5404,11 +5404,13 @@ function resumeLiveGame(){
         let localMatch = matches.find(m => m.id === liveMatchId)
         if(!localMatch) return
 
-        // 🔥 nur updaten wenn sich Events geändert haben
-        if(updatedMatch.events.length === localMatch.events.length){
-          return
-        }
+        // 🔥 BESSERER CHECK (vergleicht echte Events)
+        let hasChanged =
+          JSON.stringify(updatedMatch.events) !== JSON.stringify(localMatch.events)
 
+        if(!hasChanged) return
+
+        // 🔥 UPDATE
         Object.assign(localMatch, updatedMatch)
 
         updateLiveScore()
