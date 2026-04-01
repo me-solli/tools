@@ -2969,6 +2969,34 @@ t.classList.remove("show")
 
 }
 
+  function showGoalOverlay(text = "⚽ TOR"){
+
+  let existing = document.getElementById("goalOverlay")
+
+  if(existing){
+    existing.remove()
+  }
+
+  let el = document.createElement("div")
+  el.id = "goalOverlay"
+  el.className = "goal-overlay"
+
+  el.innerText = text
+
+  document.body.appendChild(el)
+
+  // trigger animation
+  setTimeout(()=>{
+    el.classList.add("show")
+  },10)
+
+  // entfernen nach Animation
+  setTimeout(()=>{
+    el.remove()
+  },1300)
+
+}
+
 /* =========================
 BACKUP
 ========================= */
