@@ -5241,6 +5241,39 @@ function pauseLiveGame(){
 
 }
 
+  function resetLiveMatch(){
+
+  let match = matches.find(m => m.id === liveMatchId)
+  if(!match) return
+
+  // 🔥 TIMER RESET
+  liveStartTime = null
+  livePausedAt = null
+  livePausedTotal = 0
+
+  // 🔥 IM MATCH SPEICHERN
+  ensureLiveState(match)
+
+  match.liveState.startTime = null
+  match.liveState.pausedAt = null
+  match.liveState.pausedTotal = 0
+
+  // 🔥 EVENTS OPTIONAL LÖSCHEN
+  let confirmReset = confirm("Spiel komplett zurücksetzen? (Events löschen)")
+
+  if(confirmReset){
+    match.events = []
+  }
+
+  save()
+
+  updateLiveScore()
+  updateLiveFeed()
+  updateLiveButton()
+
+  showToast("🔄 Spiel zurückgesetzt","info")
+}
+
 
 function updateLiveButton(){
 
