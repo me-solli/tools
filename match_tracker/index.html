@@ -2969,31 +2969,25 @@ t.classList.remove("show")
 
 }
 
-  function showGoalOverlay(text = "⚽ TOR"){
+function showGoalOverlay(text = "⚽ TOR"){
 
-  let existing = document.getElementById("goalOverlay")
-
-  if(existing){
-    existing.remove()
-  }
-
+  // 🔥 IMMER neu erstellen (clean)
   let el = document.createElement("div")
-  el.id = "goalOverlay"
   el.className = "goal-overlay"
 
   el.innerText = text
 
   document.body.appendChild(el)
 
-  // trigger animation
-  setTimeout(()=>{
-    el.classList.add("show")
-  },10)
+  // 🔥 Reflow erzwingen (WICHTIG!)
+  el.offsetHeight
 
-  // entfernen nach Animation
+  el.classList.add("show")
+
+  // 🔥 entfernen nach Animation
   setTimeout(()=>{
     el.remove()
-  },1300)
+  },1200)
 
 }
 
