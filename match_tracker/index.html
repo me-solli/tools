@@ -4902,26 +4902,7 @@ box.classList.remove("hidden")
   
 updateLiveScore() 
 updateLiveFeed()
-updateLiveAccessStatus()
-
-  // 🔥 FIX: Zuschauer Timer berechnen
-if(!isUnlocked){
-
-  let match = matches.find(m=>m.id===matchId)
-
-  if(match && match.events.length > 0){
-
-    let lastEvent = match.events[match.events.length - 1]
-
-    if(lastEvent.minute != null){
-      let now = Date.now()
-
-      // 🔥 simuliert Startzeit basierend auf Minute
-      liveStartTime = now - (lastEvent.minute * 60000)
-    }
-  }
-}
-  
+updateLiveAccessStatus() 
   startLiveTimer()
 
 // 👉 SWIPE DETECTION (clean)
