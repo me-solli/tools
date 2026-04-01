@@ -5544,9 +5544,10 @@ function resumeLiveGame(){
 
       closeModal()
 
-      if(type==="goal"){
-        showToast("⚽ " + p.name + " (" + minute + "')","goal")
-      } 
+if(type==="goal"){
+  showToast("⚽ " + p.name + " (" + minute + "')","goal")
+  showGoalOverlay("⚽ TOR")
+} 
       else if(type==="yellow"){
         showToast("🟨 " + p.name + " (" + minute + "')","yellow")
       } 
