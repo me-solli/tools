@@ -5265,31 +5265,53 @@ function updateLiveButton(){
 
 function resumeLiveGame(){
 
+  let match = matches.find(m => m.id === liveMatchId)
+  if(!match) return
+
+  ensureLiveState(match)
+
+  // 🔥 ERSTER START
   if(!liveStartTime){
+
     liveStartTime = Date.now()
     livePausedTotal = 0
     livePausedAt = null
+
+    // 🔥 im Match speichern
+    match.liveState.startTime = liveStartTime
+    match.liveState.pausedTotal = 0
+    match.liveState.pausedAt = null
+
+    save()
 
     startLiveTimer()
 
     showToast("▶ Spiel gestartet","info")
 
-    updateLiveButton() // 🔥 HIER
+    updateLiveButton()
     return
   }
 
+  // 🔥 nicht pausiert → nix tun
   if(!livePausedAt) return
 
+  // 🔥 Pause berechnen
   let pauseDuration = Date.now() - livePausedAt
-  livePausedTotal += pauseDuration
 
+  livePausedTotal += pauseDuration
   livePausedAt = null
+
+  // 🔥 im Match speichern
+  match.liveState.pausedTotal = livePausedTotal
+  match.liveState.pausedAt = null
+
+  save()
 
   startLiveTimer()
 
   showToast("▶ Weiter","info")
 
-  updateLiveButton() // 🔥 HIER
+  updateLiveButton()
 }
 
   function openLivePlayerSelect(type){
