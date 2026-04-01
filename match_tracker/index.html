@@ -1948,6 +1948,45 @@ box-shadow:
   background:rgba(108,99,255,0.15);
 }
 
+  /* =========================
+💻 DESKTOP LIVE MODE FIX
+========================= */
+
+@media (min-width: 769px){
+
+  .live-body{
+    flex-direction:row;
+    align-items:flex-start;
+    gap:20px;
+  }
+
+  .live-feed{
+    flex:1;
+    max-height:none;
+    min-height:300px;
+  }
+
+  .live-events{
+    width:260px;
+    flex-shrink:0;
+  }
+
+  .live-control{
+    width:260px;
+  }
+
+  .btn-live{
+    height:48px;
+    font-size:14px;
+  }
+
+  .live-score-big{
+    max-width:900px;
+    margin:0 auto 14px auto;
+  }
+
+}
+
 /* =========================
 📱 MOBILE FIX (STEP 1)
 ========================= */
