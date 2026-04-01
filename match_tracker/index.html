@@ -5164,20 +5164,15 @@ if(latestEvent){
 
     lastGoalEventId = id
 
-    // ⚽ TOR
-    if(latestEvent.type === "goal"){
+// ⚽ TOR
+if(latestEvent.type === "goal"){
+  showGoalOverlay("⚽ TOR")
+}
 
-      let name = (isUnlocked || liveAccessGranted)
-        ? latestEvent.player
-        : ""
-
-      showGoalOverlay(name ? "⚽ TOR – " + name : "⚽ TOR")
-    }
-
-    // 🥅 GEGENTOR
-    if(latestEvent.type === "goalAgainst"){
-      showGoalOverlay("🥅 GEGENTOR")
-    }
+// 🥅 GEGENTOR
+if(latestEvent.type === "goalAgainst"){
+  showGoalOverlay("🥅 GEGENTOR")
+}
 
   }
 }
