@@ -5199,7 +5199,16 @@ function pauseLiveGame(){
 
   if(livePausedAt) return
 
+  let match = matches.find(m => m.id === liveMatchId)
+  if(!match) return
+
   livePausedAt = Date.now()
+
+  // 🔥 in Match speichern
+  ensureLiveState(match)
+  match.liveState.pausedAt = livePausedAt
+
+  save()
 
   if(liveTimerInterval){
     clearInterval(liveTimerInterval)
@@ -5207,7 +5216,7 @@ function pauseLiveGame(){
 
   showToast("⏸ Pause","info")
 
-  updateLiveButton() // 🔥 HIER
+  updateLiveButton()
 }
 
   function toggleLiveState(){
