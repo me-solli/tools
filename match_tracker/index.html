@@ -3417,8 +3417,8 @@ html+=`
 
 <div class="team-actions">
 
-  ${
-    accessCache[t]
+${
+  accessCache[t] || isAdmin()
     ? `
       <button class="team-login active">
         ✓ Eingeloggt
