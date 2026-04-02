@@ -3262,29 +3262,31 @@ function selectTeam(name){
 
 function deleteTeam(name){
 
-if(!hasAccess(activeTeam)){
-  showToast("🔒 Kein Zugriff","info")
-  return
-}
+  // 🔐 Zugriff prüfen
+  if(!hasAccess(activeTeam) && !isAdmin()){
+    showToast("🔒 Kein Zugriff","info")
+    return
+  }
 
-confirmDeleteAction(()=>{
+  confirmDeleteAction(()=>{
 
-teams = teams.filter(t=>t!==name)
-players = players.filter(p=>p.team!==name)
-matches = matches.filter(m=>m.team!==name)
+    teams = teams.filter(t=>t!==name)
+    players = players.filter(p=>p.team!==name)
+    matches = matches.filter(m=>m.team!==name)
 
-// 🔥 HIER rein → Passwort löschen
-if(data.teamPasswords){
-  delete data.teamPasswords[name]
-}
+    if(data.teamPasswords){
+      delete data.teamPasswords[name]
+    }
 
-activeTeam = teams[0] || null
+    // 🔥 Wenn aktuelles Team gelöscht wurde
+    if(activeTeam === name){
+      activeTeam = teams[0] || null
+    }
 
-save()
-renderAll()
+    save()
+    renderAll()
 
-})
-
+  })
 }
 
 function editTeamName(oldName){
