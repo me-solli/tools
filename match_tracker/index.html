@@ -3107,6 +3107,10 @@ function hasAccess(team){
   return accessCache[team] === true
 }
 
+  function isAdmin(){
+  return activeTeam === "SV Testhausen" && accessCache["SV Testhausen"]
+}
+
 function unlockTeam(){
 
   if(!activeTeam){
