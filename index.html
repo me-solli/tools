@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moonlace Arena</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Online RPG Prototype</p>
+        <h1>Moonlace Arena</h1>
+      </div>
+      <div class="topbar-stats">
+        <div class="stat-card">
+          <span class="stat-label">Gold</span>
+          <strong id="goldValue">120</strong>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">HP</span>
+          <strong id="hpValue">100 / 100</strong>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Loot</span>
+          <strong id="lootValue">Silk Ribbon</strong>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Mondsplitter</span>
+          <strong id="shardValue">0 / 3</strong>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Pots</span>
+          <strong id="potionValue">3</strong>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">XP</span>
+          <strong id="xpValue">0 / 100</strong>
+        </div>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="panel panel-story">
+        <p class="eyebrow">Heldin</p>
+        <h2>Aya Starweaver</h2>
+        <p>
+          Ein zarter Manga-RPG-Prototyp mit frei begehbarer Karte.
+          Aya kann sich jetzt bereits ueber die kleine Welt bewegen.
+        </p>
+
+        <div class="mini-list">
+          <div>
+            <span>Klasse</span>
+            <strong>Moon Duelist</strong>
+          </div>
+          <div>
+            <span>Level</span>
+            <strong id="levelValue">1</strong>
+          </div>
+          <div>
+            <span>Status</span>
+            <strong id="statusValue">Bereit</strong>
+          </div>
+          <div>
+            <span>ATK / DEF</span>
+            <strong id="combatStatsValue">12 / 6</strong>
+          </div>
+        </div>
+
+        <div class="equipment-card">
+          <p class="eyebrow">Ausrüstung</p>
+          <div class="equipment-grid">
+            <div class="equip-slot">
+              <span>Waffe</span>
+              <strong id="weaponValue">Petal Blade</strong>
+            </div>
+            <div class="equip-slot">
+              <span>Charm</span>
+              <strong id="charmValue">Silk Ribbon</strong>
+            </div>
+            <div class="equip-slot">
+              <span>Begleiter</span>
+              <strong>Mochi Fox</strong>
+            </div>
+            <div class="equip-slot">
+              <span>Skin</span>
+              <strong>Amber Sprite</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="inventory-card">
+          <p class="eyebrow">Inventar</p>
+          <ul id="inventoryList" class="inventory-list">
+            <li>Silk Ribbon</li>
+            <li>Petal Blade</li>
+            <li>3x Sweet Potion</li>
+          </ul>
+        </div>
+
+        <div class="inventory-card">
+          <p class="eyebrow">Schnellaktionen</p>
+          <div class="action-buttons compact-actions">
+            <button id="usePotionButton" class="game-button alt" type="button">Potion nutzen</button>
+            <button id="saveButton" class="game-button" type="button">Speichern</button>
+          </div>
+          <p id="saveStatus" class="save-status">Noch kein Speicherstand.</p>
+        </div>
+      </aside>
+
+      <section class="panel panel-world">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Weltkarte</p>
+            <h2 id="mapTitle">Luna Garden</h2>
+          </div>
+          <p class="hint">WASD oder Pfeiltasten bewegen Aya. E interagiert mit nahen Orten.</p>
+        </div>
+
+        <div id="gameMap" class="game-map" aria-label="Spielfeld">
+          <button class="zone zone-quest" data-zone="quest" type="button">
+            <img src="assets/icons/quest.png" alt="">
+            <span>Quest</span>
+          </button>
+          <button class="zone zone-chest" data-zone="chest" type="button">
+            <img src="assets/icons/chest.png" alt="">
+            <span>Truhe</span>
+          </button>
+          <button class="zone zone-arena" data-zone="arena" type="button">
+            <img src="assets/icons/arena.png" alt="">
+            <span>Arena</span>
+          </button>
+          <button class="zone zone-casino" data-zone="casino" type="button">
+            <img src="assets/icons/casino.png" alt="">
+            <span>Casino</span>
+          </button>
+          <button class="zone zone-shop" data-zone="shop" type="button">
+            <img src="assets/icons/shop.png" alt="">
+            <span>Shop</span>
+          </button>
+          <button class="zone zone-healer" data-zone="healer" type="button">
+            <img src="assets/icons/quest.png" alt="">
+            <span>Heilerin</span>
+          </button>
+          <button class="zone zone-gate" data-zone="gate" type="button">
+            <img src="assets/icons/arena.png" alt="">
+            <span>Tor</span>
+          </button>
+          <button class="zone zone-sanctum" data-zone="sanctum" type="button">
+            <img src="assets/icons/arena.png" alt="">
+            <span>Sanctum</span>
+          </button>
+
+          <button class="collectible collectible-a" data-collectible="shard-1" type="button" aria-label="Mondsplitter 1"></button>
+          <button class="collectible collectible-b" data-collectible="shard-2" type="button" aria-label="Mondsplitter 2"></button>
+          <button class="collectible collectible-c" data-collectible="shard-3" type="button" aria-label="Mondsplitter 3"></button>
+
+          <div class="npc npc-guard" aria-hidden="true"></div>
+          <div class="encounter-zone encounter-zone-a" aria-hidden="true"></div>
+          <div class="encounter-zone encounter-zone-b" aria-hidden="true"></div>
+          <div id="player" class="player-token" aria-label="Spielerin"></div>
+          <div class="map-frame"></div>
+        </div>
+      </section>
+
+      <aside class="panel panel-log">
+        <p class="eyebrow">Ereignis</p>
+        <h2 id="zoneTitle">Luna Garden</h2>
+        <p id="zoneText">
+          Laufe zu einer Zone und druecke die Taste E oder klicke direkt auf den Ort.
+        </p>
+        <div class="mini-list mini-list-log">
+          <div>
+            <span>Mission</span>
+            <strong id="questValue">Keine aktiv</strong>
+          </div>
+          <div>
+            <span>Letzter Ort</span>
+            <strong id="locationValue">Startwiese</strong>
+          </div>
+          <div>
+            <span>Naechster Ausbau</span>
+            <strong>Story, Dungeons, Skilltree</strong>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button id="interactButton" class="game-button" type="button">Interagieren</button>
+          <button id="arenaButton" class="game-button alt" type="button">Arena testen</button>
+          <button id="talkButton" class="game-button alt" type="button">Mit NPC reden</button>
+        </div>
+
+        <div class="log-card">
+          <p class="eyebrow">Abenteuerlog</p>
+          <ul id="eventLog" class="event-log">
+            <li>Aya erreicht den Luna Garden.</li>
+          </ul>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <section id="battleScene" class="battle-scene hidden" aria-hidden="true">
+    <div class="battle-card">
+      <div class="battle-header">
+        <div>
+          <p class="eyebrow">Arena</p>
+          <h2>Crystal Duel</h2>
+        </div>
+        <button id="closeBattleButton" class="game-button alt small" type="button">Schliessen</button>
+      </div>
+
+      <div class="battle-stage">
+        <div class="fighter ally">
+          <div class="fighter-sprite fighter-sprite-ally"></div>
+          <strong>Aya</strong>
+          <span class="fighter-role">Moon Duelist</span>
+          <div class="bar">
+            <div id="battlePlayerHp" class="bar-fill"></div>
+          </div>
+        </div>
+
+        <div class="battle-center-text" id="battleMessage">Die Arena wartet.</div>
+
+        <div class="fighter enemy">
+          <div class="fighter-sprite fighter-sprite-enemy"></div>
+          <strong>Ruby Rival</strong>
+          <span class="fighter-role">Arena AI</span>
+          <div class="bar">
+            <div id="battleEnemyHp" class="bar-fill enemy-fill"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="battle-actions">
+        <button class="game-button" data-battle-action="attack" type="button">Attacke</button>
+        <button class="game-button" data-battle-action="skill" type="button">Moon Slash</button>
+        <button class="game-button alt" data-battle-action="heal" type="button">Potion</button>
+        <button class="game-button alt" data-battle-action="guard" type="button">Guard</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="dialogScene" class="battle-scene hidden" aria-hidden="true">
+    <div class="dialog-card">
+      <div class="battle-header">
+        <div>
+          <p class="eyebrow">Dialog</p>
+          <h2 id="dialogTitle">Dorfbewohner</h2>
+        </div>
+        <button id="closeDialogButton" class="game-button alt small" type="button">Schliessen</button>
+      </div>
+      <p id="dialogText" class="dialog-text">
+        Willkommen in Moonlace Arena.
+      </p>
+      <div id="shopActions" class="battle-actions hidden">
+        <button class="game-button" data-shop-action="potion" type="button">Potion kaufen (20)</button>
+        <button class="game-button alt" data-shop-action="blade" type="button">Blade Upgrade (60)</button>
+      </div>
+    </div>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
