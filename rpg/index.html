@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moonlace Arena</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;700&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Online RPG Prototype</p>
+        <h1>Moonlace Arena</h1>
+      </div>
+      <div class="topbar-stats">
+        <div class="stat-card">
+          <span class="stat-label">Gold</span>
+          <strong id="goldValue">120</strong>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">HP</span>
+          <strong id="hpValue">100 / 100</strong>
+        </div>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="panel panel-story">
+        <p class="eyebrow">Heldin</p>
+        <h2>Aya Starweaver</h2>
+        <p>
+          Ein zarter Manga-RPG-Prototyp mit frei begehbarer Karte.
+          Aya kann sich jetzt bereits ueber die kleine Welt bewegen.
+        </p>
+
+        <div class="mini-list">
+          <div>
+            <span>Klasse</span>
+            <strong>Moon Duelist</strong>
+          </div>
+          <div>
+            <span>Level</span>
+            <strong>3</strong>
+          </div>
+          <div>
+            <span>Status</span>
+            <strong>Bereit</strong>
+          </div>
+        </div>
+      </aside>
+
+      <section class="panel panel-world">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Weltkarte</p>
+            <h2>Luna Garden</h2>
+          </div>
+          <p class="hint">Bewege Aya mit WASD oder den Pfeiltasten.</p>
+        </div>
+
+        <div id="gameMap" class="game-map" aria-label="Spielfeld">
+          <button class="zone zone-quest" data-zone="quest" type="button">
+            <span>Quest</span>
+          </button>
+          <button class="zone zone-chest" data-zone="chest" type="button">
+            <span>Truhe</span>
+          </button>
+          <button class="zone zone-arena" data-zone="arena" type="button">
+            <span>Arena</span>
+          </button>
+          <button class="zone zone-casino" data-zone="casino" type="button">
+            <span>Casino</span>
+          </button>
+          <div id="player" class="player-token" aria-label="Spielerin"></div>
+        </div>
+      </section>
+
+      <aside class="panel panel-log">
+        <p class="eyebrow">Ereignis</p>
+        <h2 id="zoneTitle">Luna Garden</h2>
+        <p id="zoneText">
+          Laufe zu einer Zone und druecke die Taste E oder klicke direkt auf den Ort.
+        </p>
+        <div class="mini-list mini-list-log">
+          <div>
+            <span>Mission</span>
+            <strong id="questValue">Keine aktiv</strong>
+          </div>
+          <div>
+            <span>Letzter Ort</span>
+            <strong id="locationValue">Startwiese</strong>
+          </div>
+          <div>
+            <span>Naechster Ausbau</span>
+            <strong>Kampf, Loot, Equip</strong>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
