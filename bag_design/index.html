@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bag Mockup Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="panel">
+        <div class="panel-copy">
+          <p class="eyebrow">Basis-Prototyp</p>
+          <h1>Papiertragetaschen gestalten</h1>
+          <p class="intro">
+            Erstes Grundgerüst: Taschentyp auswählen und sofort eine visuelle Vorschau sehen.
+          </p>
+        </div>
+
+        <section class="card">
+          <label for="bag-select">Tasche</label>
+          <select id="bag-select"></select>
+          <div id="bag-meta" class="meta"></div>
+        </section>
+
+        <section class="card">
+          <p class="card-title">Logo</p>
+          <label class="upload-field" for="logo-upload">
+            <span>Datei hochladen</span>
+            <input id="logo-upload" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" />
+          </label>
+          <p class="muted small">
+            PNG, JPG, WEBP oder SVG. Das Logo wird automatisch mittig auf der Druckfläche platziert.
+          </p>
+          <button id="reset-logo" class="ghost-button" type="button">Logo zurücksetzen</button>
+        </section>
+
+        <section class="card">
+          <p class="card-title">Logo-Größe</p>
+          <input id="logo-scale" type="range" min="20" max="120" value="54" />
+          <div class="meta">
+            <span id="scale-value">54%</span> der Druckfläche
+          </div>
+        </section>
+
+        <section class="card">
+          <p class="card-title">Status</p>
+          <p id="status-text" class="muted">
+            Noch kein Logo geladen. Die Tasche kann aber schon ausgewählt werden.
+          </p>
+        </section>
+
+        <section class="card">
+          <p class="card-title">Maße</p>
+          <div class="measurement-grid">
+            <div>
+              <span class="measurement-label">Druckfläche</span>
+              <strong id="print-area-mm">-</strong>
+            </div>
+            <div>
+              <span class="measurement-label">Logo</span>
+              <strong id="logo-size-mm">-</strong>
+            </div>
+            <div>
+              <span class="measurement-label">Links</span>
+              <strong id="gap-left-mm">-</strong>
+            </div>
+            <div>
+              <span class="measurement-label">Rechts</span>
+              <strong id="gap-right-mm">-</strong>
+            </div>
+            <div>
+              <span class="measurement-label">Oben</span>
+              <strong id="gap-top-mm">-</strong>
+            </div>
+            <div>
+              <span class="measurement-label">Unten</span>
+              <strong id="gap-bottom-mm">-</strong>
+            </div>
+          </div>
+        </section>
+      </aside>
+
+      <main class="stage">
+        <div class="stage-header">
+          <p class="eyebrow">Live-Vorschau</p>
+          <h2 id="bag-name">32 x 40 cm</h2>
+        </div>
+
+        <div class="preview-wrap">
+          <div class="bag-scene">
+            <div class="bag" id="bag">
+              <div class="handle handle-left"></div>
+              <div class="handle handle-right"></div>
+              <div class="side-panel"></div>
+              <div class="front-panel">
+                <div class="print-area" id="print-area">
+                  <span id="print-placeholder">Logo-Fläche</span>
+                  <img id="logo-layer" alt="Logo-Vorschau" hidden />
+                  <div class="measure measure-top" id="measure-top" hidden></div>
+                  <div class="measure measure-right" id="measure-right" hidden></div>
+                  <div class="measure measure-bottom" id="measure-bottom" hidden></div>
+                  <div class="measure measure-left" id="measure-left" hidden></div>
+                </div>
+              </div>
+              <div class="bottom-shadow"></div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
