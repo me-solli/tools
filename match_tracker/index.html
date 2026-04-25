@@ -41,151 +41,32 @@ html{
   box-shadow:0 10px 30px rgba(0,0,0,0.6);
 }
 
-.topbar-inner{
-  width:100%;
-  max-width:1400px;
-
-  display:grid;
-  grid-template-columns:auto minmax(0,1fr) auto;
-  align-items:center;
-  column-gap:22px;
-
-  padding:0 16px;
-  box-sizing:border-box;
-}
-
 .topbar-left{
 font-weight:bold;
 font-size:18px;
 display:flex;
 align-items:center;
 gap:6px;
-justify-self:start;
 }
 
 .topbar-right{
 display:flex;
-flex-direction:column;
-gap:8px;
+gap:16px;
 font-size:13px;
 opacity:.8;
-justify-content:center;
-align-items:center;
-min-width:0;
-justify-self:center;
-width:100%;
-max-width:980px;
-}
-
-.topbar-head{
-display:flex;
-align-items:center;
-justify-content:flex-end;
-gap:10px;
-width:100%;
-}
-
-.topbar-stats{
-display:flex;
 flex-wrap:wrap;
-justify-content:center;
-gap:10px;
+justify-content:flex-end;
 min-width:0;
-width:100%;
 }
 
-.topbar-status{
+.internal-mark{
 display:inline-flex;
-align-items:center;
-gap:6px;
-font-size:13px;
-color:#d8d8d8;
-white-space:nowrap;
-justify-self:end;
-}
-
-.top-stat{
-display:flex;
-flex-direction:column;
-align-items:center;
+align-items:flex-start;
 justify-content:center;
-gap:4px;
-padding:7px 10px;
-border-radius:12px;
-background:rgba(255,255,255,0.04);
-border:1px solid rgba(255,255,255,0.05);
-color:#d5d5d5;
+color:rgba(255,255,255,0.38);
 font-size:12px;
 line-height:1;
-white-space:nowrap;
-min-width:52px;
-text-align:center;
-}
-
-.top-stat .stat-label{
-font-size:10px;
-letter-spacing:.04em;
-text-transform:uppercase;
-opacity:.72;
-}
-
-.top-stat .stat-value{
-font-size:15px;
-font-weight:700;
-color:#fff;
-}
-
-.top-stat.gold .stat-value{color:#d4a017;}
-.top-stat.star .stat-value{color:#f2c94c;}
-.top-stat.blue .stat-value{color:#6ea8ff;}
-.top-stat.green .stat-value{color:#47c769;}
-.top-stat.neutral .stat-value{color:#c7cbd1;}
-.top-stat.net .stat-value{color:#ff9b62;}
-.top-stat.yellow .stat-value{color:#f2b94b;}
-.top-stat.red .stat-value{color:#d9485f;}
-
-.top-form{
-display:flex;
-flex-direction:column;
-justify-content:center;
-gap:6px;
-padding:7px 10px;
-border-radius:12px;
-background:rgba(255,255,255,0.04);
-border:1px solid rgba(255,255,255,0.05);
-min-width:112px;
-}
-
-.top-form-label{
-display:none;
-}
-
-.top-form-track{
-display:flex;
-gap:6px;
-align-items:center;
-justify-content:center;
-}
-
-.form-dot{
-width:18px;
-height:18px;
-border-radius:50%;
-display:inline-flex;
-align-items:center;
-justify-content:center;
-font-size:10px;
-font-weight:700;
-color:#fff;
-background:rgba(255,255,255,0.1);
-}
-
-.form-dot.win{background:#2f9e44;}
-.form-dot.draw{background:#7f8c8d;}
-.form-dot.loss{background:#d9485f;}
-.form-dot.empty{
-  background:rgba(255,255,255,0.08);
-  color:rgba(255,255,255,0.35);
+transform:translateY(-8px);
 }
 
 body{
@@ -255,17 +136,6 @@ h1,h2{
   box-shadow:0 12px 28px rgba(0,0,0,0.28);
 }
 
-.next-game-card.clickable{
-  cursor:pointer;
-  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-}
-
-.next-game-card.clickable:hover{
-  transform:translateY(-2px);
-  border-color:rgba(110,168,255,0.38);
-  box-shadow:0 18px 34px rgba(0,0,0,0.34);
-}
-
 .next-game-label{
   font-size:11px;
   letter-spacing:.08em;
@@ -288,31 +158,8 @@ h1,h2{
 .next-game-title{
   font-size:18px;
   font-weight:700;
-  line-height:1.25;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.next-game-title .team-home,
-.next-game-title .team-away{
   color:#fff;
-}
-
-.next-game-title .vs-pill{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding:4px 8px;
-  border-radius:999px;
-  background:rgba(255,255,255,0.06);
-  border:1px solid rgba(255,255,255,0.08);
-  color:#9fbcff;
-  font-size:11px;
-  letter-spacing:.08em;
-  text-transform:uppercase;
-  line-height:1;
+  line-height:1.25;
 }
 
 .next-game-sub{
@@ -1061,7 +908,7 @@ gap:30px;
 }
 
 .sidebar{
-width:250px;
+width:220px;
 background:#0e0e0e;
 padding:18px;
 border-radius:14px;
@@ -1624,6 +1471,19 @@ white-space:nowrap;
 font-size:10px;
 }
 
+  .topbar-inner{
+  width:100%;
+  max-width:1400px;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  padding:0 16px;
+
+    box-sizing:border-box;
+}
+
   body::before{
 content:"";
 position:fixed;
@@ -1715,7 +1575,6 @@ pointer-events:none;
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
-  font-size:14px;
 }
 
 /* Delete Button (wie Player!) */
@@ -2001,7 +1860,7 @@ box-shadow:
 0 0 14px rgba(255,107,107,0.35);
 }
 
-#liveMode{
+  #liveMode{
   position:fixed;
   inset:0;
 
@@ -2013,7 +1872,6 @@ box-shadow:
   flex-direction:column;
 
   padding:10px;
-  overflow:hidden;
 }
 
 #liveMode.hidden{
@@ -2363,6 +2221,10 @@ box-shadow:
     align-items:flex-start;
   }
 
+  .internal-mark{
+    display:none;
+  }
+
   .next-game-card{
     padding:12px 14px;
   }
@@ -2370,12 +2232,6 @@ box-shadow:
   .next-game-title{
     font-size:15px;
     line-height:1.3;
-    gap:8px;
-  }
-
-  .next-game-title .vs-pill{
-    padding:3px 7px;
-    font-size:10px;
   }
 
   .next-game-sub{
@@ -2392,48 +2248,9 @@ box-shadow:
     align-self:flex-start;
   }
 
-  #topDraws,
-  #topLosses,
-  #topDiff{
+  /* 🔥 3. Icon (Matches) komplett ausblenden */
+  #topMatches{
     display:none;
-  }
-
-  .topbar-right{
-    gap:8px;
-    justify-content:center;
-    max-width:100%;
-  }
-
-  .topbar-inner{
-    grid-template-columns:auto minmax(0,1fr);
-    align-items:start;
-  }
-
-  .topbar-status{
-    grid-column:2;
-    grid-row:1;
-    justify-self:end;
-    margin-bottom:6px;
-  }
-
-  .topbar-right{
-    grid-column:1 / -1;
-    grid-row:2;
-    width:100%;
-  }
-
-  .topbar-head{
-    justify-content:flex-start;
-  }
-
-  .top-stat{
-    min-width:64px;
-  }
-
-  .top-form{
-    min-width:auto;
-    padding-left:12px;
-    padding-right:12px;
   }
 
   /* 🔥 APP Layout */
@@ -2672,8 +2489,9 @@ box-shadow:
   pointer-events:none;
 }
 
-  #topForm{
-  min-width:92px;
+  #topYellow,
+#topRed{
+  display:none !important;
 }
 
   .live-hero{
@@ -2838,54 +2656,52 @@ box-shadow:
 @media (min-width: 1024px){
 
   #liveMode{
-    padding:14px 18px;
-    overflow:hidden;
+    padding:18px 22px;
   }
 
   .live-score-big{
-    max-width:980px;
-    margin:0 auto 12px auto;
-    padding:10px 14px;
+    max-width:1200px;
+    margin:0 auto 16px auto;
+    padding:14px 18px;
   }
 
   .live-score-big .team{
-    font-size:16px;
+    font-size:22px;
   }
 
   .live-score-big .score{
-    font-size:28px;
-    min-width:88px;
+    font-size:42px;
+    min-width:120px;
   }
 
   .live-header{
-    max-width:980px;
-    margin:0 auto 12px auto;
-    padding:12px 14px;
+    max-width:1200px;
+    margin:0 auto 16px auto;
+    padding:16px 18px;
   }
 
   .live-body{
-    max-width:980px;
+    max-width:1200px;
     width:100%;
     margin:0 auto;
     display:grid;
-    grid-template-columns:minmax(0, 1.35fr) 280px;
-    gap:14px;
+    grid-template-columns:minmax(520px, 1.45fr) minmax(320px, 0.8fr);
+    gap:18px;
     align-items:start;
-    overflow:hidden;
   }
 
   .live-feed{
     grid-column:1;
     order:0;
-    min-height:260px;
-    max-height:360px;
-    padding:12px;
-    font-size:14px;
+    min-height:420px;
+    max-height:calc(100vh - 300px);
+    padding:14px;
+    font-size:15px;
   }
 
   .live-feed-item{
-    padding:8px 10px;
-    font-size:14px;
+    padding:10px 12px;
+    font-size:15px;
   }
 
   .live-events{
@@ -2897,40 +2713,28 @@ box-shadow:
 
   .live-row{
     grid-template-columns:1fr 1fr;
-    gap:10px;
+    gap:12px;
   }
 
   .btn-live{
-    min-height:48px;
-    font-size:14px;
+    min-height:64px;
+    font-size:24px;
     justify-content:flex-start;
-    padding:0 14px;
+    padding:0 18px;
   }
 
   .live-control{
     grid-column:2;
     width:auto;
-    margin-top:8px;
+    margin-top:10px;
     justify-content:stretch;
-    align-self:start;
   }
 
   #liveToggleBtn{
     width:100%;
-    min-height:48px;
+    min-height:58px;
     justify-content:center;
-    font-size:16px;
-  }
-
-  .live-header-actions button{
-    height:40px;
-    min-width:52px;
-  }
-
-  .live-hero{
-    height:88px;
-    max-width:980px;
-    margin:0 auto 12px auto;
+    font-size:20px;
   }
 }
     
@@ -2945,26 +2749,26 @@ box-shadow:
 <div class="logo">
   <img src="img/icon.png" alt="MT Logo">
 </div>
+<div class="internal-mark" aria-label="Interne Version">*</div>
 </div>
 
     <div class="topbar-right">
-      <div class="topbar-head">
       <button id="installBtn" class="secondary" style="display:none" aria-label="App installieren" data-tooltip="App installieren">
   📲 App
 </button>
       <span id="topTeam">–</span>
-      </div>
-      <div class="topbar-stats">
-      <span id="topMatches" class="top-stat blue"><span class="stat-label">Sp</span><span class="stat-value">0</span></span>
-      <span id="topWins" class="top-stat gold"><span class="stat-label">S</span><span class="stat-value">0</span></span>
-      <span id="topDraws" class="top-stat neutral"><span class="stat-label">U</span><span class="stat-value">0</span></span>
-      <span id="topLosses" class="top-stat red"><span class="stat-label">N</span><span class="stat-value">0</span></span>
-      <span id="topGoals" class="top-stat green"><span class="stat-label">T</span><span class="stat-value">0</span></span>
-      <span id="topAgainst" class="top-stat net"><span class="stat-label">GT</span><span class="stat-value">0</span></span>
-      <span id="topDiff" class="top-stat blue"><span class="stat-label">TD</span><span class="stat-value">0</span></span>
-      <span id="topPoints" class="top-stat star"><span class="stat-label">Pkt</span><span class="stat-value">0</span></span>
-      <span id="topForm" class="top-form"><span class="top-form-label">Form</span><span class="top-form-track"></span></span>
+      <span id="topWins">🏆 0</span>
+      <span id="topPoints">⭐ 0</span>
+      <span id="topMatches">📊 0</span>
+      <span id="topGoals">⚽ 0</span>
+      <span id="topAgainst">🥅 0</span>
+      <span id="topYellow">🟨 0</span>
+      <span id="topRed">🟥 0</span>
     </div>
+
+      <button id="unlockTeamBtn" onclick="unlockTeam()" class="secondary" aria-label="Team entsperren" data-tooltip="Team entsperren">
+    🔐
+  </button>
 
 </div>
 </div>
@@ -2987,7 +2791,7 @@ box-shadow:
 
 <div class="sidebar-section">
 <div class="section-banner players"></div>
-<button id="addPlayerBtn" class="secondary add-btn" onclick="openPlayerModal()" aria-label="Spieler zum Team hinzufügen" data-tooltip="Spieler zum Team hinzufügen">
+<button class="secondary add-btn" onclick="openPlayerModal()" aria-label="Spieler zum Team hinzufügen" data-tooltip="Spieler zum Team hinzufügen">
 <span>➕</span> Spieler hinzufügen
 </button>
 <div id="playerList" style="margin-top:10px"></div>
@@ -3398,6 +3202,10 @@ function applyLoadedData(sourceData){
   maybeOpenPendingLiveMatch()
 }
 
+function getUnlockButton(){
+  return document.getElementById("unlockTeamBtn")
+}
+
 function buildPlayerSelectionModal(title, entries, onSelect){
   const modal = document.getElementById("modal")
   const box = modal.querySelector(".modal-box")
@@ -3644,12 +3452,6 @@ function hideTooltip(target){
   activeTooltipTarget = null
 }
 
-function forceHideTooltip(){
-  if(!tooltipEl) return
-  tooltipEl.classList.remove("show")
-  activeTooltipTarget = null
-}
-
 function bindTooltipEvents(){
   document.addEventListener("mouseover", event => {
     const target = event.target.closest("[data-tooltip]")
@@ -3687,19 +3489,6 @@ function bindTooltipEvents(){
       positionTooltip(activeTooltipTarget)
     }
   })
-}
-
-function ensureTopbarLayout(){
-  const topbarInner = document.querySelector(".topbar-inner")
-  const topTeam = document.getElementById("topTeam")
-
-  if(!topbarInner || !topTeam) return
-
-  topTeam.classList.add("topbar-status")
-
-  if(topTeam.parentElement !== topbarInner){
-    topbarInner.appendChild(topTeam)
-  }
 }
 
 function loadFromServer(){
@@ -4186,8 +3975,6 @@ function editTeamName(oldName){
 
 function renderTopbar(){
 
-ensureTopbarLayout()
-
 let teamName = !isUnlocked ? "👀 Besucher" : (activeTeam || "Kein Team")
 
 document.getElementById("topTeam").innerText = teamName
@@ -4201,91 +3988,66 @@ let matchCount = matches
 .filter(m=>m.team===activeTeam && m.events.length > 0)
 .length
 
-let completedMatches = matches
-  .filter(m => m.team===activeTeam && m.events.length > 0)
-  .sort((a,b)=>{
-    let dateA = new Date(a.date + " " + (a.time || "00:00"))
-    let dateB = new Date(b.date + " " + (b.time || "00:00"))
-    return dateA - dateB
-  })
+  let wins = matches.filter(m=>{
+  if(m.team !== activeTeam || m.events.length === 0) return false
 
-let wins = 0
-let draws = 0
-let losses = 0
+  let g = m.events.filter(e=>e.type==="goal").length
+  let a = m.events.filter(e=>e.type==="goalAgainst").length
+
+  return g > a
+}).length
 
 let goals = 0
-let points = 0
+  let points = 0
 let againstTotal = 0
-let goalDiff = 0
+let yellow = 0
+let red = 0
 
-completedMatches.forEach(m=>{
+matches
+.filter(m=>m.team===activeTeam && m.events.length > 0)
+.forEach(m=>{
 
 let g = m.events.filter(e=>e.type==="goal").length
 let a = m.events.filter(e=>e.type==="goalAgainst").length
 
 goals += g
 againstTotal += a
-goalDiff += (g - a)
 
-if(g > a){
-  wins += 1
-  points += 3
-}
-else if(g === a){
-  draws += 1
-  points += 1
-}
-else{
-  losses += 1
-}
+yellow += m.events.filter(e=>e.type==="yellow").length
+red += m.events.filter(e=>e.type==="red").length
+
+// Punkte berechnen
+if(g > a) points += 3
+else if(g === a) points += 1
 
 })
 
-document.getElementById("topWins").innerHTML =
-`<span class="stat-label">S</span><span class="stat-value">${wins}</span>`
+document.getElementById("topWins").innerText =
+"🏆 " + wins
 
-document.getElementById("topMatches").innerHTML =
-`<span class="stat-label">Sp</span><span class="stat-value">${matchCount}</span>`
+document.getElementById("topMatches").innerText =
+"📊 " + matchCount
 
-document.getElementById("topDraws").innerHTML =
-`<span class="stat-label">U</span><span class="stat-value">${draws}</span>`
+document.getElementById("topPoints").innerText =
+"⭐ " + points
 
-document.getElementById("topLosses").innerHTML =
-`<span class="stat-label">N</span><span class="stat-value">${losses}</span>`
+document.getElementById("topGoals").innerText =
+"⚽ " + goals
 
-document.getElementById("topPoints").innerHTML =
-`<span class="stat-label">Pkt</span><span class="stat-value">${points}</span>`
+document.getElementById("topAgainst").innerText =
+"🥅 " + againstTotal
 
-document.getElementById("topGoals").innerHTML =
-`<span class="stat-label">T</span><span class="stat-value">${goals}</span>`
+document.getElementById("topYellow").innerText =
+"🟨 " + yellow
 
-document.getElementById("topAgainst").innerHTML =
-`<span class="stat-label">GT</span><span class="stat-value">${againstTotal}</span>`
+document.getElementById("topRed").innerText =
+"🟥 " + red
 
-document.getElementById("topDiff").innerHTML =
-`<span class="stat-label">TD</span><span class="stat-value">${goalDiff > 0 ? "+" : ""}${goalDiff}</span>`
+let btn = getUnlockButton()
 
-let formTrack = document.querySelector("#topForm .top-form-track")
-
-if(formTrack){
-  let recentForm = completedMatches
-    .slice(-5)
-    .map(m=>{
-      let g = m.events.filter(e=>e.type==="goal").length
-      let a = m.events.filter(e=>e.type==="goalAgainst").length
-
-      if(g > a) return {cls:"win", label:"S"}
-      if(g === a) return {cls:"draw", label:"U"}
-      return {cls:"loss", label:"N"}
-    })
-
-  while(recentForm.length < 5){
-    recentForm.unshift({cls:"empty", label:"·"})
-  }
-
-  formTrack.innerHTML = recentForm
-    .map(item => `<span class="form-dot ${item.cls}">${item.label}</span>`)
-    .join("")
+if(btn){
+  btn.style.display = "inline-flex"   // bleibt immer sichtbar
+  btn.innerText = isUnlocked ? "🔓" : "🔐"
 }
 
 }
@@ -4562,15 +4324,14 @@ return p[2]+"-"+p[1]+"-"+p[0]
 
 }
 
-function isPastMatch(match){
+  function isPastMatch(match){
 
   if(!match.date) return false
 
   let matchDate = new Date(match.date + " " + (match.time || "23:59"))
-  let graceMinutes = 45
   let now = new Date()
 
-  return (matchDate.getTime() + graceMinutes * 60000) < now
+  return matchDate < now
 }
 
 function requireMatchUnlock(match, callback){
@@ -5521,18 +5282,8 @@ onclick="copySquad(${match.id})">📑 Kader kopieren</button>
 
 <button class="secondary"
 ${!isUnlocked ? "disabled" : ""}
-${getTooltipAttrs("Kader per WhatsApp teilen")}
-onclick="shareSquadWhatsApp(${match.id})">💬 Kader teilen</button>
-
-<button class="secondary"
-${!isUnlocked ? "disabled" : ""}
 ${getTooltipAttrs("Bericht kopieren")}
 onclick="copyReport(${match.id})">📋 Bericht kopieren</button>
-
-<button class="secondary"
-${!isUnlocked ? "disabled" : ""}
-${getTooltipAttrs("Bericht per WhatsApp teilen")}
-onclick="shareReportWhatsApp(${match.id})">💬 Bericht teilen</button>
 `
 
 const sortedEvents = [...match.events].sort((a,b)=>{
@@ -5606,7 +5357,12 @@ function renderRankings(){
 }
 
   if(!isUnlocked){
-  document.getElementById("scorerRanking").innerHTML = ""
+  document.getElementById("scorerRanking").innerHTML = `
+    <div class="empty-state">
+      <strong>Torjägerliste gesperrt</strong>
+      Melde dich für das Team an, um Spielernamen und detaillierte Statistiken zu sehen.
+    </div>
+  `
   return
 }
 
@@ -5697,171 +5453,129 @@ box.classList.remove("hidden")
 
 /* SPIELBERICHT KOPIEREN */
 
-function ensureExportAccess(){
-  if(!hasAccess(activeTeam)){
-    showToast("🔒 Kein Zugriff","info")
-    return false
-  }
+function copyReport(matchId){
 
-  return true
-}
+let match = matches.find(m=>m.id===matchId)
 
-function buildReportText(matchId){
-  let match = matches.find(m=>m.id===matchId)
-  if(!match) return ""
+let text=""
 
   let goals = match.events.filter(e=>e.type==="goal").length
-  let against = match.events.filter(e=>e.type==="goalAgainst").length
-  let events = [...match.events].sort((a,b)=>{
-    if((a.minute || 0) !== (b.minute || 0)){
-      return (a.minute || 0) - (b.minute || 0)
-    }
-    return (a.time || 0) - (b.time || 0)
-  })
+let against = match.events.filter(e=>e.type==="goalAgainst").length
 
-  let scorers = {}
-  let lines = []
-  let locationLines = match.location
-    ? String(match.location)
-        .split("|")
-        .map(part => part.trim())
-        .filter(Boolean)
-        .map(part => `- ${part}`)
-    : []
+text += "⚽ U10 Spielbericht\n\n"
 
-  events.forEach(e=>{
-    if(e.type==="goal"){
-      lines.push(`⚽ ${e.minute}' ${e.player}`)
-      scorers[e.player] = (scorers[e.player] || 0) + 1
-    }
-    else if(e.type==="goalAgainst"){
-      lines.push(`🥅 ${e.minute}' ${match.opponent}`)
-    }
-    else if(e.type==="yellow"){
-      lines.push(`🟨 ${e.minute}' ${e.player}`)
-    }
-    else if(e.type==="red"){
-      lines.push(`🟥 ${e.minute}' ${e.player}`)
-    }
-    else if(e.type==="penalty"){
-      lines.push(`⏱ ${e.minute}' Zeitstrafe ${e.player}`)
-    }
-    else if(e.type==="sub"){
-      lines.push(`🔁 ${e.minute}' ${e.player} → ${e.in}`)
-    }
-  })
+text += activeTeam + " – " + match.opponent + "\n"
+text += "🗓 " + formatDate(match.date)
 
-  let reportTitle = "⚽ Spielbericht"
-  let matchupLine = activeTeam + " vs " + match.opponent
-  let dateLine = `📅 ${formatDate(match.date)}`
-  let timeLine = match.time ? `🕒 ${match.time}` : null
-  let typeLine = match.homeAway === "away" ? "🚗 Auswärtsspiel" : "🏠 Heimspiel"
-
-  let scorerLines = Object.entries(scorers)
-    .sort((a,b)=>b[1]-a[1])
-    .map(([name,count])=>`- ${name} (${count})`)
-
-  return [
-    reportTitle,
-    "",
-    matchupLine,
-    dateLine,
-    timeLine,
-    typeLine,
-    "",
-    `Endstand ${goals} : ${against}`,
-    "",
-    "Spielverlauf",
-    "────────────",
-    lines.length ? lines.join("\n") : "Keine Events erfasst",
-    "",
-    "Torschützen",
-    "────────────",
-    scorerLines.length ? scorerLines.join("\n") : "Keine Tore"
-  ].join("\n")
+if(match.time){
+text += "  🕒 " + match.time
 }
 
-function buildSquadText(matchId){
-  let match = matches.find(m=>m.id===matchId)
-  if(!match) return ""
-  let locationLines = match.location
-    ? String(match.location)
-        .split("|")
-        .map(part => part.trim())
-        .filter(Boolean)
-        .map(part => `- ${part}`)
-    : []
+text += "\n\nEndstand\n"
+text += goals + " : " + against + "\n\nSpielverlauf\n────────────\n"
 
-  let squadList = match.squad?.length
-    ? match.squad
-    : players
-        .filter(p=>p.team===activeTeam)
-        .map(p=>p.name)
+  let scorers={}
+  
+match.events
+.sort((a,b)=>a.minute-b.minute)
+.forEach(e=>{
+  
+if(e.type==="goal"){
 
-  let sorted = squadList
-    .map(name => players.find(p=>p.name===name && p.team===activeTeam))
-    .filter(Boolean)
-    .sort((a,b)=>getPositionRank(a.pos) - getPositionRank(b.pos))
+text += "⚽ " + e.minute + "' " + e.player + "\n"
 
-  let route = ""
-  if(match.location && match.location.trim() !== ""){
-    route = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(match.location.trim())
-  }
+scorers[e.player]=(scorers[e.player]||0)+1
 
-  return [
-    "KADER",
-    "",
-    `${activeTeam} vs ${match.opponent}`,
-    `📅 ${formatDate(match.date)}`,
-    match.time ? `🕒 ${match.time}` : null,
-    locationLines.length ? locationLines.join("\n") : null,
-    route ? `Route: ${route}` : null,
-    "",
-    sorted.length
-      ? sorted.map(player => `- ${player.pos}  ${player.name}`).join("\n")
-      : "Keine Spieler im Kader"
-  ].filter(Boolean).join("\n")
 }
 
-function shareTextOnWhatsApp(text){
-  const url = "https://wa.me/?text=" + encodeURIComponent(text)
-  window.open(url, "_blank", "noopener,noreferrer")
-}
+else if(e.type==="goalAgainst")
+text += "🥅 " + e.minute + "' Tor durch " + match.opponent + "\n"
 
-function copyReport(matchId){
-  if(!ensureExportAccess()) return
+else if(e.type==="yellow")
+text += "🟨 " + e.minute + "' " + e.player + "\n"
 
-  const text = buildReportText(matchId)
-  if(!text) return
+else if(e.type==="red")
+text += "🟥 " + e.minute + "' " + e.player + "\n"
 
-  copyTextToClipboard(text,"Spielbericht kopiert")
-}
+else if(e.type==="penalty")
+text += "⏱ " + e.minute + "' Zeitstrafe " + e.player + "\n"
 
-function shareReportWhatsApp(matchId){
-  if(!ensureExportAccess()) return
+else if(e.type==="sub")
+text += "🔁 " + e.minute + "' " + e.player + " → " + e.in + "\n"
 
-  const text = buildReportText(matchId)
-  if(!text) return
+})
 
-  shareTextOnWhatsApp(text)
+  text += "\nTore\n"
+
+Object.entries(scorers).forEach(([name,count])=>{
+text += name + " (" + count + ")\n"
+})
+
+copyTextToClipboard(text,"Spielbericht kopiert")
+
 }
 
 function copySquad(matchId){
-  if(!ensureExportAccess()) return
 
-  const text = buildSquadText(matchId)
-  if(!text) return
+let match = matches.find(m=>m.id===matchId)
+if(!match) return
 
-  copyTextToClipboard(text,"📑 Kader kopiert")
+let text = "📑 Kader\n\n"
+
+text += activeTeam + " – " + match.opponent + "\n"
+
+// 🔥 ALLES IN EINE SAUBERE ZEILE BAUEN
+let line = "🗓 " + formatDate(match.date)
+
+// Uhrzeit
+if(match.time){
+line += "  🕒 " + match.time
 }
 
-function shareSquadWhatsApp(matchId){
-  if(!ensureExportAccess()) return
+// Heim / Auswärts
+let place = match.homeAway === "away"
+  ? "🚗 Auswärtsspiel"
+  : "🏠 Heimspiel"
 
-  const text = buildSquadText(matchId)
-  if(!text) return
+line += "  " + place
 
-  shareTextOnWhatsApp(text)
+// Spielort (robust)
+// 👉 EINMAL anhängen (OHNE Location)
+text += line + "\n"
+
+// 🔥 Spielort eigene Zeile
+if(match.location && match.location.trim() !== ""){
+  let loc = match.location.trim()
+
+  text += "📍 " + loc + "\n"
+  text += "🗺️ Route: https://www.google.com/maps/dir/?api=1&destination=" 
+    + encodeURIComponent(loc)
+}
+
+text += "\n\n────────────\n"
+
+// 🔥 KADER
+let squadList = match.squad?.length 
+  ? match.squad 
+  : players
+      .filter(p=>p.team===activeTeam)
+      .map(p=>p.name)
+
+// Sortierung
+let sorted = squadList
+.map(name => players.find(p=>p.name===name))
+.filter(Boolean)
+.sort((a,b)=>{
+return getPositionRank(a.pos) - getPositionRank(b.pos)
+})
+
+text += "👥 Kader\n"
+
+sorted.forEach(p=>{
+text += `${p.pos} ${p.name}\n`
+})
+
+copyTextToClipboard(text,"📑 Kader kopiert")
 }
 
 /* ========================= */
@@ -5879,75 +5593,12 @@ function renderTools(){
 
 }
 
-function findActiveLiveMatch(){
-  if(!activeTeam) return null
-
-  return matches.find(match =>
-    match.team === activeTeam &&
-    match.liveState &&
-    match.liveState.startTime &&
-    !match.liveState.pausedAt
-  ) || null
-}
-
-function jumpToMatch(matchId){
-  const target = matches.find(match => match.id === matchId)
-  if(!target) return
-
-  matches.forEach(match => {
-    match.open = (match.id === matchId)
-  })
-
-  save()
-  renderMatches()
-
-  setTimeout(()=>{
-    document.querySelector(".match.open")?.scrollIntoView({
-      behavior:"smooth",
-      block:"start"
-    })
-  },100)
-}
-
-function handleNextGameCardClick(matchId, openLive = false){
-  if(openLive){
-    openLiveMode(matchId)
-    return
-  }
-
-  jumpToMatch(matchId)
-}
-
 function renderNextGameCard(){
   const box = document.getElementById("nextGameCard")
   if(!box) return
 
   if(!activeTeam){
     box.innerHTML = ""
-    return
-  }
-
-  const liveMatch = findActiveLiveMatch()
-
-  if(liveMatch){
-    const locationText = liveMatch.location ? `<div class="next-game-location">📍 ${liveMatch.location}</div>` : ""
-    box.innerHTML = `
-      <div class="next-game-card clickable" onclick="handleNextGameCardClick(${liveMatch.id}, true)">
-        <div class="next-game-label">Zum Live-Spiel</div>
-        <div class="next-game-main">
-        <div class="next-game-teams">
-          <div class="next-game-title">
-            <span class="team-home">${activeTeam}</span>
-            <span class="vs-pill">vs</span>
-            <span class="team-away">${liveMatch.opponent}</span>
-          </div>
-          <div class="next-game-sub">🔴 Live jetzt geöffnet${liveMatch.time ? " • 🕒 " + liveMatch.time : ""}</div>
-          ${locationText}
-        </div>
-          <div class="next-game-score">Live</div>
-        </div>
-      </div>
-    `
     return
   }
 
@@ -5973,18 +5624,15 @@ function renderNextGameCard(){
   const placeText = match.homeAway === "away" ? "Auswärts" : "Heim"
 
   box.innerHTML = `
-    <div class="next-game-card clickable" onclick="handleNextGameCardClick(${match.id}, false)">
+    <div class="next-game-card">
       <div class="next-game-label">Nächstes Spiel</div>
       <div class="next-game-main">
         <div class="next-game-teams">
-          <div class="next-game-title">
-            <span class="team-home">${activeTeam}</span>
-            <span class="vs-pill">vs</span>
-            <span class="team-away">${match.opponent}</span>
-          </div>
+          <div class="next-game-title">${activeTeam} vs ${match.opponent}</div>
           <div class="next-game-sub">📅 ${formatDate(match.date)}${match.time ? " • 🕒 " + match.time : ""} • ${placeText}${modeText}</div>
           ${match.location ? `<div class="next-game-location">📍 ${match.location}</div>` : ""}
         </div>
+        <div class="next-game-score">${match.open ? "Geöffnet" : "Anstehend"}</div>
       </div>
     </div>
   `
@@ -6002,14 +5650,9 @@ function renderAll(){
 
   // 🔥 CREATE MATCH BUTTON VISIBILITY
   let box = document.getElementById("createMatchBox")
-  let addPlayerBtn = document.getElementById("addPlayerBtn")
 
   if(box){
     box.style.display = (isUnlocked && activeTeam) ? "block" : "none"
-  }
-
-  if(addPlayerBtn){
-    addPlayerBtn.style.display = (isUnlocked && activeTeam) ? "flex" : "none"
   }
 
 let header = document.getElementById("teamHeader")
@@ -6053,8 +5696,6 @@ btn.disabled = !(date && opponent)
 }
 
 function closeLiveMode(){
-
-  forceHideTooltip()
 
   if(window.liveAutoInterval){
     clearInterval(window.liveAutoInterval)
@@ -6115,7 +5756,6 @@ function closeLiveMode(){
 
 function openLiveMode(matchId){
 
-  forceHideTooltip()
   document.body.style.overflow = "hidden";
 
   let match = matches.find(m=>m.id===matchId)
@@ -6969,7 +6609,7 @@ window.addEventListener("DOMContentLoaded", () => {
 <footer class="footer">
   <a href="impressum.html">Impressum</a> · 
   <a href="datenschutz.html">Datenschutz</a>
-  <div style="margin-top:8px;font-size:10px;opacity:.55;">Interne Version</div>
+  <div style="margin-top:8px;font-size:10px;opacity:.55;">* Interne Version</div>
 </footer>
 
 <script>
