@@ -1,0 +1,6946 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Match Tracker – Spiel & Torschützen</title>
+
+<!-- 🔥 PWA FIX -->
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#0f0f0f">
+<link rel="icon" href="img/icon.png">
+  
+<style>
+
+*,
+*::before,
+*::after{
+  box-sizing:border-box;
+}
+
+html{
+  overflow-x:hidden;
+}
+  
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:1000;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  background:rgba(17,17,17,0.7);
+  backdrop-filter:blur(10px);
+
+  border-bottom:1px solid rgba(255,255,255,0.05);
+
+  padding:10px 0;
+
+  box-shadow:0 10px 30px rgba(0,0,0,0.6);
+}
+
+.topbar-left{
+font-weight:bold;
+font-size:18px;
+display:flex;
+align-items:center;
+gap:6px;
+}
+
+.topbar-right{
+display:flex;
+gap:10px;
+font-size:13px;
+opacity:.8;
+flex-wrap:wrap;
+justify-content:flex-end;
+min-width:0;
+align-items:stretch;
+}
+
+.top-stat{
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:4px;
+padding:7px 10px;
+border-radius:12px;
+background:rgba(255,255,255,0.04);
+border:1px solid rgba(255,255,255,0.05);
+color:#d5d5d5;
+font-size:12px;
+line-height:1;
+white-space:nowrap;
+min-width:52px;
+text-align:center;
+}
+
+.top-stat .stat-label{
+font-size:10px;
+letter-spacing:.04em;
+text-transform:uppercase;
+opacity:.72;
+}
+
+.top-stat .stat-value{
+font-size:15px;
+font-weight:700;
+color:#fff;
+}
+
+.top-stat.gold .stat-value{color:#d4a017;}
+.top-stat.star .stat-value{color:#f2c94c;}
+.top-stat.blue .stat-value{color:#6ea8ff;}
+.top-stat.green .stat-value{color:#47c769;}
+.top-stat.neutral .stat-value{color:#c7cbd1;}
+.top-stat.net .stat-value{color:#ff9b62;}
+.top-stat.yellow .stat-value{color:#f2b94b;}
+.top-stat.red .stat-value{color:#d9485f;}
+
+.top-form{
+display:flex;
+flex-direction:column;
+justify-content:center;
+gap:6px;
+padding:7px 10px;
+border-radius:12px;
+background:rgba(255,255,255,0.04);
+border:1px solid rgba(255,255,255,0.05);
+min-width:112px;
+}
+
+.top-form-label{
+font-size:10px;
+letter-spacing:.04em;
+text-transform:uppercase;
+opacity:.72;
+text-align:center;
+}
+
+.top-form-track{
+display:flex;
+gap:6px;
+align-items:center;
+justify-content:center;
+}
+
+.form-dot{
+width:18px;
+height:18px;
+border-radius:50%;
+display:inline-flex;
+align-items:center;
+justify-content:center;
+font-size:10px;
+font-weight:700;
+color:#fff;
+background:rgba(255,255,255,0.1);
+}
+
+.form-dot.win{background:#2f9e44;}
+.form-dot.draw{background:#7f8c8d;}
+.form-dot.loss{background:#d9485f;}
+.form-dot.empty{
+  background:rgba(255,255,255,0.08);
+  color:rgba(255,255,255,0.35);
+}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+
+  background:#0f0f0f;
+
+  color:#eee;
+
+  margin:0;
+  padding:30px;
+
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+h1,h2{
+  margin-top:30px;
+}
+
+.panel{
+  background:rgba(24,24,24,0.92);
+  padding:22px;
+  border-radius:14px;
+  margin-bottom:30px;
+  border:1px solid rgba(255,255,255,0.04);
+
+  box-shadow:0 10px 30px rgba(0,0,0,0.6);
+  backdrop-filter:blur(6px);
+}
+
+.helper-text{
+  margin:10px 0 0;
+  padding:10px 12px;
+  border-radius:10px;
+  background:rgba(58,124,255,0.08);
+  border:1px solid rgba(58,124,255,0.18);
+  color:#cfdcff;
+  font-size:12px;
+  line-height:1.45;
+}
+
+.empty-state{
+  margin-top:10px;
+  padding:14px 16px;
+  border-radius:12px;
+  border:1px dashed rgba(255,255,255,0.12);
+  background:rgba(255,255,255,0.02);
+  color:#bdbdbd;
+  font-size:12px;
+  line-height:1.5;
+}
+
+.empty-state strong{
+  display:block;
+  margin-bottom:4px;
+  color:#fff;
+  font-size:13px;
+}
+
+.next-game-card{
+  margin-bottom:18px;
+  padding:14px 16px;
+  border-radius:14px;
+  background:linear-gradient(180deg, rgba(58,124,255,0.12), rgba(58,124,255,0.04));
+  border:1px solid rgba(58,124,255,0.22);
+  box-shadow:0 12px 28px rgba(0,0,0,0.28);
+}
+
+.next-game-card.clickable{
+  cursor:pointer;
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+.next-game-card.clickable:hover{
+  transform:translateY(-2px);
+  border-color:rgba(110,168,255,0.38);
+  box-shadow:0 18px 34px rgba(0,0,0,0.34);
+}
+
+.next-game-label{
+  font-size:11px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:#9fbcff;
+  margin-bottom:6px;
+}
+
+.next-game-main{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
+
+.next-game-teams{
+  min-width:0;
+}
+
+.next-game-title{
+  font-size:18px;
+  font-weight:700;
+  line-height:1.25;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.next-game-title .team-home,
+.next-game-title .team-away{
+  color:#fff;
+}
+
+.next-game-title .vs-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:4px 8px;
+  border-radius:999px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.08);
+  color:#9fbcff;
+  font-size:11px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  line-height:1;
+}
+
+.next-game-sub{
+  margin-top:4px;
+  font-size:12px;
+  color:#c7d3ea;
+  line-height:1.45;
+  white-space:normal;
+}
+
+.next-game-location{
+  margin-top:4px;
+  font-size:12px;
+  color:#aeb8c7;
+  line-height:1.4;
+}
+
+.next-game-score{
+  flex-shrink:0;
+  padding:8px 10px;
+  border-radius:10px;
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.08);
+  font-size:13px;
+  color:#fff;
+}
+
+
+  /* =========================
+🔥 TEAM HEADER (GLOBAL)
+========================= */
+
+.team-header{
+  margin-bottom:12px;
+}
+
+.team-header-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+
+  padding:10px 14px;
+
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.05);
+
+  border-radius:10px;
+
+  backdrop-filter:blur(6px);
+
+  box-shadow:0 6px 20px rgba(0,0,0,0.4);
+}
+
+.team-title{
+  font-size:18px;
+  font-weight:700;
+  color:#fff;
+
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.team-meta{
+  display:flex;
+  align-items:center;
+  gap:6px;
+
+  font-size:12px;
+  color:#aaa;
+}
+
+.team-meta .dot{
+  opacity:.5;
+}
+
+input,select{
+height:42px;
+padding:0 12px;
+
+border-radius:10px;
+border:1px solid rgba(255,255,255,0.08);
+
+background:#1a1a1a;
+color:#eee;
+
+font-size:13px;
+
+appearance:none;
+-webkit-appearance:none;
+-moz-appearance:none;
+
+transition:.2s;
+}
+
+  #mode{
+padding-right:28px;
+
+background-image:url("data:image/svg+xml;utf8,<svg fill='%23aaa' height='20' viewBox='0 0 20 20' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M5 7l5 5 5-5z'/></svg>");
+background-repeat:no-repeat;
+background-position:right 8px center;
+background-size:14px;
+}
+
+  #homeAway{
+  padding-right:28px;
+
+  background-image:url("data:image/svg+xml;utf8,<svg fill='%23aaa' height='20' viewBox='0 0 20 20' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M5 7l5 5 5-5z'/></svg>");
+
+  background-repeat:no-repeat;
+  background-position:right 8px center;
+  background-size:14px;
+}
+
+button{
+padding:8px 12px;
+border-radius:10px;
+border:none;
+font-size:13px;
+margin:4px 6px 4px 0;
+display:inline-flex;
+align-items:center;
+gap:6px;
+transition:all .2s ease;
+
+/* 🔥 NEU */
+font-weight:500;
+letter-spacing:.2px;
+}
+
+/* 🔥 BASIS HOVER */
+button:hover{
+transform:translateY(-1px);
+filter:brightness(1.2);
+}
+
+  button.primary:hover{
+color:#fff;
+
+border-color:#6ea8ff;
+
+box-shadow:
+0 0 0 1px rgba(110,168,255,0.5),
+0 0 14px rgba(58,124,255,0.35);
+}
+
+/* 🔵 PRIMARY */
+button.primary{
+height:42px;
+padding:0 16px;
+
+border-radius:10px;
+
+/* 🔥 NEU */
+background:transparent;
+color:#6ea8ff;
+
+border:1px solid rgba(110,168,255,0.4);
+
+box-shadow:
+0 0 0 1px rgba(110,168,255,0.2),
+0 0 10px rgba(58,124,255,0.15);
+
+transition:.2s;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+
+  height:38px;   /* 🔥 Größe steuerst du hier */
+}
+
+.logo img{
+  height:100%;
+  width:auto;
+
+  display:block;
+  object-fit:contain;
+}
+
+/* 🔴 DANGER */
+button.danger{
+background:rgba(201,42,42,0.15);
+color:#ff4d4d;
+}
+
+button.danger:hover{
+box-shadow:0 4px 12px rgba(201,42,42,0.3);
+}
+
+/* 🟢 SUCCESS / TOR */
+button.success,
+button.goal{
+background:rgba(47,158,68,0.15);
+color:#2f9e44;
+}
+
+button.success:hover,
+button.goal:hover{
+box-shadow:0 4px 12px rgba(47,158,68,0.3);
+}
+
+/* 🟡 GELB */
+button.yellow{
+background:rgba(212,160,23,0.15);
+color:#d4a017;
+}
+
+button.yellow:hover{
+box-shadow:0 4px 12px rgba(212,160,23,0.3);
+}
+
+/* 🔴 ROT */
+button.red{
+background:rgba(201,42,42,0.15);
+color:#ff4d4d;
+}
+
+button.red:hover{
+box-shadow:0 4px 12px rgba(201,42,42,0.3);
+}
+
+/* 🟣 WECHSEL */
+button.sub{
+background:rgba(108,99,255,0.15);
+color:#8f88ff;
+}
+
+button.sub:hover{
+box-shadow:0 4px 12px rgba(108,99,255,0.3);
+}
+
+/* ⚪ SECONDARY */
+button.secondary{
+background:#2a2a2a;
+color:#aaa;
+}
+
+.tooltip-bubble{
+  position:fixed;
+  left:0;
+  top:0;
+  z-index:12000;
+  max-width:min(240px, calc(100vw - 24px));
+  padding:8px 10px;
+  border-radius:8px;
+  background:rgba(8,8,8,0.96);
+  color:#f5f5f5;
+  border:1px solid rgba(255,255,255,0.08);
+  box-shadow:0 10px 24px rgba(0,0,0,0.45);
+  font-size:11px;
+  line-height:1.45;
+  text-align:left;
+  white-space:normal;
+  word-break:break-word;
+  overflow-wrap:anywhere;
+  text-wrap:balance;
+  opacity:0;
+  pointer-events:none;
+  transform:translateY(4px);
+  transition:opacity .16s ease, transform .16s ease;
+}
+
+.tooltip-bubble.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+  /* =========================
+⚽ GOAL OVERLAY
+========================= */
+
+.goal-overlay{
+  position:fixed;
+  inset:0;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:48px;
+  font-weight:800;
+  letter-spacing:2px;
+
+  color:#fff;
+
+  background:rgba(0,0,0,0.65);
+  backdrop-filter:blur(4px);
+
+  z-index:99999;
+
+  opacity:0;
+  pointer-events:none;
+
+  transform:scale(0.9);
+}
+
+/* 🔥 AKTIV */
+.goal-overlay.show{
+  animation:goalPop 1.2s ease forwards;
+}
+
+@keyframes goalPop{
+
+  0%{
+    opacity:0;
+    transform:scale(0.8);
+  }
+
+  30%{
+    opacity:1;
+    transform:scale(1.1);
+  }
+
+  60%{
+    transform:scale(1);
+  }
+
+  100%{
+    opacity:0;
+    transform:scale(1);
+  }
+
+}
+
+.matches-grid{
+display:flex;
+flex-direction:column;
+gap:20px;
+width:100%;
+}
+
+.match{
+background:linear-gradient(180deg,#1b1b1b,#161616);
+padding:14px;
+border-radius:14px;
+margin-bottom:12px;
+
+border:1px solid rgba(255,255,255,0.05);
+
+transition:all 0.25s ease;
+
+/* 🔥 NEU */
+box-shadow:0 6px 20px rgba(0,0,0,0.5);
+
+/* ✅ FIX */
+overflow:hidden;
+}
+
+.match-header{
+display:grid;
+grid-template-columns: 1fr auto;
+grid-template-rows: auto auto;
+
+gap:6px;
+
+cursor:pointer;
+padding:10px 12px;
+border-radius:10px;
+background:#202020;
+
+align-items:center;
+}
+
+/* 🔥 PLAYER CHIP – GAME STYLE (FINAL) */
+.player-chip{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  background:#2a2a2a;
+  color:#eee;
+
+  padding:6px 8px;
+  border-radius:6px;
+  margin:3px 0;
+  font-size:11px;
+  cursor:pointer;
+
+  transition:.15s;
+
+  position:relative;
+  z-index:1;              /* 🔥 BASIS LAYER */
+
+  overflow:visible;       /* 🔥 WICHTIG für Menü */
+
+  white-space:nowrap;
+
+  border:1px solid rgba(255,255,255,0.06);
+  box-shadow:0 4px 10px rgba(0,0,0,0.4);
+}
+
+  .player-chip:hover{
+  z-index:10;   /* 🔥 hebt aktiven Chip nach vorne */
+}
+
+/* 🔥 SUBTILE EDGE */
+.player-chip::before{
+content:"";
+position:absolute;
+left:0;
+top:0;
+bottom:0;
+width:2px;
+background:rgba(255,255,255,0.15);
+opacity:.4;
+}
+
+/* 🔥 HOVER */
+.player-chip:hover{
+transform:scale(1.03);
+box-shadow:0 6px 16px rgba(0,0,0,0.6);
+}
+
+/* 🔥 POS COLORS (WIE PITCH) */
+
+/* TW */
+.player-chip.pos-TW{
+background:#1e88e5;
+}
+
+/* DEF */
+.player-chip.pos-IV,
+.player-chip.pos-LV,
+.player-chip.pos-RV{
+background:#6d4c41;
+}
+
+/* MID */
+.player-chip.pos-ZM,
+.player-chip.pos-LM,
+.player-chip.pos-RM{
+background:#8e24aa;
+}
+
+/* ST */
+.player-chip.pos-ST{
+background:#e53935;
+}
+
+/* 🔥 PITCH GLEICHER STYLE */
+.pitch-player{
+background:#1f1f1f;
+border:1px solid rgba(255,255,255,0.05);
+}
+
+.pitch-player.pos-TW{border-left:3px solid #1e88e5}
+
+.pitch-player.pos-IV,
+.pitch-player.pos-LV,
+.pitch-player.pos-RV{
+border-left:3px solid #6d4c41;
+}
+
+.pitch-player.pos-ZM,
+.pitch-player.pos-LM,
+.pitch-player.pos-RM{
+border-left:3px solid #8e24aa;
+}
+
+.pitch-player.pos-ST{
+border-left:3px solid #e53935;
+}
+
+/* 🔥 SELECTED */
+.player-chip.selected{
+outline:2px solid #ffd54f;
+box-shadow:0 0 6px rgba(255,213,79,.4);
+transform:scale(1.03);
+}
+
+/* 🔥 HOVER ACTION BUTTONS */
+.player-chip:hover button{
+opacity:1;
+}
+
+/* 🔥 BUTTON STYLE – CLEAN GAME LOOK */
+.player-chip button{
+margin-left:6px;
+width:18px;
+height:18px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+padding:0;
+font-size:10px;
+
+border-radius:5px;
+flex-shrink:0;
+
+/* 🔥 DEZENT STANDARD */
+background:rgba(255,255,255,0.06);
+color:#bbb;
+border:1px solid rgba(255,255,255,0.08);
+
+opacity:0;
+transition:.15s;
+}
+
+/* 🔥 BEI HOVER SICHTBAR */
+.player-chip:hover button{
+opacity:1;
+}
+
+/* ✏️ EDIT */
+.player-chip button:first-of-type:hover{
+background:rgba(255,213,79,0.2);
+color:#ffd54f;
+border-color:rgba(255,213,79,0.4);
+}
+
+/* ❌ DELETE */
+.player-chip button:last-of-type:hover{
+background:rgba(201,42,42,0.2);
+color:#ff4d4d;
+border-color:rgba(201,42,42,0.4);
+}
+
+.pos{
+font-size:8px;
+opacity:.5;
+margin-right:4px;
+}
+
+.section-title{
+margin-top:10px;
+font-size:12px;
+color:#aaa
+}
+
+.event{
+display:flex;
+justify-content:space-between;
+align-items:center;
+font-size:13px;
+margin:2px 0;
+padding:4px 6px;
+border-radius:6px;
+}
+
+/* 🔥 NEUES EVENT */
+.event.new{
+animation:fadeInUp 0.35s ease;
+}
+
+/* 🔥 EVENT FARBEN */
+.event.goal{
+background:rgba(47,158,68,0.15);
+}
+
+.event.yellow{
+background:rgba(212,160,23,0.15);
+}
+
+.event.red{
+background:rgba(201,42,42,0.15);
+}
+
+.event.sub{
+background:rgba(108,99,255,0.15);
+}
+
+@keyframes fadeInUp{
+from{
+opacity:0;
+transform:translateY(8px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+.stat-row{
+display:flex;
+justify-content:space-between;
+padding:4px 0;
+border-bottom:1px solid #333
+}
+
+.hidden{
+  display:none !important;
+}
+
+  /* 🔐 VISITOR BLUR */
+.locked{
+  filter: blur(4px);
+  opacity: 0.6;
+  pointer-events: none;
+  user-select: none;
+}
+
+.team-chip{
+flex:1;
+background:#1f1f1f;
+padding:8px 10px;
+border-radius:10px;
+font-size:13px;
+border:1px solid rgba(255,255,255,0.06);
+transition:.2s;
+
+/* 🔥 smoother look */
+box-shadow:0 4px 12px rgba(0,0,0,0.4);
+}
+
+.team-chip:hover{
+background:#222;
+}
+
+/* 🔥 ACTIVE CLEAN */
+.team-chip.active{
+background:#1f1f1f; /* 🔥 gleich wie normal */
+
+color:#fff;
+
+/* 🔥 SUBTILER RAHMEN */
+border:1px solid rgba(80,140,255,0.6);
+
+/* 🔥 GLOW STATT FILL */
+box-shadow:
+0 0 0 1px rgba(80,140,255,0.4),
+0 0 12px rgba(80,140,255,0.25);
+}
+
+.pitch-wrap{
+display:flex;
+gap:20px;
+align-items:flex-start;
+justify-content:center;
+margin-top:14px
+}
+
+.pitch{
+background:#1f4d2b;
+box-shadow:inset 0 0 20px rgba(0,0,0,0.6);
+border:2px solid #2d7c44;
+border-radius:10px;
+padding:14px;
+width:300px;
+height:220px;
+position:relative;
+overflow:hidden;
+
+display:flex;
+flex-direction:column;
+justify-content:flex-end; /* Team nach unten schieben */
+}
+
+  /* Mittellinie */
+.pitch::before{
+content:"";
+position:absolute;
+left:0;
+right:0;
+top:50%;
+height:2px;
+background:rgba(255,255,255,0.15);
+}
+
+/* Mittelkreis */
+.pitch::after{
+content:"";
+position:absolute;
+width:80px;
+height:80px;
+border:2px solid rgba(255,255,255,0.15);
+border-radius:50%;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+}
+
+  /* Strafraum oben */
+.pitch{
+background:
+linear-gradient(rgba(255,255,255,0.12),rgba(255,255,255,0.12)) top center / 140px 60px no-repeat,
+linear-gradient(rgba(255,255,255,0.12),rgba(255,255,255,0.12)) bottom center / 140px 60px no-repeat,
+#1f4d2b;
+}
+
+.pitch-row{
+display:flex;
+justify-content:center;
+gap:8px;
+margin:10px 0;
+}
+
+.pitch-player{
+background:#2a2a2a;
+padding:5px 7px;
+border-radius:6px;
+margin:2px;
+font-size:11px;
+transition:.15s;
+}
+
+.pitch-player:hover{
+transform:scale(1.1);
+background:#3a7cff;
+}
+
+.bench{
+border-left:2px dashed #666;
+padding-left:8px;
+min-width:90px
+}
+
+.bench h4{
+margin:0 0 6px 0;
+font-size:11px;
+color:#aaa
+}
+
+.bench-player{
+background:#2b2b2b;
+padding:4px 6px;
+border-radius:5px;
+margin:3px 0;
+font-size:11px
+}
+
+.match.open{
+width:100%;
+max-width:100%;
+margin:0;
+}
+
+  .match.open{
+box-shadow:0 0 25px rgba(58,124,255,0.25);
+transform:none;
+}
+
+  .match-header span{
+font-size:18px;
+font-weight:bold;
+}
+
+.app{
+display:flex;
+gap:30px;
+}
+
+.sidebar{
+width:250px;
+background:#0e0e0e;
+padding:18px;
+border-radius:14px;
+border:1px solid rgba(255,255,255,0.05);
+height:fit-content;
+position:sticky;
+top:20px;
+
+/* 🔥 NEU */
+box-shadow:0 10px 30px rgba(0,0,0,0.6);
+}
+
+.sidebar h1{
+font-size:20px;
+margin-bottom:10px;
+}
+
+.sidebar-section{
+margin-bottom:20px;
+background:#141414;
+padding:14px;
+border-radius:12px;
+border:1px solid rgba(255,255,255,0.05);
+box-shadow:0 6px 20px rgba(0,0,0,0.5);
+}
+
+/* Inputs NICHT mehr full width */
+.sidebar input,
+.sidebar select{
+margin-bottom:8px;
+background:#1a1a1a;
+color:#eee;
+}
+
+/* TEAM */
+#teamName{
+width:70%;
+}
+
+/* SPIELER */
+#playerName{
+width:55%;
+}
+
+#playerPosition{
+width:20%;
+}
+
+/* BUTTONS */
+.sidebar-section button{
+width:100%;
+}
+
+/* MAIN */
+.main{
+flex:1.3;
+}
+
+/* MODAL */
+.modal{
+position:fixed;
+top:0;
+left:0;
+right:0;
+bottom:0;
+background:rgba(0,0,0,0.6);
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:9999;
+}
+
+.modal-box{
+background:#1a1a1a;
+padding:20px;
+border-radius:12px;
+width:300px;
+max-height:70vh;
+overflow-y:auto;
+
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+  .player-stats{
+padding:6px 10px;
+background:#151515;
+border-left:2px solid #3a7cff;
+margin-bottom:6px;
+border-radius:6px;
+}
+
+  .player-chip.small{
+display:inline-flex;
+width:auto;
+padding:3px 6px;
+font-size:11px;
+margin:2px;
+}
+
+  .player-chip span{
+overflow:hidden;
+text-overflow:ellipsis;
+}
+  
+.match-main{
+  display:grid;
+  grid-template-columns: 1fr auto 1fr;
+
+  align-items:center;
+  gap:16px;
+
+  font-weight:600;
+  font-size:17px;
+
+  min-height:32px; /* ✅ statt height */
+}
+
+.team-left,
+.team-right{
+  display:flex;
+  align-items:center;
+
+  width:100%;          /* 🔥 WICHTIG */
+  min-width:0;
+
+  font-size:14px;
+  line-height:1;
+
+  overflow:hidden;
+}
+
+/* 🔥 TEAM NAME */
+.team-name{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+
+  min-width:0;
+
+  font-size:15px;
+  font-weight:600;
+
+  opacity:.95;
+
+  display:block;
+  line-height:1.2; /* ✅ FIX */
+}
+
+/* LINKS */
+.team-left{
+  justify-content:flex-end;
+  text-align:right;
+}
+
+/* RECHTS */
+.team-right{
+  justify-content:flex-start;
+  text-align:left;
+}
+
+/* 🔥 SCORE */
+.score{
+  font-size:22px;
+  font-weight:bold;
+  letter-spacing:1px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  min-width:60px;
+  flex-shrink:0;
+
+  line-height:1;
+}
+
+.match:not(.open):hover{
+transform:translateY(-3px);
+box-shadow:0 14px 40px rgba(0,0,0,0.7);
+border-color:rgba(58,124,255,0.6);
+}
+
+  /* 🔥 RESULT COLORS */
+
+.match.result-Sieg{
+border-color: rgba(47,158,68,0.5);
+}
+
+.match.result-Niederlage{
+border-color: rgba(201,42,42,0.5);
+}
+
+.match.result-Unentschieden{
+border-color: rgba(255,255,255,0.08);
+}
+
+/* 🔥 HOVER VERSTÄRKEN */
+
+.match.result-Sieg:hover{
+box-shadow: 0 10px 30px rgba(47,158,68,0.25);
+}
+
+.match.result-Niederlage:hover{
+box-shadow: 0 10px 30px rgba(201,42,42,0.25);
+}
+
+.match.result-Unentschieden:hover{
+box-shadow: 0 10px 30px rgba(255,255,255,0.08);
+}
+
+.player-left{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  overflow:hidden;
+
+  flex:1;                /* 🔥 nimmt verfügbaren Platz */
+  min-width:0;           /* 🔥 wichtig für ellipsis */
+}
+
+.player-name{
+overflow:hidden;
+text-overflow:ellipsis;
+}
+
+.player-actions{
+  display:flex;
+  gap:4px;
+  flex-shrink:0;
+}
+
+/* 🔥 BADGE STYLE */
+.pos-badge{
+min-width:22px;
+text-align:center;
+font-size:9px;
+padding:2px 4px;
+border-radius:4px;
+background:rgba(0,0,0,0.3);
+opacity:.8;
+}
+
+  .toast{
+position:fixed;
+top:20px;
+right:20px;
+background:#1f1f1f;
+color:#fff;
+padding:10px 14px;
+border-radius:8px;
+font-size:13px;
+box-shadow:0 6px 20px rgba(0,0,0,0.5);
+opacity:0;
+transform:translateY(-10px);
+transition:.25s;
+z-index:11000;
+}
+
+.toast.show{
+opacity:1;
+transform:translateY(0);
+}
+
+/* Typen */
+.toast.goal{border-left:4px solid #2f9e44}
+.toast.yellow{border-left:4px solid #d4a017}
+.toast.red{border-left:4px solid #c92a2a}
+.toast.sub{border-left:4px solid #6c63ff}
+.toast.info{border-left:4px solid #3a7cff}
+
+/* 🔥 Button bekommt Abstand */
+.match-header .danger{
+margin-left:10px;
+}
+
+  /* 🔥 ANIMATION */
+.match{
+transition:
+transform 0.2s ease,
+box-shadow 0.2s ease,
+border-color 0.2s ease,
+max-height 0.35s ease;
+}
+
+/* BODY ANIMATION */
+.match-body{
+display:none;
+}
+
+.match-body.open{
+display:block;
+animation:fadeSlide 0.25s ease;
+}
+
+  @keyframes fadeSlide{
+from{
+opacity:0;
+transform:translateY(-6px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+.hero-banner-img{
+  position:relative;
+  overflow:hidden;
+
+  height:110px;
+  border-radius:10px;
+}
+
+/* 🔥 ZOOM LAYER */
+.hero-banner-img::before{
+  content:"";
+  position:absolute;
+  inset:0;
+
+  background:url("./img/matchtracker_banner.png") center/contain no-repeat;
+
+  transform:scale(1.1);   /* 🔥 10% Zoom */
+  transform-origin:center;
+
+  opacity:1;
+}
+
+.section-banner{
+  height:30px;
+  border-radius:6px;
+  margin-bottom:14px;
+
+  background-repeat:no-repeat;
+  background-size:contain;
+  background-position:left center;
+
+  opacity:0.85;
+  filter:brightness(0.9) contrast(0.95);
+
+  padding-left:4px;
+}
+
+/* 🔥 FIX: SPIELE identisch zu TEAMS skalieren */
+.section-banner.spiele{
+  height:32px;
+  padding-left:6px;
+
+  opacity:0.75;                  /* 🔥 weniger knallig */
+  filter:brightness(0.85) contrast(0.9);  /* 🔥 softer glow */
+}
+
+/* 🔵 TEAMS BANNER */
+.section-banner.teams{
+  background:url("./img/matchtracker_teams.png") left center/contain no-repeat;
+}
+
+.section-banner.players{
+  background:url("./img/matchtracker_player.png") left center/contain no-repeat;
+}
+
+  .section-banner.spiele{
+  background:url("./img/spiele_banner.png") left center/contain no-repeat;
+}
+
+.add-btn{
+width:100%;
+justify-content:center;
+white-space:nowrap;
+
+background:#1a1a1a;              /* statt gradient */
+color:#aaa;                      /* dezenter */
+
+font-weight:500;
+border:1px solid rgba(255,255,255,0.08);
+
+box-shadow:none;                 /* kein glow mehr */
+
+display:flex;
+align-items:center;
+justify-content:center;
+height:42px;
+font-size:13px;
+gap:8px;
+
+transition:.2s;
+}
+
+.add-btn:hover{
+background:#222;
+color:#fff;
+border-color:rgba(255,255,255,0.2);
+}
+
+ .player-chip::after{
+content:"";
+position:absolute;
+top:0;
+right:0;
+width:6px;
+height:6px;
+background:rgba(255,255,255,0.2);
+clip-path:polygon(100% 0, 0 0, 100% 100%);
+opacity:.4;
+} 
+
+  .team-row{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:8px;
+margin-top:6px;
+    cursor:pointer;
+}
+
+#teamList{
+margin-top:10px;
+display:flex;
+flex-direction:column;
+gap:6px;
+}
+
+.team-row button{
+  width:auto;
+  height:auto;
+  padding:0;
+
+  background:none;
+  border:none;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+  /* 🔥 FORM WRAPPER */
+.match-form-row{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:12px;
+}
+
+/* 🔥 EINHEITLICHER LOOK */
+.match-form-row input,
+.match-form-row select{
+height:42px;
+padding:0 12px;
+border-radius:10px;
+
+background:#1a1a1a;
+color:#eee;
+
+border:1px solid rgba(255,255,255,0.08);
+
+transition:.2s;
+}
+
+/* 🔥 HOVER / FOCUS */
+.match-form-row input:focus,
+.match-form-row select:focus{
+outline:none;
+border-color:#3a7cff;
+box-shadow:0 0 0 2px rgba(58,124,255,0.15);
+}
+
+/* 🔥 GRÖSSEN LOGIK */
+#date{width:150px}
+#time{width:110px}
+#homeAway{width:130px}
+
+/* FLEX INPUTS */
+#opponent{flex:1}
+#location{flex:1}
+
+/* 🔥 ICON SELECT FIX */
+#homeAway{
+padding-left:10px;
+}
+
+/* 🔥 OPTIONAL: Platzhalter dezenter */
+.match-form-row input::placeholder{
+color:#777;
+}
+
+  .match-actions{
+display:flex;
+gap:10px;
+align-items:center;
+margin-top:6px;
+}
+
+.match-sub{
+  grid-column:1 / 2;
+
+  display:block;
+
+  margin-top:8px;   /* 🔥 DAS HINZUFÜGEN */
+
+  font-size:12px;
+  opacity:.8;
+}
+
+.meta-top{
+display:grid;
+grid-template-columns: 110px 80px 120px 80px 1fr;
+align-items:center;
+gap:10px;
+}
+
+.meta-top span{
+white-space:nowrap;
+font-size:12px;
+opacity:.85;
+display:flex;
+align-items:center;
+gap:4px;
+}
+
+.meta-bottom{
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.location{
+overflow:hidden;
+text-overflow:ellipsis;
+white-space:nowrap;
+
+font-size:13px;
+opacity:.95;
+
+display:flex;
+align-items:center;
+gap:6px;
+
+justify-self:end;
+
+/* 🔥 NEU */
+flex:1;
+}
+
+  .meta-location-row{
+  grid-column:1 / -1;
+
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  margin-top:4px;
+
+  min-width:0;
+}
+
+.meta-right{
+justify-self:end;   /* 🔥 statt margin-left */
+white-space:nowrap;
+font-size:10px;
+}
+
+  .topbar-inner{
+  width:100%;
+  max-width:1400px;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  padding:0 16px;
+
+    box-sizing:border-box;
+}
+
+  body::before{
+content:"";
+position:fixed;
+inset:0;
+
+background:url("./img/bg_pitch_bw.png") center/cover no-repeat;
+
+transform:rotate(-6deg) scale(1.2);
+
+opacity:0.12;
+      filter:contrast(1.1) brightness(0.9);
+
+z-index:-1;
+pointer-events:none;
+}
+
+.hero-wrap{
+  max-width:1000px;
+  margin:14px auto;
+  padding:0 12px;
+}
+
+  .content-wrap{
+  width:100%;
+  max-width:1400px;
+  margin:0 auto;
+
+  padding:20px 20px 30px 20px;
+
+  border-radius:16px;
+
+  background:rgba(20,20,20,0.55);
+
+  backdrop-filter:blur(8px);
+
+  border:1px solid rgba(255,255,255,0.05);
+
+  box-shadow:0 20px 60px rgba(0,0,0,0.6);
+
+    box-sizing:border-box;
+}
+
+  .footer{
+  margin-top:40px;
+
+  text-align:center;
+  font-size:11px;
+
+  color:#777;
+
+  padding:14px 0;
+
+  border-top:1px solid rgba(255,255,255,0.04);
+
+  background:rgba(15,15,15,0.6);
+  backdrop-filter:blur(6px);
+}
+
+  .footer a{
+  color:#888;
+  text-decoration:none;
+  margin:0 6px;
+
+  transition:.2s;
+}
+
+.footer a:hover{
+  color:#fff;
+}
+
+.team-chip-full{
+  width:100%;
+
+  display:flex;
+  flex-direction:column;
+
+  justify-content:space-between;
+
+  padding:12px;
+  border-radius:10px;
+
+  position:relative;
+
+  min-height:70px; /* 🔥 sorgt für Platz */
+}
+
+/* Name */
+.team-chip-full .team-name{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:14px;
+}
+
+/* Delete Button (wie Player!) */
+.team-delete{
+  opacity:0;
+
+  width:18px;
+  height:18px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:5px;
+
+  background:rgba(255,255,255,0.06);
+  color:#bbb;
+  border:1px solid rgba(255,255,255,0.08);
+
+  transition:.15s;
+}
+
+.team-actions{
+  position:absolute;
+  right:8px;
+  bottom:8px;
+
+  display:flex;
+  gap:6px;
+}
+
+/* 🔐 LOGIN BUTTON */
+.team-login{
+  height:22px;
+  padding:0 8px;
+
+  font-size:10px;
+
+  border-radius:6px;
+
+  background:rgba(255,255,255,0.05);
+  color:#aaa;
+  border:1px solid rgba(255,255,255,0.08);
+}
+
+/* 🔓 EINGELOGGT */
+.team-login.active{
+  background:rgba(60,255,122,0.12);
+  color:#3cff7a;
+  border:1px solid rgba(60,255,122,0.4);
+
+  box-shadow:0 0 8px rgba(60,255,122,0.2);
+}
+
+/* ✏️ 🗑 ICON BUTTONS */
+.team-actions button:not(.team-login){
+  width:22px;
+  height:22px;
+
+  font-size:10px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:6px;
+
+  background:rgba(255,255,255,0.05);
+  color:#aaa;
+  border:1px solid rgba(255,255,255,0.08);
+}
+
+.team-actions button:hover{
+  background:#222;
+  color:#fff;
+}
+
+.team-actions button{
+  flex:1;                         /* 🔥 gleich breit */
+  height:24px;
+
+  font-size:11px;
+
+  border-radius:6px;
+
+  background:rgba(255,255,255,0.05);
+  color:#aaa;
+  border:1px solid rgba(255,255,255,0.08);
+
+  transition:.15s;
+}
+
+.team-actions button:hover{
+  background:#222;
+  color:#fff;
+}
+
+/* erscheint bei hover */
+.team-chip-full:hover .team-delete{
+  opacity:1;
+}
+
+/* hover style wie player */
+.team-delete:hover{
+  background:rgba(201,42,42,0.2);
+  color:#ff4d4d;
+}
+
+  .time-input{
+  padding-left:32px;
+
+  background-image:url("data:image/svg+xml;utf8,<svg fill='%23888' height='16' viewBox='0 0 24 24' width='16' xmlns='http://www.w3.org/2000/svg'><path d='M12 2a10 10 0 100 20 10 10 0 000-20zm1 11h5v-2h-4V7h-2v6z'/></svg>");
+
+  background-repeat:no-repeat;
+  background-position:10px center;
+  background-size:14px;
+}
+
+  .player-actions{
+  position:relative;
+  z-index:2;
+}
+
+.player-menu{
+  position:absolute;
+
+  right:0;              /* 🔥 sauber am Button ausrichten */
+  top:100%;             /* 🔥 direkt unter Button */
+
+  margin-top:6px;       /* 🔥 kleiner Abstand */
+
+  background:#1a1a1a;
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:8px;
+
+  box-shadow:0 12px 30px rgba(0,0,0,0.7); /* 🔥 stärker */
+
+  display:flex;
+  flex-direction:column;
+
+  z-index:999;          /* 🔥 ÜBER ALLES */
+
+  overflow:hidden;
+
+  min-width:120px;      /* 🔥 stabilere Breite */
+
+  animation:menuPop .15s ease;
+}
+
+  @keyframes menuPop{
+  from{
+    opacity:0;
+    transform:translateY(-4px) scale(0.98);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+}
+
+.player-menu button{
+  background:none;
+  border:none;
+  color:#ccc;
+
+  padding:6px 10px;
+  font-size:11px;
+
+  text-align:left;
+  justify-content:flex-start;
+}
+
+.player-menu button:hover{
+  background:#222;
+  color:#fff;
+}
+
+.match-actions-right{
+grid-column:2;
+grid-row:1 / span 2;
+
+display:flex;
+align-items:center;
+justify-content:flex-end;
+
+gap:8px;
+
+align-self:start;   /* 🔥 DAS zieht sie hoch */
+}
+
+.match-actions-right button{
+width:34px;
+height:34px;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:8px;
+} 
+
+.map-link{
+display:flex;
+align-items:center;
+gap:4px;
+
+margin-left:auto;   /* 🔥 DAS IST DER KEY */
+
+padding:2px 6px;
+
+font-size:11px;
+
+border-radius:6px;
+
+background:rgba(255,255,255,0.05);
+color:#aaa;
+
+text-decoration:none;
+
+transition:.15s;
+
+  flex-shrink:0;
+}
+
+.modal-header{
+display:flex;
+align-items:center;
+gap:10px;
+margin-bottom:10px;
+}
+
+.modal-icon{
+font-size:18px;
+opacity:.8;
+}
+
+.modal-title{
+font-size:16px;
+font-weight:600;
+}
+
+.modal-actions{
+grid-column:1/-1;
+display:flex;
+gap:10px;
+margin-top:6px;
+}
+
+.modal-actions button{
+flex:1;
+}
+
+  .topbar-right button{
+  height:28px;
+  padding:0 8px;
+  font-size:12px;
+}
+
+  /* 🔴 OUTLINE DANGER (wie primary, nur rot) */
+button.danger-outline{
+height:42px;
+padding:0 16px;
+
+border-radius:10px;
+
+background:transparent;
+color:#ff6b6b;
+
+border:1px solid rgba(255,107,107,0.4);
+
+box-shadow:
+0 0 0 1px rgba(255,107,107,0.2),
+0 0 8px rgba(255,107,107,0.15);
+
+transition:.2s;
+}
+
+button.danger-outline:hover{
+color:#fff;
+
+border-color:#ff6b6b;
+
+box-shadow:
+0 0 0 1px rgba(255,107,107,0.5),
+0 0 14px rgba(255,107,107,0.35);
+}
+
+#liveMode{
+  position:fixed;
+  inset:0;
+
+  background:#0f0f0f;
+
+  z-index:7000;
+
+  display:flex;
+  flex-direction:column;
+
+  padding:10px;
+  overflow:hidden;
+}
+
+#liveMode.hidden{
+  display:none;
+}
+
+.live-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+
+  padding:12px 14px;
+  margin-bottom:14px;
+
+  border-radius:12px;
+
+  background:linear-gradient(
+    180deg,
+    rgba(255,255,255,0.04),
+    rgba(255,255,255,0.02)
+  );
+
+  border:1px solid rgba(255,255,255,0.06);
+
+  box-shadow:0 10px 30px rgba(0,0,0,0.6);
+
+  backdrop-filter:blur(6px);
+
+  position:relative;
+  z-index:10;
+}
+
+  .live-header::before{
+  content:"LIVE";
+  position:absolute;
+
+  top:-10px;
+  left:12px;
+
+  font-size:10px;
+  padding:2px 6px;
+
+  border-radius:6px;
+
+  background:#ff3b3b;
+  color:#fff;
+
+  font-weight:600;
+  letter-spacing:.5px;
+}
+
+.live-header-actions{
+  display:flex;
+  gap:6px;
+  align-items:center;
+}
+
+/* Mobile → untereinander statt nebeneinander */
+@media (max-width: 400px){
+  .live-header-actions{
+    flex-direction:column;
+    align-items:flex-end;
+  }
+}
+
+.live-left{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.live-score{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  gap:10px;
+
+  font-size:17px;
+  font-weight:600;
+
+  width:100%;
+
+  margin-bottom:4px; /* 🔥 DAS HINZUFÜGEN */
+}
+
+.live-timer{
+  display:flex;
+  align-items:center;
+  gap:6px;
+
+  font-variant-numeric: tabular-nums;
+  letter-spacing:1px;
+}
+
+/* 🔴 LIVE DOT */
+.live-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#ff3b3b;
+}
+
+/* 🔥 blink nur wenn aktiv */
+.live-dot.blink{
+  animation:liveBlink 1s infinite;
+}
+
+@keyframes liveBlink{
+  0%{ opacity:1 }
+  50%{ opacity:0.2 }
+  100%{ opacity:1 }
+}
+
+/* 🔥 pause / idle */
+.live-dot.paused{
+  opacity:0.3;
+}
+
+/* LIVE TEXT */
+.live-text{
+  font-size:11px;
+  color:#ff6b6b;
+  font-weight:600;
+}
+
+.live-close{
+  height:34px;
+  padding:0 12px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+
+  border-radius:10px;
+
+  background:#1a1a1a;
+  color:#ccc;
+
+  border:1px solid rgba(255,255,255,0.08);
+
+  font-size:13px;
+  white-space:nowrap;
+
+  transition:.2s;
+
+  /* 🔥 FIX */
+  position:relative;
+  z-index:20;
+  pointer-events:auto;
+}
+
+.live-close:hover{
+  background:#222;
+  color:#fff;
+}
+
+.live-body{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+
+  overflow-y:auto;
+  overflow-x:hidden;
+
+  min-height:0;
+
+  position:relative;
+  z-index:1;
+
+  pointer-events:none;
+
+  padding-top:10px;
+}
+
+  .live-body{
+  pointer-events:none;
+}
+
+.live-body *{
+  pointer-events:auto;
+}
+
+.live-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+
+  flex-shrink:0;
+
+  margin-top:6px;
+}
+
+/* 🔥 RESPONSIVE FIX */
+@media (max-width: 500px){
+  .live-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+.live-player{
+    position:relative;
+  z-index:1;   /* 🔥 darunter */
+  padding:12px;
+  border-radius:10px;
+
+  background:#1a1a1a;
+  text-align:center;
+
+  font-size:14px;
+}
+
+  .live-player.active{
+  outline:2px solid #3a7cff;
+  background:#222;
+}
+
+  .live-grid button.active{
+  outline:2px solid #3a7cff;
+  background:#222;
+}
+
+.live-feed{
+  position:relative;
+
+  background:#141414;
+  border:1px solid rgba(255,255,255,0.05);
+  border-radius:10px;
+
+  padding:10px;
+
+  max-height:140px;
+  overflow:auto;
+
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+
+  font-size:13px;
+
+  flex-shrink:0;
+
+  pointer-events:auto; /* ok */
+}
+
+.live-feed-item{
+  padding:6px 8px;
+  border-radius:6px;
+
+  background:#1f1f1f;
+
+  display:flex;
+  justify-content:space-between;
+}
+
+.live-feed-item.goal{
+  background:rgba(47,158,68,0.15);
+}
+
+.live-feed-item.yellow{
+  background:rgba(212,160,23,0.15);
+}
+
+.live-feed-item.red{
+  background:rgba(201,42,42,0.15);
+}
+
+.live-feed-item.sub{
+  background:rgba(108,99,255,0.15);
+}
+
+  /* =========================
+💻 DESKTOP LIVE MODE FIX
+========================= */
+
+@media (min-width: 769px){
+
+  .live-body{
+    flex-direction:row;
+    align-items:flex-start;
+    gap:20px;
+  }
+
+  .live-feed{
+    flex:1;
+    max-height:none;
+    min-height:300px;
+  }
+
+  .live-events{
+    width:260px;
+    flex-shrink:0;
+  }
+
+  .live-control{
+    width:260px;
+  }
+
+  .btn-live{
+    height:48px;
+    font-size:14px;
+  }
+
+  .live-score-big{
+    max-width:900px;
+    margin:0 auto 14px auto;
+  }
+
+}
+
+  /* =========================
+🔥 LIVE HERO GLOBAL
+========================= */
+
+.live-hero{
+  width:100%;
+  height:120px;
+
+  border-radius:12px;
+
+  margin-bottom:12px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0,0,0,0.2),
+      rgba(0,0,0,0.6)
+    ),
+    url("./img/matchtracker_banner.png") center/cover no-repeat;
+
+  box-shadow:0 10px 30px rgba(0,0,0,0.6);
+
+  opacity:0.9;
+}
+
+/* =========================
+📱 MOBILE FIX (STEP 1)
+========================= */
+
+@media (max-width: 768px){
+
+  .next-game-main{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .next-game-card{
+    padding:12px 14px;
+  }
+
+  .next-game-title{
+    font-size:15px;
+    line-height:1.3;
+    gap:8px;
+  }
+
+  .next-game-title .vs-pill{
+    padding:3px 7px;
+    font-size:10px;
+  }
+
+  .next-game-sub{
+    font-size:11px;
+    line-height:1.35;
+  }
+
+  .next-game-location{
+    font-size:11px;
+    line-height:1.35;
+  }
+
+  .next-game-score{
+    align-self:flex-start;
+  }
+
+  #topDraws,
+  #topLosses,
+  #topDiff{
+    display:none;
+  }
+
+  /* 🔥 APP Layout */
+  .app{
+    flex-direction:column;
+    gap:14px;
+  }
+
+  .sidebar{
+    width:100%;
+    position:relative;
+    top:0;
+  }
+
+  body{
+    padding:2px;
+    overflow-x:hidden;
+  }
+
+  .content-wrap{
+    padding:8px;
+  }
+
+/* =========================
+📱 META 3-ROW LAYOUT (ROBUST)
+========================= */
+
+.meta-top{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items:center;
+  gap:6px;
+}
+
+.meta-top span{
+  font-size:11px;
+  justify-content:center;
+}
+
+/* 📅 Datum */
+.meta-date{
+  grid-column:1;
+}
+
+/* 🕒 Uhrzeit */
+.meta-time{
+  grid-column:2;
+}
+
+/* 🏠 Heim/Auswärts */
+.meta-type{
+  grid-column:1;
+}
+
+/* 🗺️ Route */
+.map-link{
+  grid-column:2;
+  margin-left:0;
+  justify-self:center;
+}
+
+/* 📍 Ort */
+.meta-location-row{
+  grid-column:1 / -1;
+  display:flex;
+  justify-content:center;
+  margin-top:4px;
+}
+
+.location{
+  white-space:normal;
+  text-align:center;
+}
+
+/* =========================
+🎯 HERO FIX (MOBILE)
+========================= */
+
+.hero-wrap{
+  padding:0 6px;
+  max-width:420px;
+  margin:10px auto;
+}
+
+.hero-banner-img{
+  height:110px;                 /* 🔥 dein Wert passt */
+  border-radius:10px;
+
+  background-size:contain;        /* 🔥 WICHTIG */
+  background-position:center;
+}
+
+/* =========================
+🔥 MATCH FIX (WICHTIG)
+========================= */
+
+.match-header{
+  overflow:hidden;
+}
+
+.match-main{
+  display:flex;                 /* 🔥 statt grid */
+  flex-direction:column;
+
+  align-items:center;
+  justify-content:center;
+
+  text-align:center;
+  gap:4px;
+
+  height:auto;                  /* 🔥 überschreibt Desktop */
+}
+
+/* 🔥 TEAM NAMEN */
+.team-left,
+.team-right{
+  justify-content:center !important;
+  text-align:center !important;
+  width:100%;
+}
+
+/* 🔥 NAME CLEAN */
+.team-name{
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* 🔥 SCORE */
+.score{
+  font-size:22px;
+  margin:2px 0;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* 🔥 BUTTONS */
+.match-actions-right{
+  grid-column:1 / -1;
+  grid-row:auto;
+
+  justify-content:center;
+  margin-top:6px;
+}
+
+.match-actions-right button{
+  width:28px;
+  height:28px;
+}
+
+  /* =========================
+  🔥 LIVE MODE MOBILE FIX
+  ========================= */
+
+  .live-grid{
+    grid-template-columns:1fr;
+  }
+
+  .live-player{
+    padding:14px;
+    font-size:15px;
+  }
+
+  .live-feed{
+    max-height:120px;
+  }
+
+  .live-header{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:6px;
+  }
+
+  .live-score{
+    font-size:14px;
+  }
+
+  .live-timer{
+    font-size:12px;
+  }
+
+.live-close{
+  position:absolute;
+  top:0;
+  right:0;
+}
+
+  .swipe-hint{
+  position:absolute;
+  top:60px;
+  left:50%;
+  transform:translateX(-50%);
+
+  background:rgba(0,0,0,0.7);
+  color:#ccc;
+
+  padding:6px 10px;
+  border-radius:8px;
+
+  font-size:12px;
+  white-space:nowrap;
+
+  opacity:0;
+  pointer-events:none;
+
+  transition:.4s;
+  z-index:1000;
+}
+
+.swipe-hint.show{
+  opacity:1;
+}
+
+  /* 🔥 FIX: gleiche Schriftgröße für beide Teams */
+.team-left .team-name,
+.team-right .team-name{
+  font-size:16px;
+}
+
+  .match{
+  width:100%;
+  max-width:100%;   /* 🔥 verhindert JEGLICHES Ausbrechen */
+  box-sizing:border-box;
+}
+
+  #matchForm{
+  margin-top:10px;
+  transition: all .25s ease;
+}
+
+#matchForm.hidden{
+  opacity:0;
+  transform:translateY(-6px);
+  pointer-events:none;
+}
+
+  #topForm{
+  min-width:92px;
+}
+
+  .live-hero{
+  width:100%;
+  height:90px;
+
+  border-radius:12px;
+
+  margin-bottom:10px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(0,0,0,0.2),
+      rgba(0,0,0,0.6)
+    ),
+    url("./img/matchtracker_banner.png") center/cover no-repeat;
+
+  box-shadow:0 10px 30px rgba(0,0,0,0.6);
+
+  opacity:0.9;
+}
+
+  .live-score-big{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:10px;
+
+  padding:10px 14px;
+  margin-bottom:10px;
+
+  border-radius:12px;
+
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.06);
+
+  box-shadow:0 10px 25px rgba(0,0,0,0.6);
+
+  font-weight:600;
+}
+
+.live-score-big .team{
+  flex:1;
+
+  font-size:14px;
+  opacity:.9;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.live-score-big .score{
+  font-size:26px;
+  font-weight:700;
+
+  letter-spacing:1px;
+
+  min-width:80px;
+  text-align:center;
+}
+
+  /* =========================
+🔥 LIVE MODE REWORK FINAL
+========================= */
+
+.live-body{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.live-feed{
+  background:#101010;
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:12px;
+  padding:12px;
+  max-height:220px;
+  overflow:auto;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  font-size:14px;
+}
+
+/* 🔥 NEUESTES EVENT */
+.live-feed-item:first-child{
+  background:rgba(58,124,255,0.2);
+  border:1px solid rgba(58,124,255,0.4);
+}
+
+/* 🔥 BUTTON BLOCK */
+.live-events{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.live-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+
+/* 🔥 BUTTONS DEZENT */
+.btn-live{
+  height:42px;
+  border-radius:10px;
+  background:rgba(255,255,255,0.05);
+  color:#bbb;
+  border:1px solid rgba(255,255,255,0.08);
+  font-size:13px;
+  font-weight:500;
+  transition:.15s;
+}
+
+.btn-live:hover{
+  background:#222;
+  color:#fff;
+}
+
+/* 🔥 NUR EDGE COLOR */
+.btn-live.goal{border-left:3px solid #2f9e44;}
+.btn-live.against{border-left:3px solid #c92a2a;}
+.btn-live.yellow{border-left:3px solid #d4a017;}
+.btn-live.red{border-left:3px solid #ff4d4d;}
+
+.live-control{
+  display:flex;
+  justify-content:center;
+  margin-top:6px;
+}
+
+.live-score-big{
+  font-size:18px;
+  padding:10px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.06);
+}
+
+.live-timer{
+  font-size:14px;
+  letter-spacing:1px;
+}
+
+  .live-feed{
+  order: -1;
+}
+
+.live-events{
+  opacity: 0.9;
+}
+
+.live-feed{
+  min-height:140px;
+}
+
+}
+
+@media (min-width: 1024px){
+
+  #liveMode{
+    padding:14px 18px;
+    overflow:hidden;
+  }
+
+  .live-score-big{
+    max-width:980px;
+    margin:0 auto 12px auto;
+    padding:10px 14px;
+  }
+
+  .live-score-big .team{
+    font-size:16px;
+  }
+
+  .live-score-big .score{
+    font-size:28px;
+    min-width:88px;
+  }
+
+  .live-header{
+    max-width:980px;
+    margin:0 auto 12px auto;
+    padding:12px 14px;
+  }
+
+  .live-body{
+    max-width:980px;
+    width:100%;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:minmax(0, 1.35fr) 280px;
+    gap:14px;
+    align-items:start;
+    overflow:hidden;
+  }
+
+  .live-feed{
+    grid-column:1;
+    order:0;
+    min-height:260px;
+    max-height:360px;
+    padding:12px;
+    font-size:14px;
+  }
+
+  .live-feed-item{
+    padding:8px 10px;
+    font-size:14px;
+  }
+
+  .live-events{
+    grid-column:2;
+    order:0;
+    width:auto;
+    opacity:1;
+  }
+
+  .live-row{
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+
+  .btn-live{
+    min-height:48px;
+    font-size:14px;
+    justify-content:flex-start;
+    padding:0 14px;
+  }
+
+  .live-control{
+    grid-column:2;
+    width:auto;
+    margin-top:8px;
+    justify-content:stretch;
+    align-self:start;
+  }
+
+  #liveToggleBtn{
+    width:100%;
+    min-height:48px;
+    justify-content:center;
+    font-size:16px;
+  }
+
+  .live-header-actions button{
+    height:40px;
+    min-width:52px;
+  }
+
+  .live-hero{
+    height:88px;
+    max-width:980px;
+    margin:0 auto 12px auto;
+  }
+}
+    
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+
+<div class="topbar-left">
+<div class="logo">
+  <img src="img/icon.png" alt="MT Logo">
+</div>
+</div>
+
+    <div class="topbar-right">
+      <button id="installBtn" class="secondary" style="display:none" aria-label="App installieren" data-tooltip="App installieren">
+  📲 App
+</button>
+      <span id="topTeam">–</span>
+      <span id="topMatches" class="top-stat blue"><span class="stat-label">Sp</span><span class="stat-value">0</span></span>
+      <span id="topWins" class="top-stat gold"><span class="stat-label">S</span><span class="stat-value">0</span></span>
+      <span id="topDraws" class="top-stat neutral"><span class="stat-label">U</span><span class="stat-value">0</span></span>
+      <span id="topLosses" class="top-stat red"><span class="stat-label">N</span><span class="stat-value">0</span></span>
+      <span id="topGoals" class="top-stat green"><span class="stat-label">T</span><span class="stat-value">0</span></span>
+      <span id="topAgainst" class="top-stat net"><span class="stat-label">GT</span><span class="stat-value">0</span></span>
+      <span id="topDiff" class="top-stat blue"><span class="stat-label">TD</span><span class="stat-value">0</span></span>
+      <span id="topPoints" class="top-stat star"><span class="stat-label">Pkt</span><span class="stat-value">0</span></span>
+      <span id="topForm" class="top-form"><span class="top-form-label">Form</span><span class="top-form-track"></span></span>
+    </div>
+
+</div>
+</div>
+
+<div class="hero-wrap">
+  <div class="hero-banner-img"></div>
+</div>
+
+<div class="app">
+
+<div class="sidebar">
+
+<div class="sidebar-section">
+<div class="section-banner teams"></div>
+<button class="secondary add-btn" onclick="openModal('Neues Team','Teamname eingeben', addTeam)" aria-label="Neues Team anlegen" data-tooltip="Neues Team anlegen">
+<span>➕</span> Team erstellen
+</button>
+<div id="teamList"></div>
+</div>
+
+<div class="sidebar-section">
+<div class="section-banner players"></div>
+<button id="addPlayerBtn" class="secondary add-btn" onclick="openPlayerModal()" aria-label="Spieler zum Team hinzufügen" data-tooltip="Spieler zum Team hinzufügen">
+<span>➕</span> Spieler hinzufügen
+</button>
+<div id="playerList" style="margin-top:10px"></div>
+</div>
+
+</div>
+
+<div class="content-wrap">
+  <div class="main">
+
+  <div id="saveStatus" style="font-size:12px;opacity:.7;margin-top:-10px;margin-bottom:10px"></div>
+  <div id="nextGameCard"></div>
+
+<div class="match-actions">
+
+</div>
+</div>
+
+<div class="panel">
+
+<div class="section-banner spiele"></div>   <!-- 🔥 HIERHIN -->
+
+<div id="teamHeader" class="team-header">–</div>
+
+<div id="createMatchBox" class="panel">
+
+  <button class="secondary add-btn" onclick="toggleMatchForm()" aria-label="Spielformular öffnen" data-tooltip="Spielformular öffnen">
+    <span>➕</span> Spiel erstellen
+  </button>
+
+  <div id="matchForm" class="hidden">
+
+    <div class="match-form-row">
+      <input id="date" type="date">
+      <input id="time" type="time" class="time-input">
+      <select id="homeAway">
+        <option value="home">🏠 Heim</option>
+        <option value="away">🚗 Auswärts</option>
+      </select>
+    </div>
+
+    <div class="match-form-row">
+      <input id="opponent" placeholder="Gegner">
+      <input id="location" placeholder="Spielort">
+    </div>
+
+    <div class="match-form-row">
+      <select id="mode">
+        <option value="7">7 vs 7</option>
+        <option value="11">11 vs 11</option>
+      </select>
+
+      <button id="createBtn" class="primary" onclick="createMatch()" aria-label="Spiel anlegen" data-tooltip="Spiel anlegen">
+        ✔ Erstellen
+      </button>
+    </div>
+
+  </div>
+
+</div>
+
+  <div id="matches" class="matches-grid"></div>
+</div>
+
+<div class="panel">
+  <h2>Top Scorer</h2>
+  <div id="scorerRanking"></div>
+</div>
+
+<div class="panel" id="toolsPanel" style="opacity:.7">
+  <h3 style="font-size:13px;margin-bottom:8px">Tools</h3>
+
+  <button onclick="exportBackup()" aria-label="Backup herunterladen" data-tooltip="Backup herunterladen">💾 Backup</button>
+  <button class="secondary" onclick="document.getElementById('importFile').click()" aria-label="Backup laden" data-tooltip="Backup laden">📂 Laden</button>
+  <button class="secondary" onclick="forceSyncToServer()" aria-label="Zum Server synchronisieren" data-tooltip="Zum Server synchronisieren">☁️ Sync</button>
+
+  <input type="file" id="importFile" hidden>
+</div>
+
+</div> <!-- main -->
+</div> <!-- content-wrap -->
+</div> <!-- app 🔥 DAS HAT GEFEHLT -->
+
+<script>
+
+/* =========================
+DATA
+========================= */
+
+const REMOTE_API = "https://rare-kindness-production.up.railway.app"
+const API = (() => {
+  const isLocalServer =
+    window.location.protocol.startsWith("http") &&
+    ["localhost", "127.0.0.1"].includes(window.location.hostname)
+
+  const isSameOriginDeployment =
+    window.location.protocol.startsWith("http") &&
+    !window.location.hostname.endsWith(".github.io")
+
+  if(isLocalServer || isSameOriginDeployment){
+    return window.location.origin
+  }
+
+  return REMOTE_API
+})()
+
+/* 🔥 MODAL SYSTEM */
+let modalCallback = null
+  
+function openModal(title, placeholder, callback, isPassword = false){
+
+// 🔥 IMMER RESET
+modalCallback = null
+
+let modal = document.getElementById("modal")
+let box = modal.querySelector(".modal-box")
+
+// 🔥 STANDARD LAYOUT IMMER NEU
+box.innerHTML = `
+<div class="modal-header">
+  <div id="modalTitle" class="modal-title"></div>
+</div>
+
+<!-- 🔥 HARDCORE FIX gegen Passwort-Manager -->
+<input type="text" name="fakeuser" autocomplete="username"
+  style="position:absolute; opacity:0; pointer-events:none;">
+<input type="password" name="fakepass" autocomplete="current-password"
+  style="position:absolute; opacity:0; pointer-events:none;">
+
+<!-- 🔐 ECHTES INPUT -->
+<input id="modalInput"
+  type="text"
+  placeholder=""
+  autocomplete="off"
+  name="nope"
+  data-lpignore="true"
+  data-1p-ignore="true"
+  data-bwignore="true"
+  data-form-type="other"
+  spellcheck="false"
+>
+
+<div class="modal-actions">
+  <button class="primary" onclick="confirmModal()">OK</button>
+  <button class="danger-outline" onclick="closeModal()">Abbrechen</button>
+</div>
+`
+
+// Titel + Input setzen
+document.getElementById("modalTitle").innerText = title
+
+let input = document.getElementById("modalInput")
+input.value = ""
+input.placeholder = placeholder || ""
+  
+input.setAttribute("autocomplete","new-password")
+input.setAttribute("spellcheck","false")
+input.setAttribute("name","no-autofill")
+input.setAttribute("data-form-type","other")
+
+setTimeout(()=>{
+  input.focus()
+},50)
+  
+if(isPassword){
+  input.type = "password"
+}
+
+// 🔥 ENTER = BESTÄTIGEN
+input.addEventListener("keydown", function(e){
+if(e.key === "Enter"){
+confirmModal()
+}
+})
+
+// Callback setzen
+modalCallback = callback
+
+modal.classList.remove("hidden")
+}
+
+function closeModal(){
+modalCallback = null
+document.getElementById("modal").classList.add("hidden")
+}
+
+function confirmModal(){
+
+let value = document.getElementById("modalInput").value
+
+if(!modalCallback){
+closeModal()
+return
+}
+
+let cb = modalCallback
+modalCallback = null
+
+// 🔥 erst schließen
+closeModal()
+
+// 🔥 dann callback (wichtig!)
+setTimeout(() => {
+cb(value)
+}, 50)
+
+}
+
+function confirmEditAction(callback){
+
+  let modal = document.getElementById("modal")
+  let box = modal.querySelector(".modal-box")
+
+  box.innerHTML = `
+    <h3>Änderung bestätigen</h3>
+
+    <input id="modalInput" placeholder="BEARBEITEN eingeben" style="grid-column:1/-1">
+
+    <button class="primary" onclick="confirmEditModal()">Bestätigen</button>
+    <button onclick="closeModal()">Abbrechen</button>
+  `
+
+  modalCallback = callback
+
+  modal.classList.remove("hidden")
+
+  setTimeout(()=>{
+    document.getElementById("modalInput").focus()
+  },50)
+}
+
+  function confirmDeleteAction(callback){
+
+  let modal = document.getElementById("modal")
+  let box = modal.querySelector(".modal-box")
+
+  box.innerHTML = `
+    <div class="modal-header">
+      <div class="modal-title">⚠️ Löschen bestätigen</div>
+    </div>
+
+    <div style="font-size:13px;opacity:.8">
+      Zum Löschen bitte <b>LÖSCHEN</b> eingeben
+    </div>
+
+    <input id="modalInput" placeholder="LÖSCHEN eingeben">
+
+    <div class="modal-actions">
+      <button class="danger-outline" onclick="confirmDeleteModal()">Löschen</button>
+      <button onclick="closeModal()">Abbrechen</button>
+    </div>
+  `
+
+  modalCallback = callback
+
+  modal.classList.remove("hidden")
+
+  setTimeout(()=>{
+    document.getElementById("modalInput").focus()
+  },50)
+}
+
+function confirmDeleteModal(){
+
+  let value = document.getElementById("modalInput").value
+
+  if(value.trim().toUpperCase() !== "LÖSCHEN"){
+    showToast("Falsche Eingabe","info")
+    return
+  }
+
+  let cb = modalCallback
+  modalCallback = null
+
+  closeModal()
+
+  setTimeout(()=>{
+    cb()
+  },50)
+}
+
+function confirmEditModal(){
+
+  let value = document.getElementById("modalInput").value
+
+  if(value.trim().toUpperCase() !== "BEARBEITEN"){
+    showToast("Falsche Eingabe","info")
+    return
+  }
+
+  let cb = modalCallback
+  modalCallback = null
+
+  closeModal()
+
+  setTimeout(()=>{
+    cb()
+  },50)
+}
+
+/* ========================= */
+
+let data = {
+teams:[],
+players:[],
+matches:[],
+activeTeam:null
+}
+
+  let lastGoalEventId = null
+
+let teams = []
+let players = []
+
+function getVisiblePlayers(){
+  return isUnlocked ? players : []
+}
+let matches = []
+let activeTeam = null
+  let isUnlocked = false
+  let liveStartTime = null
+let livePausedAt = null
+let livePausedTotal = 0
+let liveMatchId = null
+  let isViewerMode = false
+let liveAccessGranted = false
+  let liveTimerInterval = null
+  let touchStartX = 0
+let touchEndX = 0
+let pendingLiveMatchId = null
+
+const POSITION_ORDER = ["TW","IV","LV","RV","ZM","LM","RM","ST"]
+
+function getPositionRank(pos){
+  const index = POSITION_ORDER.indexOf(pos)
+  return index === -1 ? 99 : index
+}
+
+function generateId(prefix = "id"){
+  return prefix + "_" + Date.now() + "_" + Math.random().toString(36).slice(2,8)
+}
+
+function createMatchEvent(type, extra = {}){
+  return {
+    id: generateId("event"),
+    type,
+    time: Date.now(),
+    ...extra
+  }
+}
+
+function ensureMatchDefaults(match){
+  if(!match) return
+
+  if(!Array.isArray(match.squad)) match.squad = []
+  if(!Array.isArray(match.lineup)) match.lineup = []
+  if(!Array.isArray(match.bench)) match.bench = []
+  if(!Array.isArray(match.events)) match.events = []
+  if(typeof match.open !== "boolean") match.open = false
+  if(match.twOverride === undefined) match.twOverride = null
+
+  match.events = match.events.map(event => ({
+    ...event,
+    id: event?.id || generateId("event"),
+    time: event?.time || Date.now()
+  }))
+
+  ensureLiveState(match)
+}
+
+function normalizeState(serverData){
+  const normalized = serverData && typeof serverData === "object" ? serverData : {}
+
+  normalized.teams = Array.isArray(normalized.teams) ? normalized.teams : []
+  normalized.players = Array.isArray(normalized.players) ? normalized.players : []
+  normalized.matches = Array.isArray(normalized.matches) ? normalized.matches : []
+
+  normalized.matches.forEach(ensureMatchDefaults)
+
+  return normalized
+}
+
+function getSelectedTeam(){
+  const savedTeam = localStorage.getItem("activeTeam")
+
+  if(savedTeam && teams.includes(savedTeam)){
+    return savedTeam
+  }
+
+  return teams[0] || null
+}
+
+function applyLoadedData(sourceData){
+  data = normalizeState(sourceData)
+
+  teams = data.teams
+  players = data.players
+  matches = data.matches
+
+  matches.forEach(match => {
+    match.open = false
+  })
+
+  activeTeam = getSelectedTeam()
+  isUnlocked = false
+
+  renderAll()
+  maybeOpenPendingLiveMatch()
+}
+
+function buildPlayerSelectionModal(title, entries, onSelect){
+  const modal = document.getElementById("modal")
+  const box = modal.querySelector(".modal-box")
+
+  box.innerHTML = `
+    <div class="modal-header">
+      <div class="modal-title">${title}</div>
+    </div>
+  `
+
+  entries.forEach(entry => {
+    const btn = document.createElement("button")
+    btn.type = "button"
+    btn.className = "secondary"
+    btn.innerText = entry.label
+    btn.onclick = () => {
+      closeModal()
+      onSelect(entry.value)
+    }
+    box.appendChild(btn)
+  })
+
+  const cancel = document.createElement("button")
+  cancel.type = "button"
+  cancel.className = "danger-outline"
+  cancel.innerText = "Abbrechen"
+  cancel.onclick = closeModal
+  box.appendChild(cancel)
+
+  modal.classList.remove("hidden")
+}
+
+function openFormModal(title, fields, onSubmit, options = {}){
+  const modal = document.getElementById("modal")
+  const box = modal.querySelector(".modal-box")
+  const submitLabel = options.submitLabel || "Speichern"
+  const cancelLabel = options.cancelLabel || "Abbrechen"
+
+  box.innerHTML = `
+    <div class="modal-header">
+      <div class="modal-title">${title}</div>
+    </div>
+  `
+
+  fields.forEach(field => {
+    let element
+
+    if(field.type === "select"){
+      element = document.createElement("select")
+      ;(field.options || []).forEach(option => {
+        const optionEl = document.createElement("option")
+        optionEl.value = option.value
+        optionEl.innerText = option.label
+        if(option.value === field.value){
+          optionEl.selected = true
+        }
+        element.appendChild(optionEl)
+      })
+    }else{
+      element = document.createElement("input")
+      element.type = field.type || "text"
+      element.value = field.value || ""
+      element.placeholder = field.placeholder || ""
+      if(field.maxLength){
+        element.maxLength = field.maxLength
+      }
+    }
+
+    element.id = field.id
+    box.appendChild(element)
+  })
+
+  const actions = document.createElement("div")
+  actions.className = "modal-actions"
+
+  const submit = document.createElement("button")
+  submit.type = "button"
+  submit.className = "primary"
+  submit.innerText = submitLabel
+  submit.onclick = () => {
+    const values = {}
+
+    fields.forEach(field => {
+      values[field.id] = document.getElementById(field.id)?.value ?? ""
+    })
+
+    closeModal()
+    onSubmit(values)
+  }
+
+  const cancel = document.createElement("button")
+  cancel.type = "button"
+  cancel.className = "danger-outline"
+  cancel.innerText = cancelLabel
+  cancel.onclick = closeModal
+
+  actions.appendChild(submit)
+  actions.appendChild(cancel)
+  box.appendChild(actions)
+
+  modal.classList.remove("hidden")
+
+  setTimeout(()=>{
+    const first = document.getElementById(fields[0]?.id)
+    first?.focus()
+  },50)
+}
+
+function confirmChoiceAction(title, message, confirmLabel, callback, cancelLabel = "Abbrechen"){
+  const modal = document.getElementById("modal")
+  const box = modal.querySelector(".modal-box")
+
+  box.innerHTML = `
+    <div class="modal-header">
+      <div class="modal-title">${title}</div>
+    </div>
+    <div style="font-size:13px;opacity:.85">${message}</div>
+    <div class="modal-actions">
+      <button id="choiceConfirmBtn" class="primary">${confirmLabel}</button>
+      <button id="choiceCancelBtn" class="danger-outline">${cancelLabel}</button>
+    </div>
+  `
+
+  document.getElementById("choiceConfirmBtn").onclick = () => {
+    closeModal()
+    callback()
+  }
+
+  document.getElementById("choiceCancelBtn").onclick = closeModal
+  modal.classList.remove("hidden")
+}
+
+function copyTextToClipboard(text, successMessage = "Kopiert"){
+  const fallbackCopy = () => {
+    const area = document.createElement("textarea")
+    area.value = text
+    area.setAttribute("readonly","readonly")
+    area.style.position = "fixed"
+    area.style.opacity = "0"
+    document.body.appendChild(area)
+    area.select()
+    document.execCommand("copy")
+    area.remove()
+  }
+
+  const onSuccess = () => showToast(successMessage,"info")
+  const onFailure = () => showToast("Kopieren fehlgeschlagen","info")
+
+  if(navigator.clipboard?.writeText){
+    navigator.clipboard.writeText(text).then(onSuccess).catch(() => {
+      try{
+        fallbackCopy()
+        onSuccess()
+      }catch{
+        onFailure()
+      }
+    })
+    return
+  }
+
+  try{
+    fallbackCopy()
+    onSuccess()
+  }catch{
+    onFailure()
+  }
+}
+
+function getTooltipAttrs(text){
+  const safe = String(text).replace(/"/g,"&quot;")
+  return `aria-label="${safe}" data-tooltip="${safe}"`
+}
+
+
+function maybeOpenPendingLiveMatch(){
+  if(!pendingLiveMatchId) return
+  if(!matches.some(match => match.id === pendingLiveMatchId)) return
+
+  const nextLiveId = pendingLiveMatchId
+  pendingLiveMatchId = null
+
+  openLiveMode(nextLiveId)
+
+  if(isViewerMode){
+    startLiveTimer()
+    startLiveAutoUpdate()
+  }
+}
+
+let tooltipEl = null
+let activeTooltipTarget = null
+
+function ensureTooltipElement(){
+  if(tooltipEl) return tooltipEl
+
+  tooltipEl = document.createElement("div")
+  tooltipEl.className = "tooltip-bubble"
+  document.body.appendChild(tooltipEl)
+
+  return tooltipEl
+}
+
+function positionTooltip(target){
+  if(!tooltipEl || !target) return
+
+  const gap = 10
+  const viewportPadding = 12
+  const rect = target.getBoundingClientRect()
+  const tooltipRect = tooltipEl.getBoundingClientRect()
+
+  let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2)
+  left = Math.max(viewportPadding, Math.min(left, window.innerWidth - tooltipRect.width - viewportPadding))
+
+  let top = rect.top - tooltipRect.height - gap
+
+  if(top < viewportPadding){
+    top = rect.bottom + gap
+  }
+
+  if(top + tooltipRect.height > window.innerHeight - viewportPadding){
+    top = Math.max(viewportPadding, window.innerHeight - tooltipRect.height - viewportPadding)
+  }
+
+  tooltipEl.style.left = left + "px"
+  tooltipEl.style.top = top + "px"
+}
+
+function showTooltip(target){
+  const text = target?.getAttribute("data-tooltip")
+  if(!text) return
+
+  activeTooltipTarget = target
+  const el = ensureTooltipElement()
+  el.textContent = text
+  el.classList.add("show")
+  positionTooltip(target)
+}
+
+function hideTooltip(target){
+  if(target && activeTooltipTarget && target !== activeTooltipTarget) return
+  if(!tooltipEl) return
+
+  tooltipEl.classList.remove("show")
+  activeTooltipTarget = null
+}
+
+function forceHideTooltip(){
+  if(!tooltipEl) return
+  tooltipEl.classList.remove("show")
+  activeTooltipTarget = null
+}
+
+function bindTooltipEvents(){
+  document.addEventListener("mouseover", event => {
+    const target = event.target.closest("[data-tooltip]")
+    if(!target) return
+    showTooltip(target)
+  })
+
+  document.addEventListener("mouseout", event => {
+    const target = event.target.closest("[data-tooltip]")
+    if(!target) return
+    if(target.contains(event.relatedTarget)) return
+    hideTooltip(target)
+  })
+
+  document.addEventListener("focusin", event => {
+    const target = event.target.closest("[data-tooltip]")
+    if(!target) return
+    showTooltip(target)
+  })
+
+  document.addEventListener("focusout", event => {
+    const target = event.target.closest("[data-tooltip]")
+    if(!target) return
+    hideTooltip(target)
+  })
+
+  window.addEventListener("scroll", () => {
+    if(activeTooltipTarget){
+      positionTooltip(activeTooltipTarget)
+    }
+  }, true)
+
+  window.addEventListener("resize", () => {
+    if(activeTooltipTarget){
+      positionTooltip(activeTooltipTarget)
+    }
+  })
+}
+
+function loadFromServer(){
+
+  fetch(API + "/data")
+    .then(res => res.json())
+    .then(serverData => {
+      applyLoadedData(serverData)
+    })
+.catch(() => {
+
+  console.log("Server nicht erreichbar → lade lokal")
+
+  let local = localStorage.getItem("matchTrackerData")
+
+  if(local){
+    applyLoadedData(JSON.parse(local))
+  }
+
+})
+  }
+
+function save(){
+
+  const status = document.getElementById("saveStatus")
+  if(status) status.innerText = "Speichert…"
+
+  data.teams = teams
+  data.players = players
+  matches.forEach(ensureMatchDefaults)
+
+  data.matches = matches
+  data.activeTeam = activeTeam
+
+  // 🔥 LOCAL SPEICHERN
+  localStorage.setItem("matchTrackerData", JSON.stringify(data))
+
+  // 🔥 SERVER SPEICHERN (optional)
+  fetch(API + "/save", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  })
+.then(res => res.json())
+.then(res => {
+
+  if(res.error){
+    showToast(res.error,"info")
+
+    // 🔥 WICHTIG → Daten neu laden
+    loadFromServer()
+
+    return
+  }
+
+  if(status){
+    status.innerText = "✓ gespeichert"
+    setTimeout(()=> status.innerText = "", 1500)
+  }
+})
+  .catch(() => {
+    if(status) status.innerText = "⚠️ nur lokal gespeichert"
+  })
+}
+
+function forceSyncToServer(){
+  save()
+  showToast("Server wurde überschrieben","info")
+}
+
+function cell(p){
+return p
+? `<div class='pitch-player pos-${p.pos}'><span class="pos">${p.pos}</span>${p.name}</div>`
+: `<div class='pitch-player' style='opacity:.25'>·</div>`
+}
+
+  function showToast(text,type="info"){
+
+let t = document.getElementById("toast")
+
+t.className = "toast " + type
+t.innerText = text
+
+// trigger animation
+setTimeout(()=> t.classList.add("show"),10)
+
+setTimeout(()=>{
+t.classList.remove("show")
+},2000)
+
+}
+
+function showGoalOverlay(text = "⚽ TOR"){
+
+  // 🔥 IMMER neu erstellen (clean)
+  let el = document.createElement("div")
+  el.className = "goal-overlay"
+
+  el.innerText = text
+
+  document.body.appendChild(el)
+
+  // 🔥 Reflow erzwingen (WICHTIG!)
+  el.offsetHeight
+
+  el.classList.add("show")
+
+  // 🔥 entfernen nach Animation
+  setTimeout(()=>{
+    el.remove()
+  },2600)
+
+}
+
+function showLiveStatusOverlay(text){
+  let el = document.createElement("div")
+  el.className = "goal-overlay"
+  el.innerText = text
+
+  document.body.appendChild(el)
+  el.offsetHeight
+  el.classList.add("show")
+
+  setTimeout(()=>{
+    el.remove()
+  },2200)
+}
+
+/* =========================
+BACKUP
+========================= */
+
+function exportBackup(){
+
+const blob = new Blob(
+[JSON.stringify(data,null,2)],
+{type:"application/json"}
+)
+
+const a = document.createElement("a")
+
+a.href = URL.createObjectURL(blob)
+a.download = "match_tracker_backup.json"
+
+a.click()
+
+}
+
+document.getElementById("importFile").addEventListener("change",function(e){
+
+const file = e.target.files[0]
+if(!file) return
+
+const reader = new FileReader()
+
+reader.onload = function(){
+
+try{
+
+data = JSON.parse(reader.result)
+
+teams = data.teams
+players = data.players
+matches = data.matches
+activeTeam = data.activeTeam
+  
+save()
+renderAll()   // sofort anzeigen
+
+}catch{
+
+showToast("Ungültige Backup Datei","info")
+
+}
+
+}
+
+reader.readAsText(file)
+
+})
+
+/* =========================
+TEAMS
+========================= */
+
+function addTeam(name){
+
+if(!name) return
+
+openFormModal("Team erstellen",[
+  {
+    id:"newTeamName",
+    placeholder:"Teamname",
+    value:name.trim()
+  },
+  {
+    id:"newTeamPassword",
+    type:"password",
+    placeholder:"Passwort optional"
+  }
+],(values)=>{
+
+  const teamName = values.newTeamName.trim()
+  const pw = values.newTeamPassword.trim()
+
+  if(!teamName) return
+
+  teams.push(teamName)
+
+  if(pw !== ""){
+    if(!data.teamPasswords) data.teamPasswords = {}
+    data.teamPasswords[teamName] = pw
+  }
+
+  activeTeam = teamName
+  isUnlocked = true
+
+  save()
+  renderAll()
+},"Weiter")
+
+}
+
+function openPlayerModal(){
+
+if(!activeTeam){
+showToast("Kein Team ausgewählt","info")
+return
+}
+
+if(!hasAccess(activeTeam)){
+showToast("🔒 Kein Zugriff","info")
+return
+}
+
+openFormModal("Spieler hinzufügen",[
+{
+  id:"playerNameInput",
+  placeholder:"Name eingeben"
+},
+{
+  id:"playerPositionInput",
+  type:"select",
+  value:"ZM",
+  options: POSITION_ORDER.map(pos => ({ value:pos, label:pos }))
+}
+],(values)=>{
+
+const name = values.playerNameInput.trim()
+const pos = values.playerPositionInput.trim()
+
+if(!name || !pos) return
+
+players.push({
+team:activeTeam,
+name:name,
+pos:pos
+})
+
+save()
+renderAll()
+},"Hinzufügen")
+
+}
+
+let accessCache = {}
+
+function hasAccess(team){
+  return accessCache[team] === true
+}
+
+  function isAdmin(){
+  return activeTeam === "SV Testhausen" && accessCache["SV Testhausen"]
+}
+
+function unlockTeam(){
+
+  if(!activeTeam){
+    showToast("⚠️ Kein Team ausgewählt","info")
+    return
+  }
+
+  openModal("🔐 Passwort für " + activeTeam, "Passwort eingeben", (pw)=>{
+
+    if(!pw) return
+
+    fetch(API + "/check-team-access", {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({
+        team: activeTeam,
+        password: pw
+      })
+    })
+    .then(res=>res.json())
+    .then(data=>{
+
+      if(!data || data.ok !== true){
+        showToast("❌ Falsches Passwort","info")
+        return
+      }
+
+      // 🔥 EINZIGE WAHRHEIT
+      accessCache[activeTeam] = true
+
+      // 🔥 optional (für UI)
+      isUnlocked = true
+
+      save()
+      renderAll()
+
+      showToast("🔓 Freigeschaltet","info")
+
+    })
+
+  }, true)
+}
+
+function unlockTeamFromList(team){
+
+  activeTeam = team
+
+  openModal("🔐 Passwort für " + team, "Passwort eingeben", (pw)=>{
+
+    if(!pw) return
+
+    fetch(API + "/check-team-access", {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({
+        team:team,
+        password:pw
+      })
+    })
+    .then(res=>res.json())
+    .then(data=>{
+
+      if(!data || data.ok !== true){
+        showToast("❌ Falsches Passwort","info")
+        return
+      }
+
+      // 🔥 EINZIGE WAHRHEIT
+      accessCache[team] = true
+
+      // optional UI
+      isUnlocked = true
+
+      save()
+      renderAll()
+
+      showToast("🔓 Freigeschaltet","info")
+
+    })
+
+  }, true)
+
+}
+  
+function ensureTeamAccessOnLoad(){
+
+  if(!activeTeam) return
+  if(accessCache[activeTeam]) return
+
+  openModal("🔐 Passwort für " + activeTeam, "Passwort eingeben", (pw)=>{
+
+if(!pw){
+  activeTeam = null
+  isUnlocked = false
+  renderAll()
+  return
+}
+
+    fetch(API + "/check-team-access", {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({
+        team:activeTeam,
+        password:pw
+      })
+    })
+    .then(res=>res.json())
+    .then(data=>{
+
+      if(!data.ok){
+        showToast("Kein Zugriff","info")
+        activeTeam = null
+        renderAll()
+        return
+      }
+
+      accessCache[activeTeam] = true
+      renderAll()
+
+    })
+  })
+}
+
+function selectTeam(name){
+
+  activeTeam = name
+
+  // 🔥 SPEICHERN
+  localStorage.setItem("activeTeam", name)
+
+  // 🔓 schon freigeschaltet → direkt rein
+  if(accessCache[name]){
+    isUnlocked = true
+    save()
+    renderAll()
+    return
+  }
+
+  // 👀 Besucher-Modus
+  isUnlocked = false
+  renderAll()
+}
+
+function deleteTeam(name){
+
+  // 🔐 Zugriff prüfen
+  if(!hasAccess(activeTeam) && !isAdmin()){
+    showToast("🔒 Kein Zugriff","info")
+    return
+  }
+
+  confirmDeleteAction(()=>{
+
+    teams = teams.filter(t=>t!==name)
+    players = players.filter(p=>p.team!==name)
+    matches = matches.filter(m=>m.team!==name)
+
+    if(data.teamPasswords){
+      delete data.teamPasswords[name]
+    }
+
+    // 🔥 Wenn aktuelles Team gelöscht wurde
+    if(activeTeam === name){
+      activeTeam = teams[0] || null
+    }
+
+    save()
+    renderAll()
+
+  })
+}
+
+function editTeamName(oldName){
+
+  openModal("Team umbenennen","Neuer Name",(newName)=>{
+
+    if(!newName || newName.trim()==="") return
+
+    newName = newName.trim()
+
+    teams = teams.map(t => t === oldName ? newName : t)
+
+    if(activeTeam === oldName){
+      activeTeam = newName
+    }
+
+    players.forEach(p=>{
+      if(p.team === oldName) p.team = newName
+    })
+
+    matches.forEach(m=>{
+      if(m.team === oldName) m.team = newName
+    })
+
+    save()
+    renderAll()
+
+  })
+
+}  
+
+function renderTopbar(){
+
+let teamName = !isUnlocked ? "👀 Besucher" : (activeTeam || "Kein Team")
+
+document.getElementById("topTeam").innerText = teamName
+
+let big = document.getElementById("topTeamBig")
+if(big){
+  big.innerText = teamName
+}
+
+let matchCount = matches
+.filter(m=>m.team===activeTeam && m.events.length > 0)
+.length
+
+let completedMatches = matches
+  .filter(m => m.team===activeTeam && m.events.length > 0)
+  .sort((a,b)=>{
+    let dateA = new Date(a.date + " " + (a.time || "00:00"))
+    let dateB = new Date(b.date + " " + (b.time || "00:00"))
+    return dateA - dateB
+  })
+
+let wins = 0
+let draws = 0
+let losses = 0
+
+let goals = 0
+let points = 0
+let againstTotal = 0
+let goalDiff = 0
+
+completedMatches.forEach(m=>{
+
+let g = m.events.filter(e=>e.type==="goal").length
+let a = m.events.filter(e=>e.type==="goalAgainst").length
+
+goals += g
+againstTotal += a
+goalDiff += (g - a)
+
+if(g > a){
+  wins += 1
+  points += 3
+}
+else if(g === a){
+  draws += 1
+  points += 1
+}
+else{
+  losses += 1
+}
+
+})
+
+document.getElementById("topWins").innerHTML =
+`<span class="stat-label">S</span><span class="stat-value">${wins}</span>`
+
+document.getElementById("topMatches").innerHTML =
+`<span class="stat-label">Sp</span><span class="stat-value">${matchCount}</span>`
+
+document.getElementById("topDraws").innerHTML =
+`<span class="stat-label">U</span><span class="stat-value">${draws}</span>`
+
+document.getElementById("topLosses").innerHTML =
+`<span class="stat-label">N</span><span class="stat-value">${losses}</span>`
+
+document.getElementById("topPoints").innerHTML =
+`<span class="stat-label">Pkt</span><span class="stat-value">${points}</span>`
+
+document.getElementById("topGoals").innerHTML =
+`<span class="stat-label">T</span><span class="stat-value">${goals}</span>`
+
+document.getElementById("topAgainst").innerHTML =
+`<span class="stat-label">GT</span><span class="stat-value">${againstTotal}</span>`
+
+document.getElementById("topDiff").innerHTML =
+`<span class="stat-label">TD</span><span class="stat-value">${goalDiff > 0 ? "+" : ""}${goalDiff}</span>`
+
+let formTrack = document.querySelector("#topForm .top-form-track")
+
+if(formTrack){
+  let recentForm = completedMatches
+    .slice(-5)
+    .map(m=>{
+      let g = m.events.filter(e=>e.type==="goal").length
+      let a = m.events.filter(e=>e.type==="goalAgainst").length
+
+      if(g > a) return {cls:"win", label:"S"}
+      if(g === a) return {cls:"draw", label:"U"}
+      return {cls:"loss", label:"N"}
+    })
+
+  while(recentForm.length < 5){
+    recentForm.unshift({cls:"empty", label:"·"})
+  }
+
+  formTrack.innerHTML = recentForm
+    .map(item => `<span class="form-dot ${item.cls}">${item.label}</span>`)
+    .join("")
+}
+
+}
+  
+function renderTeams(){
+
+let html=""
+
+if(teams.length === 0){
+  document.getElementById("teamList").innerHTML = `
+    <div class="empty-state">
+      <strong>Noch kein Team vorhanden</strong>
+      Erstelle zuerst ein Team. Danach kannst du dich dort anmelden, Spieler anlegen und Spiele erfassen.
+    </div>
+  `
+  return
+}
+
+teams.forEach(t=>{
+
+let cls = t===activeTeam ? "team-chip active" : "team-chip"
+
+html+=`
+<div class="team-row">
+
+  <div class="${cls} team-chip-full"
+       onclick='selectTeam(${JSON.stringify(t)})'>
+
+<span class="team-name">
+  ${t}
+</span>
+
+<div class="team-actions">
+
+${
+  accessCache[t] || isAdmin()
+    ? `
+      <button class="team-login active">
+        ✓ Eingeloggt
+      </button>
+
+      <button
+        ${getTooltipAttrs("Teamname ändern")}
+        onclick='event.stopPropagation(); editTeamName(${JSON.stringify(t)})'>
+        ✏️
+      </button>
+
+      <button
+        ${getTooltipAttrs("Team löschen")}
+        onclick='event.stopPropagation(); deleteTeam(${JSON.stringify(t)})'>
+        🗑
+      </button>
+    `
+    : `
+      <button
+        class="team-login"
+        ${getTooltipAttrs("Bei diesem Team einloggen")}
+        onclick='event.stopPropagation(); unlockTeamFromList(${JSON.stringify(t)})'>
+        🔐 Einloggen
+      </button>
+    `
+  }
+
+</div>
+
+  </div>
+
+</div>
+`
+
+})
+
+document.getElementById("teamList").innerHTML=html
+
+}
+
+/* =========================
+PLAYERS
+========================= */
+
+function deletePlayer(name){
+
+if(!hasAccess(activeTeam)){
+  showToast("🔒 Kein Zugriff","info")
+  return
+}
+
+confirmDeleteAction(()=>{
+
+players = players.filter(p=>p.name!==name)
+
+save()
+renderAll()
+
+})
+
+}
+
+function editPlayer(name){
+
+if(!hasAccess(activeTeam)){
+  showToast("🔒 Kein Zugriff","info")
+  return
+}
+
+let p = players.find(x=>x.name===name)
+if(!p) return
+
+let oldName = p.name
+
+openFormModal("Spieler bearbeiten",[
+{
+  id:"editPlayerName",
+  placeholder:"Name eingeben",
+  value:p.name
+},
+{
+  id:"editPlayerPosition",
+  type:"select",
+  value:p.pos,
+  options: POSITION_ORDER.map(pos => ({ value:pos, label:pos }))
+}
+],(values)=>{
+
+const newName = values.editPlayerName.trim()
+const newPos = values.editPlayerPosition.trim()
+
+if(!newName || !newPos) return
+
+p.name = newName
+p.pos = newPos
+
+matches.forEach(match=>{
+match.lineup = match.lineup.map(n => n===oldName ? newName : n)
+match.bench = match.bench.map(n => n===oldName ? newName : n)
+match.squad = match.squad.map(n => n===oldName ? newName : n)
+
+match.events.forEach(ev=>{
+if(ev.player===oldName) ev.player = newName
+if(ev.in===oldName) ev.in = newName
+})
+})
+
+save()
+renderAll()
+
+},"Speichern")
+
+}
+
+function renderPlayers(){
+
+let locked = !isUnlocked
+
+let html=""
+let teamPlayers = players
+.filter(p=>p.team===activeTeam)
+.sort((a, b) => {
+  return getPositionRank(a.pos) - getPositionRank(b.pos)
+})
+
+if(!activeTeam){
+  document.getElementById("playerList").innerHTML = `
+    <div class="empty-state">
+      <strong>Kein Team ausgewählt</strong>
+      Wähle links zuerst ein Team aus. Dann kannst du hier den Kader sehen und erweitern.
+    </div>
+  `
+  return
+}
+
+if(teamPlayers.length === 0){
+  document.getElementById("playerList").innerHTML = `
+    <div class="empty-state">
+      <strong>Noch keine Spieler</strong>
+      Füge dem ausgewählten Team Spieler mit Position hinzu, damit du später Kader und Startelf zusammenstellen kannst.
+    </div>
+  `
+  return
+}
+
+if(locked){
+  const preview = teamPlayers.slice(0,2)
+  const masked = (name) => {
+    const trimmed = String(name || "").trim()
+    if(!trimmed) return "Spieler"
+    return trimmed.charAt(0) + "•••"
+  }
+
+  document.getElementById("playerList").innerHTML = preview.map(p => `
+    <div class="player-chip small pos-${p.pos} locked">
+      <div class="player-left">
+        <span class="pos-badge">${p.pos}</span>
+        <span class="player-name">${masked(p.name)}</span>
+      </div>
+    </div>
+  `).join("") + (teamPlayers.length > 2 ? `
+    <div class="player-chip small locked" style="justify-content:center; opacity:.75;">
+      + ${teamPlayers.length - 2} weitere Spieler
+    </div>
+  ` : "")
+  return
+}
+
+teamPlayers.forEach((p)=>{
+
+html+=`
+<div class="player-chip pos-${p.pos} ${locked ? "locked" : ""}">
+
+<div class="player-left">
+<span class="pos-badge">${p.pos}</span>
+<span class="player-name">${p.name}</span>
+</div>
+
+<div class="player-actions">
+<button ${locked ? "disabled" : ""} ${getTooltipAttrs("Spielermenü öffnen")} onclick='event.stopPropagation(); togglePlayerMenu(event, ${JSON.stringify(p.name)})'>✏️</button>
+</div>
+
+</div>
+`
+
+})
+
+document.getElementById("playerList").innerHTML=html
+
+}
+
+  let openMenu = null
+
+function togglePlayerMenu(e, name){
+
+  e.stopPropagation()
+
+  // altes Menü schließen
+  closePlayerMenu()
+
+  let btn = e.currentTarget
+
+  let menu = document.createElement("div")
+  menu.className = "player-menu"
+
+  menu.innerHTML = `
+    <button ${getTooltipAttrs("Spieler bearbeiten")} onclick='editPlayer(${JSON.stringify(name)})'>✏️ Bearbeiten</button>
+    <button ${getTooltipAttrs("Spieler löschen")} onclick='deletePlayer(${JSON.stringify(name)})'>🗑 Löschen</button>
+  `
+
+  btn.parentElement.appendChild(menu)
+
+  openMenu = menu
+
+  // Klick außerhalb schließt Menü
+  setTimeout(()=>{
+    document.addEventListener("click", closePlayerMenu, {once:true})
+  },10)
+
+}
+
+function closePlayerMenu(){
+  if(openMenu){
+    openMenu.remove()
+    openMenu = null
+  }
+}
+
+/* =========================
+MATCHES
+========================= */
+
+function formatDate(d){
+
+if(!d) return ""
+let p=d.split("-")
+return p[2]+"-"+p[1]+"-"+p[0]
+
+}
+
+function isPastMatch(match){
+
+  if(!match.date) return false
+
+  let matchDate = new Date(match.date + " " + (match.time || "23:59"))
+  let graceMinutes = 45
+  let now = new Date()
+
+  return (matchDate.getTime() + graceMinutes * 60000) < now
+}
+
+function requireMatchUnlock(match, callback){
+
+  if(!isPastMatch(match)){
+    callback()
+    return
+  }
+
+confirmEditAction(() => {
+    callback()
+  })
+}
+
+function editMatch(id){
+
+if(!hasAccess(activeTeam)){
+  showToast("🔒 Kein Zugriff","info")
+  return
+}
+
+let m = matches.find(x => x.id === id)
+if(!m) return
+
+let modal = document.getElementById("modal")
+let box = modal.querySelector(".modal-box")
+
+box.innerHTML = `
+
+<h3 style="grid-column:1/-1">Spiel bearbeiten</h3>
+
+<input id="editDate" type="date" value="${m.date}">
+<input id="editTime" type="time" value="${m.time || ""}">
+
+<input id="editOpponent" placeholder="Gegner" value="${m.opponent}">
+
+<select id="editHomeAway">
+  <option value="home">🏠 Heimspiel</option>
+  <option value="away">🚗 Auswärtsspiel</option>
+</select>
+
+<input id="editLocation" placeholder="Spielort" value="${m.location || ""}">
+
+<select id="editMode">
+  <option value="7">7 gegen 7</option>
+  <option value="11">11 gegen 11</option>
+</select>
+
+<button class="primary" onclick="saveMatchEdit(${m.id})">Speichern</button>
+<button onclick="closeModal()">Abbrechen</button>
+`
+
+setTimeout(()=>{
+document.getElementById("editHomeAway").value = m.homeAway || "home"
+document.getElementById("editMode").value = m.mode || "7"
+},10)
+
+modal.classList.remove("hidden")
+
+}
+
+  function handleLiveClick(id){
+
+  let match = matches.find(m=>m.id===id)
+  if(!match) return
+
+  requireMatchUnlock(match, ()=>{
+    openLiveMode(id)
+  })
+}
+
+function handleEditMatch(id){
+
+  let match = matches.find(m=>m.id===id)
+  if(!match) return
+
+  requireMatchUnlock(match, ()=>{
+
+    // 🔥 automatisch öffnen
+    matches.forEach(m => {
+      m.open = (m.id === id)
+    })
+
+    save()
+    renderMatches()
+
+    // 🔥 dann edit modal
+    setTimeout(()=>{
+      editMatch(id)
+    },100)
+
+  })
+}
+
+  function saveMatchEdit(id){
+
+let m = matches.find(x => x.id === id)
+if(!m) return
+
+m.date = document.getElementById("editDate").value
+m.time = document.getElementById("editTime").value
+m.opponent = document.getElementById("editOpponent").value.trim()
+
+m.homeAway = document.getElementById("editHomeAway").value
+m.location = document.getElementById("editLocation").value.trim()
+
+m.mode = document.getElementById("editMode").value
+
+save()
+renderAll()
+closeModal()
+
+showToast("Spiel aktualisiert ✅","info")
+
+}
+
+function openCreateMatchModal(){
+
+  if(!activeTeam){
+    showToast("⚠️ Kein Team ausgewählt","info")
+    return
+  }
+
+  openFormModal("Neues Spiel",[
+    { id:"quickOpponent", placeholder:"Gegner" },
+    { id:"quickDate", type:"date" },
+    { id:"quickTime", type:"time" }
+  ],(values)=>{
+
+    const opponent = values.quickOpponent.trim()
+    const date = values.quickDate
+
+    if(!opponent || !date){
+      showToast("Datum und Gegner fehlen","info")
+      return
+    }
+
+    matches.push({
+      id: Date.now(),
+      team: activeTeam,
+      date: date,
+      time: values.quickTime || "",
+      opponent: opponent,
+      mode: "7",
+      homeAway: "home",
+      location: "",
+      squad:[],
+      lineup:[],
+      bench:[],
+      events:[],
+      open:false
+    })
+
+    save()
+    renderAll()
+    showToast("Spiel erstellt ✅","info")
+
+  },"Erstellen")
+
+}
+  
+function createMatch(){
+
+if(!hasAccess(activeTeam)){
+  showToast("🔒 Kein Zugriff","info")
+  return
+}
+
+  let date = document.getElementById("date").value
+  let opponent = document.getElementById("opponent").value.trim()
+
+  // 🔐 Team prüfen
+  if(!activeTeam){
+    showToast("⚠️ Kein Team ausgewählt","info")
+    return
+  }
+
+  // 📅 Eingaben prüfen
+  if(!date || !opponent){
+    showToast("⚠️ Datum & Gegner fehlen","info")
+    return
+  }
+
+  // ✅ Spiel erstellen
+  matches.push({
+
+    id: Date.now(),
+    team: activeTeam,
+
+    date: date,
+    time: document.getElementById("time").value,
+    opponent: opponent,
+    mode: document.getElementById("mode").value,
+
+    homeAway: document.getElementById("homeAway").value,
+    location: document.getElementById("location").value.trim(),
+
+    squad:[], 
+    lineup:[],
+    bench:[],
+    events:[],
+    twOverride:null,
+    open:false
+
+  })
+
+  save()
+  renderAll()
+
+  // 🔄 Inputs reset
+  document.getElementById("date").value = ""
+  document.getElementById("time").value = ""
+  document.getElementById("opponent").value = ""
+  document.getElementById("mode").value = "7"
+  document.getElementById("homeAway").value = "home"
+  document.getElementById("location").value = ""
+
+  // 🔒 Button wieder deaktivieren
+  validateMatchForm()
+
+  // 🔔 Feedback
+  showToast("Spiel erstellt ✅","info")
+}
+
+function deleteMatch(id){
+
+if(!hasAccess(activeTeam)){
+  showToast("🔒 Kein Zugriff","info")
+  return
+}
+  
+confirmDeleteAction(()=>{
+
+matches = matches.filter(m=>m.id!==id)
+
+save()
+renderAll()
+
+})
+
+}
+
+function toggleMatch(id){
+
+  let match = matches.find(m => m.id === id)
+  if(!match) return
+
+  // 🔒 Wenn vergangenes Spiel UND aktuell zu → blockieren
+  if(isPastMatch(match) && !match.open){
+    showToast("🔒 Spiel abgeschlossen – über ✏️ bearbeiten öffnen","info")
+    return
+  }
+
+  matches.forEach(m => {
+    if(m.id === id){
+      m.open = !m.open
+    }else{
+      m.open = false
+    }
+  })
+
+  save()
+  renderMatches()
+
+  setTimeout(()=>{
+    document.querySelector(".match.open")?.scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    })
+  },100)
+}
+
+  /* =========================
+SQUAD / LINEUP / BENCH
+========================= */
+
+function toggleLineup(matchId,name){
+
+if(!hasAccess(activeTeam)){
+  showToast("🔒 Kein Zugriff","info")
+  return
+}
+
+let match = matches.find(m=>m.id===matchId)
+let max = match.mode=="7"?7:11
+
+let i = match.lineup.indexOf(name)
+
+if(i>-1){
+
+match.lineup.splice(i,1)
+
+}else{
+
+if(match.lineup.length>=max){
+showToast("Startelf voll","info")
+return
+}
+
+match.lineup.push(name)
+
+// 🔥 aus Bank entfernen
+match.bench = match.bench.filter(p=>p!==name)
+
+}
+
+save()
+renderMatches()
+
+}
+
+function toggleBench(matchId,name){
+
+if(!hasAccess(activeTeam)){
+  showToast("🔒 Kein Zugriff","info")
+  return
+}
+
+let match = matches.find(m=>m.id===matchId)
+
+let i = match.bench.indexOf(name)
+
+if(i>-1){
+
+match.bench.splice(i,1)
+
+}else{
+
+match.bench.push(name)
+
+// 🔥 aus Startelf entfernen
+match.lineup = match.lineup.filter(p=>p!==name)
+
+}
+
+save()
+renderMatches()
+
+}
+
+function toggleSquad(matchId,name){
+
+if(!hasAccess(activeTeam)){
+  showToast("🔒 Kein Zugriff","info")
+  return
+}
+
+let match = matches.find(m=>m.id===matchId)
+
+let i = match.squad.indexOf(name)
+
+if(i>-1){
+
+match.squad.splice(i,1)
+
+// 🔥 auch aus lineup/bench entfernen
+match.lineup = match.lineup.filter(p=>p!==name)
+match.bench = match.bench.filter(p=>p!==name)
+
+}else{
+
+match.squad.push(name)
+
+}
+
+save()
+renderMatches()
+
+}
+
+/* =========================
+EVENTS
+========================= */
+
+function chooseFrom(list,title,callback){
+
+if(list.length===0){
+showToast("Keine Spieler verfügbar","info")
+return
+}
+
+buildPlayerSelectionModal(
+  title,
+  list.map(name => ({ label:name, value:name })),
+  callback
+)
+}
+
+function addEvent(matchId,type){
+
+if(!hasAccess(activeTeam)){
+  showToast("🔒 Kein Zugriff","info")
+  return
+}
+
+let match = matches.find(m=>m.id==matchId)
+
+// 🔥 Gegentor bleibt simpel
+if(type==="goalAgainst"){
+
+openModal("Minute eingeben","z.B. 23",(minute)=>{
+
+if(!minute) return
+
+match.events.push(createMatchEvent(type,{
+minute:Number(minute)
+}))
+
+save()
+renderMatches()
+
+})
+
+return
+}
+
+// 🔥 STEP 1 → MINUTE
+openModal("Minute eingeben","z.B. 23",(minute)=>{
+
+if(!minute) return
+
+minute = Number(minute)
+
+// 🔥 SPIELER LISTE BAUEN
+let teamPlayers = players
+  .filter(p => p.team === match.team)
+
+if(teamPlayers.length === 0){
+showToast("Keine Spieler im Team","info")
+return
+}
+
+// 🔥 STEP 2 → AUSWAHL
+// 🔥 STEP 2 → SPIELER KLICKEN
+
+let modal = document.getElementById("modal")
+let box = modal.querySelector(".modal-box")
+
+// Titel setzen
+box.innerHTML = `<h3>Spieler wählen</h3>`
+
+teamPlayers.forEach(p=>{
+let btn = document.createElement("button")
+  btn.type = "button"
+
+btn.innerText = p.name
+btn.classList.add("secondary")
+
+btn.onclick = ()=>{
+
+let m = matches.find(x => x.id === matchId)
+
+if(!m){
+showToast("Match nicht gefunden","info")
+return
+}
+
+closeModal()
+
+m.events.push(createMatchEvent(type,{
+  player:p.name,
+  minute:minute
+}))
+
+save()
+renderAll()
+
+// 🔥 TOAST
+if(type==="goal"){
+  showToast("⚽ Tor gespeichert","goal")
+  showGoalOverlay("⚽ TOR")
+}
+else if(type==="yellow") showToast("🟨 Gelbe Karte","yellow")
+else if(type==="red") showToast("🟥 Rote Karte","red")
+else if(type==="penalty") showToast("⏱ Zeitstrafe","info")
+}
+
+box.appendChild(btn)
+})
+
+// Abbrechen Button
+let cancel = document.createElement("button")
+  cancel.type = "button"
+cancel.innerText = "Abbrechen"
+cancel.onclick = closeModal
+box.appendChild(cancel)
+
+modal.classList.remove("hidden")
+
+})
+
+}
+
+function deleteEvent(matchId,eventId){
+
+if(!hasAccess(activeTeam)){
+  showToast("🔒 Kein Zugriff","info")
+  return
+}
+
+let match=matches.find(m=>m.id===matchId)
+
+if(!match) return
+
+match.events = match.events.filter(event => event.id !== eventId)
+
+save()
+renderAll()
+
+}
+
+function addSubstitution(matchId){
+
+if(!hasAccess(activeTeam)){
+  showToast("🔒 Kein Zugriff","info")
+  return
+}
+
+let match=matches.find(m=>m.id==matchId)
+
+openModal("Minute eingeben","z.B. 45",(minute)=>{
+
+if(!minute) return
+
+minute = Number(minute)
+
+chooseFrom(match.lineup,"Wer geht raus?",(out)=>{
+
+chooseFrom(match.bench,"Wer kommt rein?",(inp)=>{
+
+match.lineup = match.lineup.filter(p=>p!==out)
+match.lineup.push(inp)
+
+match.bench = match.bench.filter(p=>p!==inp)
+match.bench.push(out)
+
+match.events.push(createMatchEvent("sub",{
+player:out,
+in:inp,
+minute:minute
+}))
+
+save()
+renderMatches()
+
+})
+
+})
+
+})
+}
+
+/* 🔥 NEU: TW setzen */
+function setGoalkeeper(matchId){
+
+if(!hasAccess(activeTeam)){
+  return
+}
+
+let match = matches.find(m=>m.id===matchId)
+
+// nur Spieler aus Startelf wählen
+chooseFrom(match.lineup,"Wer ist TW?",(player)=>{
+
+match.twOverride = player
+
+save()
+renderMatches()
+
+})
+
+}
+
+/* =========================
+PITCH
+========================= */
+
+function renderPitch(match){
+
+let list=match.lineup
+let bench=match.bench
+
+let teamPlayers = players.filter(p =>
+  list.includes(p.name) && p.team === match.team
+)
+
+let gk = null
+
+if(match.twOverride){
+  gk = players.find(p =>
+    p.name === match.twOverride && p.team === match.team
+  ) || null
+}else{
+  gk = teamPlayers.find(p => p.pos === 'TW') || null
+}
+  
+let lv = teamPlayers.find(p=>p.pos==="LV")
+let iv = teamPlayers.find(p=>p.pos==="IV")
+let rv = teamPlayers.find(p=>p.pos==="RV")
+
+let remainingDefs = teamPlayers.filter(p => ["LV","IV","RV"].includes(p.pos) && ![lv,iv,rv].includes(p))
+
+let def1 = lv || remainingDefs.shift()
+let def2 = iv || remainingDefs.shift()
+let def3 = rv || remainingDefs.shift()
+
+  let lm = teamPlayers.find(p=>p.pos==="LM")
+let zm = teamPlayers.find(p=>p.pos==="ZM")
+let rm = teamPlayers.find(p=>p.pos==="RM")
+
+let remainingMids = teamPlayers.filter(p => ["LM","ZM","RM"].includes(p.pos) && ![lm,zm,rm].includes(p))
+
+let mid1 = lm || remainingMids.shift()
+let mid2 = zm || remainingMids.shift()
+let mid3 = rm || remainingMids.shift()
+  
+let strs = teamPlayers.filter(p => p.pos === "ST")
+
+let st1 = strs[0] || null
+let st2 = strs[1] || null
+
+function row(players){
+
+// 🔥 null entfernen
+let clean = players.filter(p => p)
+
+// 🔥 wenn leer → nichts anzeigen
+if(clean.length === 0) return ""
+
+// 🔥 normal rendern
+let html = clean.map(p => cell(p)).join("")
+
+return `<div class='pitch-row'>${html}</div>`
+}
+
+let html="<div class='pitch-wrap'>"
+
+html+="<div class='pitch'>"
+
+// 🔥 STURM
+html += row([st1, st2])
+
+// 🔥 MITTELFELD
+html += row([mid1, mid2, mid3])
+
+// 🔥 VERTEIDIGUNG
+html += row([def1, def2, def3])
+
+// 🔥 TORWART
+if(gk){
+html += `<div class='pitch-row'>${cell(gk)}</div>`
+}
+
+html+="</div>"
+
+html+="<div class='bench'><h4>Bank</h4>"
+
+bench.forEach(n=>{
+
+let p = players.find(pl => pl.name === n && pl.team === match.team)
+
+html+=`
+<div class='bench-player'>
+<span class="pos">${p.pos}</span>${n}
+</div>
+`
+
+})
+
+html+="</div>"
+html+="</div>"
+
+return html
+
+}
+
+/* =========================
+RENDER
+========================= */
+
+function renderMatches(){
+
+  // 🔥 SORTIERUNG NACH DATUM + ZEIT
+let sortedMatches = [...matches]
+.filter(m=> m.team === activeTeam)
+.sort((a,b)=>{
+
+  let dateA = new Date(a.date + " " + (a.time || "00:00"))
+  let dateB = new Date(b.date + " " + (b.time || "00:00"))
+
+  return dateA - dateB   // 🔼 ältestes zuerst
+})
+
+let html=""
+
+if(!activeTeam){
+  document.getElementById("matches").innerHTML = `
+    <div class="empty-state">
+      <strong>Wähle zuerst ein Team</strong>
+      Die Spieleliste gehört immer zum gerade aktiven Team. Wähle links ein Team oder lege ein neues an.
+    </div>
+  `
+  return
+}
+
+if(sortedMatches.length === 0){
+  document.getElementById("matches").innerHTML = `
+    <div class="empty-state">
+      <strong>Noch keine Spiele geplant</strong>
+      Erstelle oben dein erstes Spiel. Danach kannst du Kader, Startelf, Tore, Karten und Wechsel verwalten.
+    </div>
+  `
+  return
+}
+
+sortedMatches.forEach(match=>{
+
+if(!match.squad) match.squad = []
+
+let goals = match.events.filter(e=>e.type==="goal").length
+let against = match.events.filter(e=>e.type==="goalAgainst").length
+
+let resultText = "-"
+let resultColor = "#666"
+
+if(match.events.length > 0){
+
+  if(goals > against){
+    resultColor = "#2f9e44"
+    resultText = "Sieg"
+  }
+  else if(goals < against){
+    resultColor = "#c92a2a"
+    resultText = "Niederlage"
+  }
+  else{
+    resultColor = "#aaa"
+    resultText = "Unentschieden"
+  }
+
+}
+
+let arrow = match.open ? "▼" : "▶"
+
+html+=`
+
+<div class="match ${match.open ? "open" : ""} result-${resultText}">
+
+<div class="match-header"
+${!isUnlocked ? "" : `onclick="toggleMatch(${match.id})"`}>
+
+<div class="match-main">
+
+<div class="team-left">
+  <span class="team-name">${activeTeam}</span>
+</div>
+
+<div class="score" style="color:${resultColor}">
+${goals} : ${against}
+</div>
+
+<div class="team-right">
+  <span class="team-name">${match.opponent}</span>
+</div>
+
+</div>
+
+<div class="match-sub">
+
+  <div class="meta-top">
+
+<span class="meta-date">📅 ${formatDate(match.date)}</span>
+
+${match.time ? `<span class="meta-time">🕒 ${match.time}</span>` : ""}
+
+<span class="meta-type">
+  ${match.homeAway === "away" ? "🚗 Auswärtsspiel" : "🏠 Heimspiel"}
+</span>
+
+${match.location ? `
+<a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(match.location)}"
+   target="_blank"
+   onclick="event.stopPropagation()"
+   ${getTooltipAttrs("Route öffnen")}
+   class="map-link">
+  🗺️ Route
+</a>
+
+<div class="meta-location-row">
+  <span class="location">
+    📍 ${match.location}
+  </span>
+</div>
+` : ""}
+
+  </div>
+
+</div>
+
+<div class="match-actions-right">
+
+<button class="secondary"
+${getTooltipAttrs(isPastMatch(match) ? "Vergangenes Spiel öffnen, um Tore und Karten nachträglich einzutragen" : "Dieses Spiel im Live-Modus öffnen und Ereignisse während des Spiels erfassen")}
+onclick="event.stopPropagation();handleLiveClick(${match.id})"
+>
+${isPastMatch(match) ? "🕘" : "▶"}
+</button>
+
+<button class="secondary"
+${!isUnlocked ? "disabled" : ""}
+${getTooltipAttrs("Spiel bearbeiten")}
+onclick="event.stopPropagation();handleEditMatch(${match.id})">
+${isPastMatch(match) ? "✏️" : "✏️"}
+</button>
+
+<button class="danger"
+${!isUnlocked ? "disabled" : ""}
+${getTooltipAttrs("Spiel löschen")}
+onclick="event.stopPropagation();deleteMatch(${match.id})">
+🗑
+</button>
+
+</div>
+
+</div>
+
+<div class="match-body ${match.open && isUnlocked ? 'open' : ''}">
+
+<div class="section-title">
+Kader (${match.squad?.length || 0} Spieler)
+</div>
+`
+
+players
+.filter(p=>p.team===activeTeam)
+.sort((a, b) => {
+  return getPositionRank(a.pos) - getPositionRank(b.pos)
+})
+.forEach(p=>{
+
+let active = match.squad?.includes(p.name) ? "selected" : ""
+
+html+=`
+<span class="player-chip small pos-${p.pos} ${active}"
+onclick='toggleSquad(${match.id}, ${JSON.stringify(p.name)})'>
+
+<span class="pos">${p.pos}</span>${p.name}
+
+</span>
+`
+})
+
+html+=`<div class="section-title">Startelf</div>`
+
+players
+.filter(p=>{
+return p.team===activeTeam
+&& (match.squad?.length ? match.squad.includes(p.name) : true)
+&& !match.bench.includes(p.name)
+})
+.sort((a, b) => {
+  return getPositionRank(a.pos) - getPositionRank(b.pos)
+})
+.forEach(p=>{
+
+let active = match.lineup.includes(p.name)?"selected":""
+
+html+=`
+<span class="player-chip small pos-${p.pos} ${active}"
+onclick='toggleLineup(${match.id}, ${JSON.stringify(p.name)})'>
+
+<span class="pos">${p.pos}</span>${p.name}
+
+</span>
+`
+
+})
+
+html+=`<div class="section-title">Bank wählen</div>`
+
+players
+.filter(p=>{
+return p.team===activeTeam
+&& (match.squad?.length ? match.squad.includes(p.name) : true)
+&& !match.lineup.includes(p.name)
+})
+.sort((a,b)=>getPositionRank(a.pos)-getPositionRank(b.pos))
+.forEach(p=>{
+
+let active = match.bench.includes(p.name)?"selected":""
+
+html+=`
+<span class="player-chip small pos-${p.pos} ${active}"
+onclick='toggleBench(${match.id}, ${JSON.stringify(p.name)})'>
+
+<span class="pos">${p.pos}</span>${p.name}
+
+</span>
+`
+
+})
+
+html+=renderPitch(match)
+
+html+=`
+
+<button class="secondary"
+${!isUnlocked ? "disabled" : ""}
+${getTooltipAttrs("Torwart festlegen")}
+onclick="setGoalkeeper(${match.id})">🧤 TW setzen</button>
+
+<div class="section-title">Events</div>
+
+<button class="success"
+${!isUnlocked ? "disabled" : ""}
+${getTooltipAttrs("Tor eintragen")}
+onclick="addEvent(${match.id},'goal')">⚽ Tor</button>
+
+<button class="secondary"
+${!isUnlocked ? "disabled" : ""}
+${getTooltipAttrs("Gegentor eintragen")}
+onclick="addEvent(${match.id},'goalAgainst')">🥅 Gegentor</button>
+
+<button class="yellow"
+${!isUnlocked ? "disabled" : ""}
+${getTooltipAttrs("Gelbe Karte")}
+onclick="addEvent(${match.id},'yellow')">🟨 Gelb</button>
+
+<button class="red"
+${!isUnlocked ? "disabled" : ""}
+${getTooltipAttrs("Rote Karte")}
+onclick="addEvent(${match.id},'red')">🟥 Rot</button>
+
+<button class="secondary"
+${!isUnlocked ? "disabled" : ""}
+${getTooltipAttrs("Zeitstrafe")}
+onclick="addEvent(${match.id},'penalty')">⏱ Zeitstrafe</button>
+
+<button class="sub"
+${!isUnlocked ? "disabled" : ""}
+${getTooltipAttrs("Wechsel eintragen")}
+onclick="addSubstitution(${match.id})">🔁 Wechsel</button>
+
+<button class="secondary"
+${!isUnlocked ? "disabled" : ""}
+${getTooltipAttrs("Kader kopieren")}
+onclick="copySquad(${match.id})">📑 Kader kopieren</button>
+
+<button class="secondary"
+${!isUnlocked ? "disabled" : ""}
+${getTooltipAttrs("Kader per WhatsApp teilen")}
+onclick="shareSquadWhatsApp(${match.id})">💬 Kader teilen</button>
+
+<button class="secondary"
+${!isUnlocked ? "disabled" : ""}
+${getTooltipAttrs("Bericht kopieren")}
+onclick="copyReport(${match.id})">📋 Bericht kopieren</button>
+
+<button class="secondary"
+${!isUnlocked ? "disabled" : ""}
+${getTooltipAttrs("Bericht per WhatsApp teilen")}
+onclick="shareReportWhatsApp(${match.id})">💬 Bericht teilen</button>
+`
+
+const sortedEvents = [...match.events].sort((a,b)=>{
+
+  // 🔥 zuerst nach Minute
+  if(a.minute !== b.minute){
+    return a.minute - b.minute
+  }
+
+  // 🔥 dann nach echter Zeit (Fallback 0)
+  return (a.time || 0) - (b.time || 0)
+})
+
+sortedEvents.forEach((e,i)=>{
+
+let txt
+
+if(e.type==="sub")
+txt=`${e.minute}' 🔁 ${e.player} → ${e.in}`
+
+else if(e.type==="goal")
+txt=`${e.minute}' ⚽ ${e.player}`
+
+  else if(e.type==="goalAgainst")
+txt=`${e.minute}' 🥅 Gegner`
+
+else if(e.type==="yellow")
+txt=`${e.minute}' 🟨 ${e.player}`
+
+else if(e.type==="red")
+txt=`${e.minute}' 🟥 ${e.player}`
+
+else if(e.type==="penalty")
+txt=`${e.minute}' ⏱ Zeitstrafe ${e.player}`
+
+let cls = e.type
+
+html+=`
+<div class="event ${cls} ${i === sortedEvents.length-1 ? "new" : ""}">
+<span>${txt}</span>
+<button class="secondary"
+${getTooltipAttrs("Event löschen")}
+onclick='deleteEvent(${match.id}, ${JSON.stringify(e.id)})'>❌</button>
+</div>
+`
+
+})
+
+html+="</div></div>"
+
+})
+
+document.getElementById("matches").innerHTML = html
+
+}
+
+/* =========================
+SCORER
+========================= */
+
+function renderRankings(){
+
+  if(!activeTeam){
+  document.getElementById("scorerRanking").innerHTML = `
+    <div class="empty-state">
+      <strong>Kein Team aktiv</strong>
+      Sobald ein Team ausgewählt ist, erscheint hier die Torjägerliste dieses Teams.
+    </div>
+  `
+  return
+}
+
+  if(!isUnlocked){
+  document.getElementById("scorerRanking").innerHTML = ""
+  return
+}
+
+let goalMap={}
+
+matches
+.filter(m=>m.team===activeTeam)
+.forEach(m=>{
+
+m.events.forEach(ev=>{
+
+if(ev.type==="goal"){
+
+goalMap[ev.player] =
+(goalMap[ev.player]||0)+1
+
+}
+
+})
+
+})
+
+let list = Object.entries(goalMap)
+.sort((a,b)=>b[1]-a[1])
+
+let html=""
+
+list.forEach(([name,goals])=>{
+
+let p = players.find(pl => pl.name === name && pl.team === activeTeam)
+
+html+=`
+<div class="stat-row" onclick="togglePlayerStats('${name}')">
+<span><span class="pos">${p.pos}</span>${name}</span>
+<span>${goals}</span>
+</div>
+
+<div id="player-${name}" class="player-stats hidden"></div>
+`
+
+})
+
+document.getElementById("scorerRanking").innerHTML =
+html || `
+  <div class="empty-state">
+    <strong>Noch keine Tore erfasst</strong>
+    Trage in einem Spiel ein Tor für dein Team ein. Danach taucht der Spieler automatisch hier auf.
+  </div>
+`
+
+}
+
+function togglePlayerStats(name){
+
+let box = document.getElementById("player-"+name)
+
+// toggle schließen
+if(!box.classList.contains("hidden")){
+  box.classList.add("hidden")
+  return
+}
+
+// Daten sammeln
+let html=""
+
+matches
+.filter(m=>m.team===activeTeam)
+.forEach(m=>{
+
+  let goals = m.events.filter(e=>e.type==="goal" && e.player===name)
+
+  if(goals.length){
+
+    html+=`
+<div style="padding:4px 0;border-bottom:1px solid #333;font-size:12px">
+${formatDate(m.date)} vs ${m.opponent}<br>
+⚽ ${goals.length} Tor(e)
+</div>
+`
+
+  }
+
+})
+
+box.innerHTML = html || "Keine Tore"
+box.classList.remove("hidden")
+}
+
+/* SPIELBERICHT KOPIEREN */
+
+function ensureExportAccess(){
+  if(!hasAccess(activeTeam)){
+    showToast("🔒 Kein Zugriff","info")
+    return false
+  }
+
+  return true
+}
+
+function buildReportText(matchId){
+  let match = matches.find(m=>m.id===matchId)
+  if(!match) return ""
+
+  let goals = match.events.filter(e=>e.type==="goal").length
+  let against = match.events.filter(e=>e.type==="goalAgainst").length
+  let events = [...match.events].sort((a,b)=>{
+    if((a.minute || 0) !== (b.minute || 0)){
+      return (a.minute || 0) - (b.minute || 0)
+    }
+    return (a.time || 0) - (b.time || 0)
+  })
+
+  let scorers = {}
+  let lines = []
+  let locationLines = match.location
+    ? String(match.location)
+        .split("|")
+        .map(part => part.trim())
+        .filter(Boolean)
+        .map(part => `- ${part}`)
+    : []
+
+  events.forEach(e=>{
+    if(e.type==="goal"){
+      lines.push(`⚽ ${e.minute}' ${e.player}`)
+      scorers[e.player] = (scorers[e.player] || 0) + 1
+    }
+    else if(e.type==="goalAgainst"){
+      lines.push(`🥅 ${e.minute}' ${match.opponent}`)
+    }
+    else if(e.type==="yellow"){
+      lines.push(`🟨 ${e.minute}' ${e.player}`)
+    }
+    else if(e.type==="red"){
+      lines.push(`🟥 ${e.minute}' ${e.player}`)
+    }
+    else if(e.type==="penalty"){
+      lines.push(`⏱ ${e.minute}' Zeitstrafe ${e.player}`)
+    }
+    else if(e.type==="sub"){
+      lines.push(`🔁 ${e.minute}' ${e.player} → ${e.in}`)
+    }
+  })
+
+  let reportTitle = "⚽ Spielbericht"
+  let matchupLine = activeTeam + " vs " + match.opponent
+  let dateLine = `📅 ${formatDate(match.date)}`
+  let timeLine = match.time ? `🕒 ${match.time}` : null
+  let typeLine = match.homeAway === "away" ? "🚗 Auswärtsspiel" : "🏠 Heimspiel"
+
+  let scorerLines = Object.entries(scorers)
+    .sort((a,b)=>b[1]-a[1])
+    .map(([name,count])=>`- ${name} (${count})`)
+
+  return [
+    reportTitle,
+    "",
+    matchupLine,
+    dateLine,
+    timeLine,
+    typeLine,
+    "",
+    `Endstand ${goals} : ${against}`,
+    "",
+    "Spielverlauf",
+    "────────────",
+    lines.length ? lines.join("\n") : "Keine Events erfasst",
+    "",
+    "Torschützen",
+    "────────────",
+    scorerLines.length ? scorerLines.join("\n") : "Keine Tore"
+  ].join("\n")
+}
+
+function buildSquadText(matchId){
+  let match = matches.find(m=>m.id===matchId)
+  if(!match) return ""
+  let locationLines = match.location
+    ? String(match.location)
+        .split("|")
+        .map(part => part.trim())
+        .filter(Boolean)
+        .map(part => `- ${part}`)
+    : []
+
+  let squadList = match.squad?.length
+    ? match.squad
+    : players
+        .filter(p=>p.team===activeTeam)
+        .map(p=>p.name)
+
+  let sorted = squadList
+    .map(name => players.find(p=>p.name===name && p.team===activeTeam))
+    .filter(Boolean)
+    .sort((a,b)=>getPositionRank(a.pos) - getPositionRank(b.pos))
+
+  let route = ""
+  if(match.location && match.location.trim() !== ""){
+    route = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(match.location.trim())
+  }
+
+  return [
+    "KADER",
+    "",
+    `${activeTeam} vs ${match.opponent}`,
+    `📅 ${formatDate(match.date)}`,
+    match.time ? `🕒 ${match.time}` : null,
+    locationLines.length ? locationLines.join("\n") : null,
+    route ? `Route: ${route}` : null,
+    "",
+    sorted.length
+      ? sorted.map(player => `- ${player.pos}  ${player.name}`).join("\n")
+      : "Keine Spieler im Kader"
+  ].filter(Boolean).join("\n")
+}
+
+function shareTextOnWhatsApp(text){
+  const url = "https://wa.me/?text=" + encodeURIComponent(text)
+  window.open(url, "_blank", "noopener,noreferrer")
+}
+
+function copyReport(matchId){
+  if(!ensureExportAccess()) return
+
+  const text = buildReportText(matchId)
+  if(!text) return
+
+  copyTextToClipboard(text,"Spielbericht kopiert")
+}
+
+function shareReportWhatsApp(matchId){
+  if(!ensureExportAccess()) return
+
+  const text = buildReportText(matchId)
+  if(!text) return
+
+  shareTextOnWhatsApp(text)
+}
+
+function copySquad(matchId){
+  if(!ensureExportAccess()) return
+
+  const text = buildSquadText(matchId)
+  if(!text) return
+
+  copyTextToClipboard(text,"📑 Kader kopiert")
+}
+
+function shareSquadWhatsApp(matchId){
+  if(!ensureExportAccess()) return
+
+  const text = buildSquadText(matchId)
+  if(!text) return
+
+  shareTextOnWhatsApp(text)
+}
+
+/* ========================= */
+function renderTools(){
+
+  let panel = document.getElementById("toolsPanel")
+  if(!panel) return
+
+  // 🔐 NUR sichtbar wenn SV Testhausen + wirklich eingeloggt
+  if(activeTeam === "SV Testhausen" && accessCache["SV Testhausen"]){
+    panel.style.display = "block"
+  }else{
+    panel.style.display = "none"
+  }
+
+}
+
+function findActiveLiveMatch(){
+  if(!activeTeam) return null
+
+  return matches.find(match =>
+    match.team === activeTeam &&
+    match.liveState &&
+    match.liveState.startTime &&
+    !match.liveState.pausedAt
+  ) || null
+}
+
+function jumpToMatch(matchId){
+  const target = matches.find(match => match.id === matchId)
+  if(!target) return
+
+  matches.forEach(match => {
+    match.open = (match.id === matchId)
+  })
+
+  save()
+  renderMatches()
+
+  setTimeout(()=>{
+    document.querySelector(".match.open")?.scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    })
+  },100)
+}
+
+function handleNextGameCardClick(matchId, openLive = false){
+  if(openLive){
+    openLiveMode(matchId)
+    return
+  }
+
+  jumpToMatch(matchId)
+}
+
+function renderNextGameCard(){
+  const box = document.getElementById("nextGameCard")
+  if(!box) return
+
+  if(!activeTeam){
+    box.innerHTML = ""
+    return
+  }
+
+  const liveMatch = findActiveLiveMatch()
+
+  if(liveMatch){
+    const locationText = liveMatch.location ? `<div class="next-game-location">📍 ${liveMatch.location}</div>` : ""
+    box.innerHTML = `
+      <div class="next-game-card clickable" onclick="handleNextGameCardClick(${liveMatch.id}, true)">
+        <div class="next-game-label">Zum Live-Spiel</div>
+        <div class="next-game-main">
+        <div class="next-game-teams">
+          <div class="next-game-title">
+            <span class="team-home">${activeTeam}</span>
+            <span class="vs-pill">vs</span>
+            <span class="team-away">${liveMatch.opponent}</span>
+          </div>
+          <div class="next-game-sub">🔴 Live jetzt geöffnet${liveMatch.time ? " • 🕒 " + liveMatch.time : ""}</div>
+          ${locationText}
+        </div>
+          <div class="next-game-score">Live</div>
+        </div>
+      </div>
+    `
+    return
+  }
+
+  const now = new Date()
+  const upcomingMatches = matches
+    .filter(match => match.team === activeTeam && match.date)
+    .map(match => ({
+      match,
+      date: new Date(match.date + " " + (match.time || "23:59"))
+    }))
+    .filter(entry => !Number.isNaN(entry.date.getTime()) && entry.date >= now)
+    .sort((a,b) => a.date - b.date)
+
+  const next = upcomingMatches[0]
+
+  if(!next){
+    box.innerHTML = ""
+    return
+  }
+
+  const match = next.match
+  const modeText = match.mode ? " • " + match.mode + "vs" + match.mode : ""
+  const placeText = match.homeAway === "away" ? "Auswärts" : "Heim"
+
+  box.innerHTML = `
+    <div class="next-game-card clickable" onclick="handleNextGameCardClick(${match.id}, false)">
+      <div class="next-game-label">Nächstes Spiel</div>
+      <div class="next-game-main">
+        <div class="next-game-teams">
+          <div class="next-game-title">
+            <span class="team-home">${activeTeam}</span>
+            <span class="vs-pill">vs</span>
+            <span class="team-away">${match.opponent}</span>
+          </div>
+          <div class="next-game-sub">📅 ${formatDate(match.date)}${match.time ? " • 🕒 " + match.time : ""} • ${placeText}${modeText}</div>
+          ${match.location ? `<div class="next-game-location">📍 ${match.location}</div>` : ""}
+        </div>
+      </div>
+    </div>
+  `
+}
+  
+function renderAll(){
+
+  renderNextGameCard()
+  renderTeams()
+  renderPlayers()
+  renderMatches()
+  renderRankings()
+  renderTopbar()
+  renderTools()
+
+  // 🔥 CREATE MATCH BUTTON VISIBILITY
+  let box = document.getElementById("createMatchBox")
+  let addPlayerBtn = document.getElementById("addPlayerBtn")
+
+  if(box){
+    box.style.display = (isUnlocked && activeTeam) ? "block" : "none"
+  }
+
+  if(addPlayerBtn){
+    addPlayerBtn.style.display = (isUnlocked && activeTeam) ? "flex" : "none"
+  }
+
+let header = document.getElementById("teamHeader")
+
+if(header){
+
+  let name = activeTeam || "Kein Team"
+
+  // 🔥 Modus aus letztem Spiel ziehen (optional fallback)
+  let lastMatch = matches
+    .filter(m => m.team === activeTeam)
+    .slice(-1)[0]
+
+  let mode = lastMatch ? (lastMatch.mode + "vs" + lastMatch.mode) : "7vs7"
+
+let year = new Date().getFullYear()
+
+header.innerHTML = `
+  <div class="team-header-inner">
+    <div class="team-title">${name}</div>
+    <div class="team-meta">
+      <span>Saison ${year}</span>
+      <span class="dot">•</span>
+      <span>${mode}</span>
+    </div>
+  </div>
+`
+}
+
+}
+
+  function validateMatchForm(){
+
+let date = document.getElementById("date").value
+let opponent = document.getElementById("opponent").value.trim()
+
+let btn = document.getElementById("createBtn")
+
+btn.disabled = !(date && opponent)
+
+}
+
+function closeLiveMode(){
+
+  forceHideTooltip()
+
+  if(window.liveAutoInterval){
+    clearInterval(window.liveAutoInterval)
+    window.liveAutoInterval = null
+  }
+
+  // 🔥 WICHTIG: State vorher speichern
+  let match = matches.find(m => m.id === liveMatchId)
+
+  if(match){
+    ensureLiveState(match)
+
+    match.liveState.startTime = liveStartTime
+    match.liveState.pausedAt = livePausedAt
+    match.liveState.pausedTotal = livePausedTotal
+  }
+
+  // 🔥 speichern (server + lokal)
+  save()
+
+  document.body.style.overflow = ""
+
+  if(liveTimerInterval){
+    clearInterval(liveTimerInterval)
+  }
+
+  // 👉 NUR GLOBAL RESETTEN (NICHT Match!)
+  liveStartTime = null
+  livePausedAt = null
+  livePausedTotal = 0
+  liveMatchId = null
+
+  document.getElementById("liveMode").classList.add("hidden")
+
+  showToast("Spiel verlassen ✅","info")
+}
+
+  function handleSwipe(){
+
+  let diff = touchEndX - touchStartX
+
+  // 👉 nur nach rechts wischen
+  if(diff > 80){
+    closeLiveMode()
+  }
+
+}
+
+  function ensureLiveState(match){
+  if(!match.liveState){
+    match.liveState = {
+      startTime: null,
+      pausedAt: null,
+      pausedTotal: 0
+    }
+  }
+}
+
+function openLiveMode(matchId){
+
+  forceHideTooltip()
+  document.body.style.overflow = "hidden";
+
+  let match = matches.find(m=>m.id===matchId)
+  if(!match) return
+  ensureLiveState(match)
+
+  // 🔥🔥🔥 NEU: INITIAL STATE SETZEN (ANTI-SPAM)
+  lastGoalEventId = null
+
+  let matchEvents = match.events || []
+
+  if(matchEvents.length > 0){
+
+    let latest = [...matchEvents].sort((a,b)=>{
+
+      if(b.minute !== a.minute){
+        return b.minute - a.minute
+      }
+
+      return (b.time || 0) - (a.time || 0)
+    })[0]
+
+    if(latest){
+      lastGoalEventId = (latest.time || latest.minute) + "_" + latest.type
+    }
+  }
+
+  // 🔥 STATE LADEN (FIX für Timer Reset)
+  liveStartTime = match.liveState.startTime
+  livePausedAt = match.liveState.pausedAt
+  livePausedTotal = match.liveState.pausedTotal
+
+  let box = document.getElementById("liveMode")
+
+  // 🔥 Spieler holen
+  let teamPlayers = players.filter(p => p.team === match.team)
+
+  box.innerHTML = `
+
+<div class="live-hero"></div>
+
+<div class="live-score-big" id="liveScoreBig">
+  <span class="team">${match.team}</span>
+  <span class="score" id="liveScoreBigValue">0 : 0</span>
+  <span class="team">${match.opponent}</span>
+</div>
+
+<div class="live-header">
+  <div class="live-left">
+    <div id="liveTimer" class="live-timer">
+      <span class="live-dot paused"></span>
+      <span id="liveTimeValue">00:00</span>
+    </div>
+
+    <div id="liveAccessStatus" class="live-timer"></div>
+  </div>
+
+<div class="live-header-actions">
+
+  ${isUnlocked ? `
+    <button class="secondary" ${getTooltipAttrs("Live-Spiel zurücksetzen")} onclick="resetLiveMatch()">🔄</button>
+  ` : ""}
+
+  <button class="secondary" ${getTooltipAttrs("Code eingeben")} onclick="enterLiveCode()">🔓 Code</button>
+  <button class="secondary" ${getTooltipAttrs("Live-Link kopieren")} onclick="shareLiveMatch()">🔗</button>
+  <button class="live-close" ${getTooltipAttrs("Live-Modus schließen")} onclick="closeLiveMode()">✖</button>
+
+</div>
+</div>
+
+<div class="live-body">
+
+  <div id="liveFeed" class="live-feed"></div>
+
+  <div class="live-events">
+
+    <div class="live-row">
+      <button class="btn-live goal"
+        ${!isUnlocked ? "disabled" : ""}
+        ${getTooltipAttrs("Live-Tor")}
+        onclick="setLiveEvent('goal')">
+        ⚽ Tor
+      </button>
+
+      <button class="btn-live against"
+        ${!isUnlocked ? "disabled" : ""}
+        ${getTooltipAttrs("Live-Gegentor")}
+        onclick="setLiveEvent('goalAgainst')">
+        🥅 Gegner
+      </button>
+    </div>
+
+    <div class="live-row">
+      <button class="btn-live yellow"
+        ${!isUnlocked ? "disabled" : ""}
+        ${getTooltipAttrs("Live-Gelb")}
+        onclick="setLiveEvent('yellow')">
+        🟨 Gelb
+      </button>
+
+      <button class="btn-live red"
+        ${!isUnlocked ? "disabled" : ""}
+        ${getTooltipAttrs("Live-Rot")}
+        onclick="setLiveEvent('red')">
+        🟥 Rot
+      </button>
+    </div>
+
+  </div>
+
+  <div class="live-control">
+    <button id="liveToggleBtn"
+      class="primary"
+      ${!isUnlocked ? "disabled" : ""}
+      ${getTooltipAttrs("Timer starten oder pausieren")}
+      onclick="toggleLiveState()">
+      ▶ Start
+    </button>
+  </div>
+
+</div>
+  `
+
+  // 🔥 STATE
+  liveMatchId = matchId
+  window.liveEventType = null
+
+  box.classList.remove("hidden")
+  
+  updateLiveScore() 
+  updateLiveFeed()
+  updateLiveAccessStatus() 
+  startLiveTimer()
+
+  // 🔥🔥🔥 HIER IST DER FIX !!!
+  startLiveAutoUpdate()
+
+  // 👉 SWIPE DETECTION (clean)
+  let liveBox = document.getElementById("liveMode")
+
+  liveBox.ontouchstart = (e)=>{
+    touchStartX = e.changedTouches[0].screenX
+  }
+
+  liveBox.ontouchend = (e)=>{
+    touchEndX = e.changedTouches[0].screenX
+    handleSwipe()
+  }
+
+  // 👉 Swipe Hint beim Öffnen anzeigen
+  let hint = document.getElementById("swipeHint")
+
+  setTimeout(()=>{
+    hint?.classList.add("show")
+  }, 300)
+
+  setTimeout(()=>{
+    hint?.classList.remove("show")
+  }, 2500)
+}
+
+function updateLiveFeed(){
+
+  let match = matches.find(m => m.id === liveMatchId)
+  if(!match) return
+
+  let box = document.getElementById("liveFeed")
+  if(!box) return
+
+  // 🔥 IMMER RESET (wichtig für sofortiges Update)
+  box.innerHTML = ""
+
+  let events = [...match.events].sort((a,b)=>{
+
+    if(b.minute !== a.minute){
+      return b.minute - a.minute
+    }
+
+    return (b.time || 0) - (a.time || 0)
+  })
+
+
+// 🔥🔥🔥 NUR DAS NEUESTE EVENT CHECKEN (FIX)
+let latestEvent = events[0]   // weil bereits sortiert!
+
+if(latestEvent){
+
+  let id = (latestEvent.time || latestEvent.minute) + "_" + latestEvent.type
+
+  if(id !== lastGoalEventId){
+
+    lastGoalEventId = id
+
+    // ⚽ TOR
+    if(latestEvent.type === "goal"){
+      showGoalOverlay("⚽ TOR")
+    }
+
+    // 🥅 GEGENTOR
+    if(latestEvent.type === "goalAgainst"){
+      showGoalOverlay("🥅 GEGENTOR")
+    }
+
+  }
+}
+
+
+  let html = ""
+
+  events.slice(0,10).forEach(e=>{
+
+    let text = ""
+
+    let showName = isUnlocked || liveAccessGranted
+
+    if(e.type==="goal"){
+      text = "⚽ " + (showName ? e.player : "Spieler")
+    }
+    else if(e.type==="goalAgainst"){
+      text = "🥅 Gegner"
+    }
+    else if(e.type==="yellow"){
+      text = "🟨 " + (showName ? e.player : "Spieler")
+    }
+    else if(e.type==="red"){
+      text = "🟥 " + (showName ? e.player : "Spieler")
+    }
+    else if(e.type==="sub"){
+      text = showName
+        ? "🔁 " + e.player + " → " + e.in
+        : "🔁 Wechsel"
+    }
+
+    html += `
+<div class="live-feed-item ${e.type}">
+  <span>${text}</span>
+  <span>${(e.minute ?? 0).toString().padStart(2,"0")}'</span>
+</div>
+`
+  })
+
+  box.innerHTML = html || "<div style='opacity:.5'>Noch keine Events</div>"
+
+  box.scrollTop = 0
+}
+
+function setLiveEvent(type, e){
+
+  if(!isUnlocked){
+  showToast("👀 Zuschauer-Modus","info")
+  return
+}
+
+  // 🔒 Spiel muss laufen
+  if(!liveStartTime){
+    showToast("▶ Erst Spiel starten","info")
+    return
+  }
+
+  // ⏸ PAUSE BLOCK
+  if(livePausedAt){
+    showToast("⏸ Spiel pausiert","info")
+    return
+  }
+
+  // 🔥 GEGNER DIREKT
+  if(type === "goalAgainst"){
+
+    let match = matches.find(m => m.id === liveMatchId)
+    if(!match) return
+
+    let minute = getLiveMinute()
+
+    match.events.push(createMatchEvent("goalAgainst",{
+      minute:minute
+    }))
+
+    save()
+    updateLiveScore()
+    updateLiveFeed()
+    renderMatches()
+
+showToast("🥅 Gegentor (" + minute + "')","red")
+showGoalOverlay("🥅 GEGENTOR")
+
+    return
+  }
+
+  // 🔥 NORMALER FLOW
+openLivePlayerSelect(type)
+
+  showToast("Event: " + type,"info")
+}
+
+function getLiveMinute(){
+
+  if(!liveStartTime) return 0
+
+  let now = Date.now()
+
+  // 🔥 wenn pausiert → Zeit einfrieren
+  if(livePausedAt){
+    now = livePausedAt
+  }
+
+  let diff = now - liveStartTime - livePausedTotal
+
+  let minutes = Math.floor(diff / 60000)
+
+  return Math.min(minutes, 60)
+}
+
+function updateLiveScore(){
+
+  let match = matches.find(m => m.id === liveMatchId)
+  if(!match) return
+
+  let goals = match.events.filter(e=>e.type==="goal").length
+  let against = match.events.filter(e=>e.type==="goalAgainst").length
+
+  let text = goals + " : " + against
+
+  let el = document.getElementById("liveScore")
+  if(el){
+    el.innerText = text
+  }
+
+  let big = document.getElementById("liveScoreBigValue")
+  if(big){
+    big.innerText = text
+  }
+}
+
+function updateLiveAccessStatus(){
+
+  let el = document.getElementById("liveAccessStatus")
+  if(!el) return
+
+  let stored = localStorage.getItem("liveAccess")
+
+  if(!stored){
+    el.innerText = "👀 Zuschauer-Modus"
+    return
+  }
+
+  try{
+    let obj = JSON.parse(stored)
+
+    if(!obj.granted || obj.expires < Date.now()){
+      el.innerText = "👀 Zuschauer-Modus"
+      return
+    }
+
+    let diff = obj.expires - Date.now()
+
+    let days = Math.ceil(diff / (1000 * 60 * 60 * 24))
+
+    if(days <= 0){
+el.innerText = "🔓 Namen laufen heute ab"
+    }else if(days === 1){
+el.innerText = "🔓 Namen laufen morgen ab"
+    }else{
+el.innerText = "🔓 Namen freigeschaltet (" + days + " Tage)"
+    }
+
+  }catch{
+    el.innerText = "👀 Zuschauer-Modus"
+  }
+
+}
+
+function startLiveTimer(){
+
+  updateLiveButton()
+
+  if(liveTimerInterval){
+    clearInterval(liveTimerInterval)
+  }
+
+  liveTimerInterval = setInterval(()=>{
+
+    let el = document.getElementById("liveTimeValue")
+    if(!el) return
+
+    let dot = document.querySelector(".live-dot")
+
+    // 🔥 DOT STATUS
+    if(dot){
+      if(!liveStartTime){
+        dot.classList.remove("blink")
+        dot.classList.add("paused")
+      }
+      else if(livePausedAt){
+        dot.classList.remove("blink")
+        dot.classList.add("paused")
+      }else{
+        dot.classList.remove("paused")
+        dot.classList.add("blink")
+      }
+    }
+
+    if(!liveStartTime){
+      el.innerText = "00:00"
+      return
+    }
+
+    let now = Date.now()
+
+    if(livePausedAt){
+      now = livePausedAt
+    }
+
+    let diff = now - liveStartTime - livePausedTotal
+
+    let totalSeconds = Math.floor(diff / 1000)
+
+    let minutes = Math.floor(totalSeconds / 60)
+    let seconds = totalSeconds % 60
+
+    let m = String(minutes).padStart(2,"0")
+    let s = String(seconds).padStart(2,"0")
+
+    el.innerText = m + ":" + s
+
+  }, 500)
+}
+
+function pauseLiveGame(){
+
+  if(livePausedAt) return
+
+  let match = matches.find(m => m.id === liveMatchId)
+  if(!match) return
+
+  livePausedAt = Date.now()
+
+  // 🔥 in Match speichern
+  ensureLiveState(match)
+  match.liveState.pausedAt = livePausedAt
+
+  save()
+
+  if(liveTimerInterval){
+    clearInterval(liveTimerInterval)
+  }
+
+  showToast("⏸ Pause","info")
+  showLiveStatusOverlay("⏸ PAUSE")
+
+  updateLiveButton()
+}
+
+  function toggleLiveState(){
+
+  // 🔥 noch nicht gestartet → starten
+  if(!liveStartTime){
+    resumeLiveGame()
+    return
+  }
+
+  // 🔥 läuft → pausieren
+  if(!livePausedAt){
+    pauseLiveGame()
+  }else{
+    // 🔥 pausiert → weiter
+    resumeLiveGame()
+  }
+
+}
+
+  function resetLiveMatch(){
+
+  let match = matches.find(m => m.id === liveMatchId)
+  if(!match) return
+
+  // 🔥 TIMER RESET
+  liveStartTime = null
+  livePausedAt = null
+  livePausedTotal = 0
+
+  // 🔥 IM MATCH SPEICHERN
+  ensureLiveState(match)
+
+  match.liveState.startTime = null
+  match.liveState.pausedAt = null
+  match.liveState.pausedTotal = 0
+
+  confirmChoiceAction(
+    "Spiel zurücksetzen",
+    "Soll das Spiel komplett zurückgesetzt und alle Events gelöscht werden?",
+    "Alles löschen",
+    ()=>{
+      match.events = []
+      save()
+      updateLiveScore()
+      updateLiveFeed()
+      updateLiveButton()
+      showToast("🔄 Spiel zurückgesetzt","info")
+    },
+    "Nur Timer resetten"
+  )
+
+  document.getElementById("choiceCancelBtn").onclick = () => {
+    closeModal()
+    save()
+    updateLiveScore()
+    updateLiveFeed()
+    updateLiveButton()
+    showToast("⏱ Timer zurückgesetzt","info")
+  }
+}
+
+
+function updateLiveButton(){
+
+  let btn = document.getElementById("liveToggleBtn")
+  if(!btn) return
+
+  // ❌ noch nicht gestartet
+  if(!liveStartTime){
+    btn.innerText = "▶ Start"
+    btn.className = "primary"
+    return
+  }
+
+  // ⏸ pausiert
+  if(livePausedAt){
+    btn.innerText = "▶ Weiter"
+    btn.className = "primary"
+  }
+  else{
+    // ▶ läuft
+    btn.innerText = "⏸ Pause"
+    btn.className = "secondary"
+  }
+
+}
+
+function resumeLiveGame(){
+
+  let match = matches.find(m => m.id === liveMatchId)
+  if(!match) return
+
+  ensureLiveState(match)
+
+  // 🔥 ERSTER START
+  if(!liveStartTime){
+
+    liveStartTime = Date.now()
+    livePausedTotal = 0
+    livePausedAt = null
+
+    // 🔥 im Match speichern
+    match.liveState.startTime = liveStartTime
+    match.liveState.pausedTotal = 0
+    match.liveState.pausedAt = null
+
+    save()
+
+    startLiveTimer()
+
+    showToast("▶ Spiel gestartet","info")
+
+    updateLiveButton()
+    return
+  }
+
+  // 🔥 nicht pausiert → nix tun
+  if(!livePausedAt) return
+
+  // 🔥 Pause berechnen
+  let pauseDuration = Date.now() - livePausedAt
+
+  livePausedTotal += pauseDuration
+  livePausedAt = null
+
+  // 🔥 im Match speichern
+  match.liveState.pausedTotal = livePausedTotal
+  match.liveState.pausedAt = null
+
+  save()
+
+  startLiveTimer()
+
+  showToast("▶ Weiter","info")
+  showLiveStatusOverlay("▶ WEITER")
+
+  updateLiveButton()
+}
+
+  function openLivePlayerSelect(type){
+
+  let match = matches.find(m => m.id === liveMatchId)
+  if(!match) return
+
+  let teamPlayers = players.filter(p => p.team === match.team)
+
+  let modal = document.getElementById("modal")
+  let box = modal.querySelector(".modal-box")
+
+  box.innerHTML = `<h3>Spieler wählen</h3>`
+
+  teamPlayers.forEach(p=>{
+
+    let btn = document.createElement("button")
+    btn.type = "button"
+    btn.classList.add("secondary")
+
+    btn.innerText = p.pos + " " + p.name
+
+    btn.onclick = ()=>{
+
+      let minute = getLiveMinute()
+
+      match.events.push(createMatchEvent(type,{
+        player:p.name,
+        minute:minute
+      }))
+
+      save()
+      updateLiveScore()
+      updateLiveFeed()
+      renderMatches()
+
+      closeModal()
+
+if(type==="goal"){
+  showToast("⚽ " + p.name + " (" + minute + "')","goal")
+  showGoalOverlay("⚽ TOR")
+} 
+      else if(type==="yellow"){
+        showToast("🟨 " + p.name + " (" + minute + "')","yellow")
+      } 
+      else if(type==="red"){
+        showToast("🟥 " + p.name + " (" + minute + "')","red")
+      }
+
+    }
+
+    box.appendChild(btn)
+  })
+
+  let cancel = document.createElement("button")
+  cancel.innerText = "Abbrechen"
+  cancel.onclick = closeModal
+
+  box.appendChild(cancel)
+
+  modal.classList.remove("hidden")
+}
+
+function startLiveAutoUpdate(){
+
+  // 🔥 kein doppeltes Interval
+  if(window.liveAutoInterval){
+    clearInterval(window.liveAutoInterval)
+  }
+
+  window.liveAutoInterval = setInterval(()=>{
+
+    if(!liveMatchId) return
+
+    fetch(API + "/data")
+      .then(res => res.json())
+      .then(serverData => {
+
+        let serverMatch = (serverData.matches || [])
+          .find(m => m.id === liveMatchId)
+
+        let localMatch = matches
+          .find(m => m.id === liveMatchId)
+
+        if(!serverMatch || !localMatch) return
+
+        // 🔥 STABILER VERGLEICH
+        let serverEvents = JSON.stringify(serverMatch.events || [])
+        let localEvents = JSON.stringify(localMatch.events || [])
+
+        if(serverEvents === localEvents){
+          return
+        }
+
+        // 🔥 UPDATE
+        Object.assign(localMatch, serverMatch)
+
+        // 🔥 TIMER SYNC FIX
+if(!isUnlocked){  // nur Zuschauer!
+
+  liveStartTime = serverMatch.liveState?.startTime || null
+  livePausedAt = serverMatch.liveState?.pausedAt || null
+  livePausedTotal = serverMatch.liveState?.pausedTotal || 0
+
+}
+
+        // 🔥 UI IMMER KOMPLETT REFRESHEN
+        updateLiveScore()
+        updateLiveFeed()
+        renderMatches()
+
+      })
+      .catch(() => {
+        // optional: still silent fail
+      })
+
+  }, 1500)
+}
+
+  function toggleMatchForm(){
+
+  let form = document.getElementById("matchForm")
+
+  if(!form) return
+
+  form.classList.toggle("hidden")
+
+  // optional: rein scrollen wenn geöffnet
+  if(!form.classList.contains("hidden")){
+    setTimeout(()=>{
+      form.scrollIntoView({
+        behavior:"smooth",
+        block:"center"
+      })
+    },100)
+  }
+
+}
+
+function enterLiveCode(){
+
+  openModal("Zugriffscode", "Code eingeben", (code)=>{
+
+    if(!code) return
+
+    if(code === "team123"){   // ← dein Code
+      liveAccessGranted = true
+      
+  // 🔥 NEU: speichern (persist)
+let expires = Date.now() + (10 * 24 * 60 * 60 * 1000)
+
+localStorage.setItem("liveAccess", JSON.stringify({
+  granted: true,
+  expires: expires
+}))
+      
+      showToast("🔓 Namen sichtbar","info")
+updateLiveFeed()
+updateLiveAccessStatus()
+    }else{
+      showToast("❌ Falscher Code","info")
+    }
+
+  })
+
+}
+
+
+function shareLiveMatch(){
+
+  if(!liveMatchId){
+    showToast("Kein Spiel aktiv","info")
+    return
+  }
+
+  let url = window.location.origin + window.location.pathname
+    + "?live=" + liveMatchId + "&view=1"
+
+  copyTextToClipboard(url,"🔗 Link kopiert")
+}
+  
+  function goBack(){
+  if(history.length > 1){
+    history.back()
+  }else{
+    window.location.href = "/"
+  }
+}
+
+function checkLiveFromURL(){
+
+    // 🔥 NEU: gespeicherten Zugriff laden
+let stored = localStorage.getItem("liveAccess")
+
+if(stored){
+  try{
+    let obj = JSON.parse(stored)
+
+    if(obj.granted && obj.expires > Date.now()){
+      liveAccessGranted = true
+    }else{
+      localStorage.removeItem("liveAccess")
+      liveAccessGranted = false
+    }
+  }catch{
+    localStorage.removeItem("liveAccess")
+  }
+}
+
+  let params = new URLSearchParams(window.location.search)
+
+  let liveId = params.get("live")
+  let viewOnly = params.get("view")
+
+  if(!liveId) return
+
+  // 👀 Zuschauer-Modus aktivieren
+  if(viewOnly){
+    isViewerMode = true
+    isUnlocked = false
+  }
+
+  pendingLiveMatchId = Number(liveId)
+  maybeOpenPendingLiveMatch()
+
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+
+  let dateInput = document.getElementById("date")
+  let opponentInput = document.getElementById("opponent")
+
+  if(dateInput){
+    dateInput.addEventListener("input", validateMatchForm)
+  }
+
+  if(opponentInput){
+    opponentInput.addEventListener("input", validateMatchForm)
+  }
+
+  bindTooltipEvents()
+  loadFromServer()
+  checkLiveFromURL()
+})
+
+</script>
+
+<div id="modal" class="modal hidden">
+  <div class="modal-box">
+
+    <!-- 🔥 Fake Felder direkt im DOM (extrem wichtig!) -->
+    <input type="text" name="fakeuser" autocomplete="username"
+      style="position:absolute; opacity:0; pointer-events:none;">
+    <input type="password" name="fakepass" autocomplete="current-password"
+      style="position:absolute; opacity:0; pointer-events:none;">
+
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+  <div id="liveMode" class="hidden"></div>
+
+<footer class="footer">
+  <a href="impressum.html">Impressum</a> · 
+  <a href="datenschutz.html">Datenschutz</a>
+  <div style="margin-top:8px;font-size:10px;opacity:.55;">Interne Version</div>
+</footer>
+
+<script>
+
+// 🔥 SERVICE WORKER
+if ("serviceWorker" in navigator && window.location.protocol.startsWith("http")) {
+  navigator.serviceWorker.register("./sw.js")
+    .then(() => console.log("✅ Service Worker registriert"))
+    .catch(err => console.log("❌ SW Fehler:", err))
+}
+
+// 🔥 INSTALL BUTTON LOGIK
+let deferredPrompt = null
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault()
+
+  deferredPrompt = e
+
+  const btn = document.getElementById("installBtn")
+  if(btn) btn.style.display = "inline-flex"
+})
+
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("installBtn")
+
+  if(!btn) return
+
+  btn.addEventListener("click", async () => {
+
+    if(!deferredPrompt) return
+
+    deferredPrompt.prompt()
+
+    const result = await deferredPrompt.userChoice
+
+    if(result.outcome === "accepted"){
+      showToast("App installiert ✅","info")
+    }else{
+      showToast("Installation abgebrochen","info")
+    }
+
+    deferredPrompt = null
+    btn.style.display = "none"
+  })
+})
+
+// 🔥 NACH INSTALLATION AUSBLENDEN
+window.addEventListener("appinstalled", () => {
+  const btn = document.getElementById("installBtn")
+  if(btn) btn.style.display = "none"
+})
+
+</script>
+
+</body>
+</html>
