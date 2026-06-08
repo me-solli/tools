@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Taschendesigner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="panel">
+        <div class="panel-copy">
+          <p class="eyebrow">Bag Designer</p>
+          <h1>Papiertragetasche konfigurieren</h1>
+          <p class="intro">
+            Format wählen, Grundfarbe festlegen, Griff aussuchen und das Logo direkt auf der
+            Druckfläche platzieren.
+          </p>
+        </div>
+
+        <section class="card">
+          <div class="section-head">
+            <p class="card-title">1. Format</p>
+            <span class="section-note">Größe und Druckfläche</span>
+          </div>
+          <div id="format-grid" class="choice-grid"></div>
+        </section>
+
+        <section class="card">
+          <div class="section-head">
+            <p class="card-title">2. Grundfarbe</p>
+            <span class="section-note">Papierfarbe der Tasche</span>
+          </div>
+          <div id="color-grid" class="swatch-grid"></div>
+        </section>
+
+        <section class="card">
+          <div class="section-head">
+            <p class="card-title">3. Griff</p>
+            <span class="section-note">Passend zur Tasche</span>
+          </div>
+          <div id="handle-grid" class="choice-row"></div>
+        </section>
+
+        <section class="card">
+          <div class="section-head">
+            <p class="card-title">4. Logo</p>
+            <span class="section-note">Upload und Platzierung</span>
+          </div>
+          <label class="upload-field" for="logo-upload">
+            <span>Logo hochladen</span>
+            <input id="logo-upload" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" />
+          </label>
+          <div class="slider-stack">
+            <label class="slider-label" for="logo-scale">
+              <span>Logo-Größe</span>
+              <strong id="scale-value">54%</strong>
+            </label>
+            <input id="logo-scale" type="range" min="20" max="120" value="54" />
+          </div>
+          <button id="reset-logo" class="ghost-button" type="button">Logo zurücksetzen</button>
+        </section>
+
+        <section class="card">
+          <div class="section-head">
+            <p class="card-title">Ansicht</p>
+            <span class="section-note">Drehen und Zoomen</span>
+          </div>
+          <div class="view-actions">
+            <button id="rotate-left" class="ghost-button" type="button">Links drehen</button>
+            <button id="reset-view" class="ghost-button" type="button">Ansicht reset</button>
+            <button id="rotate-right" class="ghost-button" type="button">Rechts drehen</button>
+          </div>
+          <div class="slider-stack">
+            <label class="slider-label" for="zoom-range">
+              <span>Zoom</span>
+              <strong id="zoom-value">100%</strong>
+            </label>
+            <input id="zoom-range" type="range" min="70" max="145" value="100" />
+          </div>
+          <div class="slider-stack">
+            <label class="slider-label" for="tilt-range">
+              <span>Rotation</span>
+              <strong id="rotation-value">-16°</strong>
+            </label>
+            <input id="tilt-range" type="range" min="-40" max="40" value="-16" />
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="section-head">
+            <p class="card-title">Produktdaten</p>
+            <span class="section-note">Live aus der Auswahl</span>
+          </div>
+          <div id="bag-meta" class="summary-copy"></div>
+        </section>
+
+        <section class="card">
+          <div class="section-head">
+            <p class="card-title">Druckmaße</p>
+            <span class="section-note">Logo und Abstände in mm</span>
+          </div>
+          <div class="measurement-grid">
+            <div>
+              <span class="measurement-label">Druckfläche</span>
+              <strong id="print-area-mm">-</strong>
+            </div>
+            <div>
+              <span class="measurement-label">Logo</span>
+              <strong id="logo-size-mm">-</strong>
+            </div>
+            <div>
+              <span class="measurement-label">Links</span>
+              <strong id="gap-left-mm">-</strong>
+            </div>
+            <div>
+              <span class="measurement-label">Rechts</span>
+              <strong id="gap-right-mm">-</strong>
+            </div>
+            <div>
+              <span class="measurement-label">Oben</span>
+              <strong id="gap-top-mm">-</strong>
+            </div>
+            <div>
+              <span class="measurement-label">Unten</span>
+              <strong id="gap-bottom-mm">-</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="section-head">
+            <p class="card-title">Status</p>
+            <span class="section-note">Was gerade passiert</span>
+          </div>
+          <p id="status-text" class="muted">
+            Noch kein Logo geladen. Format, Farbe und Griff können direkt gewählt werden.
+          </p>
+        </section>
+      </aside>
+
+      <main class="stage">
+        <div class="stage-topbar">
+          <div>
+            <p class="eyebrow">Live-Vorschau</p>
+            <h2 id="bag-name">Papiertragetasche</h2>
+          </div>
+          <p class="stage-help">
+            Logo in der Druckfläche ziehen. Tasche über die Ansicht-Regler drehen und zoomen.
+          </p>
+        </div>
+
+        <div class="preview-wrap">
+          <div class="scene-background"></div>
+          <div class="bag-scene" id="bag-scene">
+            <div class="size-pill size-pill-top" id="size-pill-top"></div>
+            <div class="size-pill size-pill-side" id="size-pill-side"></div>
+            <div class="bag" id="bag">
+              <div class="handle handle-left" id="handle-left"></div>
+              <div class="handle handle-right" id="handle-right"></div>
+              <div class="side-panel"></div>
+              <div class="front-panel">
+                <div class="print-area" id="print-area">
+                  <div class="print-grid"></div>
+                  <span id="print-placeholder">Logo hier platzieren</span>
+                  <img id="logo-layer" alt="Logo-Vorschau" hidden />
+                  <div class="measure measure-top" id="measure-top" hidden></div>
+                  <div class="measure measure-right" id="measure-right" hidden></div>
+                  <div class="measure measure-bottom" id="measure-bottom" hidden></div>
+                  <div class="measure measure-left" id="measure-left" hidden></div>
+                </div>
+              </div>
+              <div class="bottom-shadow"></div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
