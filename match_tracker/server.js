@@ -15,7 +15,7 @@ const FILE = path.join(DATA_DIR, "data.json")
 const LIVE_PHOTO_FILE = path.join(DATA_DIR, "live_photos.json")
 const LIVE_PHOTO_DIR = path.join(DATA_DIR, "live_photos")
 const STATIC_DIR = __dirname
-const LIVE_PHOTO_TTL_MS = 24 * 60 * 60 * 1000
+const LIVE_PHOTO_TTL_MS = 30 * 24 * 60 * 60 * 1000
 
 function createInitialData() {
   return {
