@@ -177,7 +177,7 @@ ensureStorage()
 
 const TEAM_PASSWORDS = {
   "SV Riedmoos U11": "u11",
-  "SV Riedmoos U10-III": "u10-3",
+  "SV Riedmoos U10-III": "u11-2",
   "SV Testhausen": "test"
 }
 
