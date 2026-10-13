@@ -6762,6 +6762,13 @@ body:has(#liveMode:not(.hidden)){
   height:0 !important;
 }
 </style>
+<style>
+/* Trainer-Zentrale: einheitliche gelbe Hinweise für ausstehende Punkte */
+.quickbar-status-pill{display:inline-flex;align-items:center;gap:4px;margin-top:2px;padding:4px 7px;border-radius:7px;font-size:9px;font-weight:800;letter-spacing:.02em;border:1px solid transparent;line-height:1.15}
+.quickbar-status-pending{color:#ffd27a;background:rgba(170,117,28,.18);border-color:rgba(255,193,74,.42)}
+.quickbar-status-done{color:#8ce0ac;background:rgba(36,119,74,.16);border-color:rgba(89,205,133,.28)}
+.todo-status-pill{color:#ffd27a;background:rgba(170,117,28,.18);border:1px solid rgba(255,193,74,.35);border-radius:6px;padding:2px 5px}
+</style>
 </head>
 <body>
 
@@ -11110,9 +11117,9 @@ function renderTeamQuickBar(){
     <div class="quickbar-head"><span class="quickbar-kicker">⚽ Trainer-Zentrale</span><span class="quickbar-team">${escapeHtml(activeTeam)} · Teamzugang aktiv</span></div>
     <div class="quickbar-grid">
       <button type="button" class="quickbar-button" onclick="quickBarCreateMatch()"><span class="quickbar-button-top"><span class="qicon">＋</span>Spiel anlegen</span><small>Neues Spiel eintragen</small></button>
-      <button type="button" class="quickbar-button" onclick="quickBarLineup()"><span class="quickbar-button-top"><span class="qicon">👥</span>Aufstellung</span><small>Kader fürs nächste Spiel öffnen</small></button>
+      <button type="button" class="quickbar-button" onclick="quickBarLineup()"><span class="quickbar-button-top"><span class="qicon">👥</span>Aufstellung</span><small>Kader fürs nächste Spiel öffnen</small><span class="quickbar-status-pill quickbar-status-pending">⚠ Aufstellung prüfen</span></button>
       <button type="button" class="quickbar-button" onclick="quickBarLiveTicker()"><span class="quickbar-button-top"><span class="qicon">◉</span>Live-Ticker</span><small>Laufendes oder nächstes Spiel</small></button>
-      <button type="button" class="quickbar-button" onclick="openTeamTodos()"><span class="quickbar-button-top"><span class="qicon">☑</span>Aufgaben <span class="todo-status-pill">${getTeamTodos().filter(t=>t.status!=="Abgeschlossen").length} offen</span></span><small>Notizen & Aufgaben verwalten</small></button>
+      <button type="button" class="quickbar-button" onclick="openTeamTodos()"><span class="quickbar-button-top"><span class="qicon">☑</span>Aufgaben</span><small>Notizen & Aufgaben verwalten</small><span class="quickbar-status-pill ${getTeamTodos().filter(t=>t.status!=="Abgeschlossen").length?"quickbar-status-pending":"quickbar-status-done"}">${getTeamTodos().filter(t=>t.status!=="Abgeschlossen").length?`${getTeamTodos().filter(t=>t.status!=="Abgeschlossen").length} offen`:"✓ Alles erledigt"}</span></button>
       <button type="button" class="quickbar-button quickbar-report-button" onclick="openLatestTeamMatchReport()"><span class="quickbar-button-top"><span class="qicon">📄</span>Spielbericht</span><small>${latestPast?`${escapeHtml(getMatchSides(latestPast).home)} · ${escapeHtml(formatDate(latestPast.date||""))}`:"Bericht zum letzten Spiel"}</small><span class="report-reminder ${reportClass}">${reportStatus}</span></button>
     </div>`
 }
@@ -13907,7 +13914,7 @@ body::after{
 .quickbar-button-top{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:800;line-height:1.2}
 .quickbar-button-top .qicon{color:#71ddf7;font-size:14px}
 .quickbar-button small{font-size:10px;color:#9eb3bd;line-height:1.3;font-weight:500}
-.quickbar-report-button .report-reminder{display:inline-flex;align-items:center;gap:5px;margin-top:2px;padding:4px 7px;border-radius:7px;font-size:9px;font-weight:800;letter-spacing:.02em;border:1px solid transparent}.quickbar-report-button .report-reminder-missing{color:#ffb0a9;background:rgba(137,39,47,.2);border-color:rgba(255,105,115,.35)}.quickbar-report-button .report-reminder-done{color:#8ce0ac;background:rgba(36,119,74,.16);border-color:rgba(89,205,133,.28)}
+.quickbar-report-button .report-reminder{display:inline-flex;align-items:center;gap:5px;margin-top:2px;padding:4px 7px;border-radius:7px;font-size:9px;font-weight:800;letter-spacing:.02em;border:1px solid transparent}.quickbar-report-button .report-reminder-missing{color:#ffd27a;background:rgba(170,117,28,.18);border-color:rgba(255,193,74,.42)}.quickbar-report-button .report-reminder-done{color:#8ce0ac;background:rgba(36,119,74,.16);border-color:rgba(89,205,133,.28)}
 .todo-modal{width:min(560px,calc(100vw - 28px));max-height:82vh;overflow:auto;background:#111e26;border:1px solid rgba(105,210,237,.24);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:12px}
 .todo-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .todo-title{font-size:17px;font-weight:800;color:#f2f8fb}
