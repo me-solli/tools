@@ -6834,7 +6834,7 @@ body:has(#liveMode:not(.hidden)){
     <div class="hub-icon">⚽</div>
   </div>
   <div class="hub-copy">Team auswählen, Zugang freischalten und direkt in den Spielbetrieb wechseln.</div>
-  <button class="secondary add-btn" onclick="openModal('Neues Team','Teamname eingeben', addTeam)" aria-label="Neues Team anlegen" data-tooltip="Neues Team anlegen">
+  <button id="adminCreateTeamBtn" class="secondary add-btn" style="display:none" onclick="openModal('Neues Team','Teamname eingeben', addTeam)" aria-label="Neues Team anlegen" data-tooltip="Neues Team anlegen">
     <span>＋</span> Neues Team
   </button>
   <div id="teamList"></div>
@@ -7926,6 +7926,12 @@ TEAMS
 
 function addTeam(name){
 
+  // Enforce the same restriction in the action handler, not just the UI.
+  if(!isAdmin()){
+    showToast("🔒 Teams anlegen ist nur für SV Testhausen nach Login möglich","info")
+    return
+  }
+
 if(!name) return
 
 openFormModal("Team erstellen",[
@@ -8406,6 +8412,12 @@ function testhausenCrest(){
 }
 
 function renderTeams(){
+
+// Team creation is reserved for the authenticated SV Testhausen admin account.
+const createTeamBtn = document.getElementById("adminCreateTeamBtn")
+if(createTeamBtn){
+  createTeamBtn.style.display = isAdmin() ? "" : "none"
+}
 
 let html=""
 

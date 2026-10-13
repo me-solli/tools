@@ -364,15 +364,6 @@ function normalizeIncomingData(input) {
       next.teamPasswords &&
       typeof next.teamPasswords === "object"
         ? next.teamPasswords
-        : {},
-
-    // Team-Aufgaben müssen die Normalisierung überleben, sonst verschwinden
-    // sie nach dem Server-Save beim nächsten GET /data.
-    teamTodos:
-      next.teamTodos &&
-      typeof next.teamTodos === "object" &&
-      !Array.isArray(next.teamTodos)
-        ? next.teamTodos
         : {}
   }
 }
