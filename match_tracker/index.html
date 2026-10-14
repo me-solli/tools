@@ -9809,7 +9809,7 @@ onclick="event.stopPropagation();togglePublicMatchInfo(${match.id})">
 
 <div class="match-body ${match.open ? 'open' : ''}">
 
-${hasAccess(activeTeam) ? `<div class="section-title">
+${hasAccess(activeTeam) ? `<div class="planning-block planning-roster"><div class="section-title">
 Kader (${match.squad?.length || 0} Spieler)
 </div>` : ""}
 `
@@ -9838,7 +9838,7 @@ onclick='toggleSquad(${match.id}, ${JSON.stringify(p.name)})'>
 `
 })
 
-html+=`<div class="section-title">Startelf</div>`
+html+=`</div><div class="planning-block planning-starting"><div class="section-title">Startelf</div>`
 
 players
 .filter(p=>{
@@ -9864,7 +9864,7 @@ onclick='toggleLineup(${match.id}, ${JSON.stringify(p.name)})'>
 
 })
 
-html+=`<div class="section-title">Bank wählen</div>`
+html+=`</div><div class="planning-block planning-bench"><div class="section-title">Bank wählen</div>`
 
 players
 .filter(p=>{
@@ -9888,9 +9888,9 @@ onclick='toggleBench(${match.id}, ${JSON.stringify(p.name)})'>
 
 })
 
-html+=renderPitch(match)
+html+=`</div><div class="planning-pitch-area">` + renderPitch(match) + `</div>`
 
-html+=`
+html+=`<div class="planning-actions"><div class="planning-action-primary">
 
 <button class="secondary"
 ${!isUnlocked ? "disabled" : ""}
@@ -9928,7 +9928,7 @@ onclick="addEvent(${match.id},'penalty')">⏱ Zeitstrafe</button>
 ${!isUnlocked ? "disabled" : ""}
 ${getTooltipAttrs("Wechsel eintragen")}
 onclick="addSubstitution(${match.id})">🔁 Wechsel</button>
-
+</div><div class="planning-action-secondary">
 <button class="secondary"
 ${!isUnlocked ? "disabled" : ""}
 ${getTooltipAttrs("Kader kopieren")}
@@ -9948,6 +9948,7 @@ onclick="copyReport(${match.id})">📋 Bericht kopieren</button>
 ${!isUnlocked ? "disabled" : ""}
 ${getTooltipAttrs("Bericht per WhatsApp teilen")}
 onclick="shareReportWhatsApp(${match.id})">💬 Bericht teilen</button>
+</div></div>
 `
 
 const sortedEvents = [...match.events].sort((a,b)=>{
@@ -13968,6 +13969,77 @@ body::after{
   overflow:visible !important;
 }
 .topbar-left .logo img{filter:drop-shadow(0 0 8px rgba(88,224,255,.12)) !important;}
+
+
+
+/* ===== Match planning editor: cleaner grouping, same functionality ===== */
+.match-body.open{
+  padding:14px 15px 18px !important;
+}
+.match-body.open .planning-block{
+  margin:10px 0 13px;
+  padding:11px 12px 12px;
+  border:1px solid rgba(105,177,198,.15);
+  border-radius:12px;
+  background:linear-gradient(145deg,rgba(20,38,48,.78),rgba(13,27,35,.55));
+}
+.match-body.open .planning-block .section-title{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  margin:0 0 9px;
+  color:#89a2af !important;
+  font-size:10px !important;
+  letter-spacing:.13em;
+}
+.match-body.open .planning-roster .player-chip,
+.match-body.open .planning-starting .player-chip,
+.match-body.open .planning-bench .player-chip{
+  margin:2px 3px 3px 0;
+  min-height:27px;
+  vertical-align:middle;
+}
+.match-body.open .planning-starting{border-left:2px solid rgba(96,220,246,.48);}
+.match-body.open .planning-bench{border-left:2px solid rgba(156,135,255,.42);}
+.match-body.open .planning-pitch-area{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  margin:14px 0 16px;
+  padding:12px;
+  border:1px solid rgba(105,177,198,.13);
+  border-radius:14px;
+  background:rgba(7,17,23,.28);
+  overflow:hidden;
+}
+.match-body.open .planning-pitch-area > *{max-width:100%;}
+.match-body.open .planning-actions{
+  margin-top:12px;
+  padding:12px;
+  border:1px solid rgba(105,177,198,.15);
+  border-radius:12px;
+  background:rgba(13,27,35,.62);
+}
+.match-body.open .planning-action-primary,
+.match-body.open .planning-action-secondary{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:7px;
+}
+.match-body.open .planning-action-primary{padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.07);}
+.match-body.open .planning-action-secondary{padding-top:10px;}
+.match-body.open .planning-actions button{margin:0;min-height:34px;border-radius:9px;}
+.match-body.open .planning-actions .section-title{margin:0 0 8px;width:100%;}
+@media(max-width:760px){
+  .match-body.open{padding:10px 9px 14px !important;}
+  .match-body.open .planning-block{padding:9px;margin:8px 0 10px;}
+  .match-body.open .planning-pitch-area{padding:7px;margin:10px 0 12px;}
+  .match-body.open .planning-actions{padding:9px;}
+  .match-body.open .planning-action-primary,
+  .match-body.open .planning-action-secondary{gap:6px;}
+  .match-body.open .planning-actions button{flex:1 1 calc(50% - 6px);min-width:0;font-size:12px;padding:8px 7px;}
+}
 
 </style>
 </body>
