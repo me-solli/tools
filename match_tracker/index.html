@@ -14143,3 +14143,32 @@ body::after{
 </style>
 </body>
 </html>
+
+
+/* ===== Match planning: restrained selection like the Team Stats rows ===== */
+.match-body.open .planning-roster .player-chip,
+.match-body.open .planning-starting .player-chip,
+.match-body.open .planning-bench .player-chip{
+  border:1px solid rgba(135,166,180,.16)!important;
+  outline:none!important;
+  box-shadow:0 2px 5px rgba(0,0,0,.12)!important;
+  transform:none!important;
+  transition:background .15s ease,border-color .15s ease,box-shadow .15s ease;
+}
+.match-body.open .planning-roster .player-chip:hover,
+.match-body.open .planning-starting .player-chip:hover,
+.match-body.open .planning-bench .player-chip:hover{
+  border-color:rgba(88,224,255,.48)!important;
+  background:linear-gradient(90deg,rgba(88,224,255,.12),rgba(88,224,255,.045))!important;
+  box-shadow:inset 2px 0 0 rgba(88,224,255,.55),0 3px 8px rgba(0,0,0,.14)!important;
+  transform:translateY(-1px)!important;
+}
+.match-body.open .planning-roster .player-chip.selected,
+.match-body.open .planning-starting .player-chip.selected,
+.match-body.open .planning-bench .player-chip.selected{
+  border:1px solid rgba(88,224,255,.42)!important;
+  outline:none!important;
+  background:linear-gradient(90deg,rgba(88,224,255,.13),rgba(88,224,255,.055))!important;
+  box-shadow:inset 3px 0 0 rgba(88,224,255,.72),0 2px 6px rgba(0,0,0,.12)!important;
+  transform:none!important;
+}
