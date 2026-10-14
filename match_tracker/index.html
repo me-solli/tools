@@ -10326,45 +10326,82 @@ function buildReportText(matchId){
 }
 
 function buildSquadText(matchId){
-  let match = matches.find(m=>m.id===matchId)
+  const match = matches.find(m => String(m.id) === String(matchId))
   if(!match) return ""
-  let locationLines = match.location
-    ? String(match.location)
-        .split("|")
-        .map(part => part.trim())
-        .filter(Boolean)
-        .map(part => `- ${part}`)
-    : []
 
-  let squadList = match.squad?.length
-    ? match.squad
-    : players
-        .filter(p=>p.team===activeTeam)
-        .map(p=>p.name)
-
-  let sorted = squadList
-    .map(name => players.find(p=>p.name===name && p.team===activeTeam))
+  const locationParts = String(match.location || "")
+    .split("|")
+    .map(part => part.trim())
     .filter(Boolean)
-    .sort((a,b)=>getPositionRank(a.pos) - getPositionRank(b.pos))
 
-  let route = ""
-  if(match.location && match.location.trim() !== ""){
-    route = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(match.location.trim())
+  const venue = locationParts[0] || ""
+  const address = locationParts.slice(1).join(", ")
+
+  const squadList = Array.isArray(match.squad) && match.squad.length
+    ? match.squad
+    : players.filter(p => p.team === activeTeam).map(p => p.name)
+
+  const sorted = squadList
+    .map(entry => {
+      const name = typeof entry === "string" ? entry : (entry?.name || "")
+      return players.find(p => p.name === name && p.team === activeTeam)
+    })
+    .filter(Boolean)
+    .sort((a,b) => getPositionRank(a.pos) - getPositionRank(b.pos))
+
+  const route = match.location
+    ? "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(String(match.location).trim())
+    : ""
+
+  // Datum WhatsApp-freundlich und mit Wochentag darstellen, ohne UTC-Verschiebung.
+  let dateLabel = formatDate(match.date).replace(/-/g, ".")
+  const rawDate = String(match.date || "")
+  let dateParts = null
+  if(/^\d{4}-\d{2}-\d{2}$/.test(rawDate)){
+    const [, y, m, d] = rawDate.match(/^(\d{4})-(\d{2})-(\d{2})$/)
+    dateParts = [Number(y), Number(m), Number(d)]
+  }else if(/^\d{2}[.-]\d{2}[.-]\d{4}$/.test(rawDate)){
+    const parts = rawDate.split(/[.-]/).map(Number)
+    dateParts = [parts[2], parts[1], parts[0]]
+  }
+  if(dateParts){
+    const [y,m,d] = dateParts
+    const dateObj = new Date(y, m - 1, d)
+    const weekday = ["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"][dateObj.getDay()]
+    dateLabel = `${weekday}, ${String(d).padStart(2,"0")}.${String(m).padStart(2,"0")}.${y}`
   }
 
-  return [
-    "KADER",
+  const positionEmoji = {
+    "TW":"🧤", "IV":"🛡️", "LV":"⬅️", "RV":"➡️",
+    "LM":"⚽", "RM":"⚽", "ZM":"⚽", "OM":"🎯",
+    "ST":"🥅", "LF":"⚡", "RF":"⚡"
+  }
+
+  const rosterLines = sorted.map(player => {
+    const pos = String(player.pos || "").trim().toUpperCase()
+    const emoji = positionEmoji[pos] || "⚽"
+    return `${emoji} ${pos ? `*${pos}* · ` : ""}${player.name}`
+  })
+
+  const lines = [
+    `⚽ *KADER | ${activeTeam}*`,
     "",
-    `${activeTeam} vs ${match.opponent}`,
-    `📅 ${formatDate(match.date)}`,
-    match.time ? `🕒 ${match.time}` : null,
-    locationLines.length ? locationLines.join("\n") : null,
-    route ? `Route: ${route}` : null,
+    `🆚 *${activeTeam} – ${match.opponent || "Gegner offen"}*`,
+    `📅 ${dateLabel}`,
+    match.time ? `🕒 Spielbeginn: *${match.time} Uhr*` : null,
     "",
-    sorted.length
-      ? sorted.map(player => `- ${player.pos}  ${player.name}`).join("\n")
-      : "Keine Spieler im Kader"
-  ].filter(Boolean).join("\n")
+    venue ? `📍 *${venue}*` : (address ? "📍 *Spielort*" : null),
+    address || null,
+    !address && locationParts.length > 1 ? locationParts.slice(1).join(", ") : null,
+    route ? `🗺️ Route: ${route}` : null,
+    "",
+    `👥 *Kader (${sorted.length} ${sorted.length === 1 ? "Spieler" : "Spieler"})*`,
+    rosterLines.length ? rosterLines.join("\n") : "Noch keine Spieler im Kader eingetragen.",
+    "",
+    "💙 *Auf geht’s, SVR!*"
+  ]
+
+  return lines.filter(line => line !== null && line !== undefined).join("\n")
 }
 
 function shareTextOnWhatsApp(text){
