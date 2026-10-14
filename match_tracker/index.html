@@ -10374,21 +10374,38 @@ function buildSquadText(matchId){
     dateLabel = `${weekday}, ${String(d).padStart(2,"0")}.${String(m).padStart(2,"0")}.${y}`
   }
 
-  // Für WhatsApp bewusst schlicht: keine Positionskürzel, wenig Formatierung und nur ein Emoji.
+  // Treffpunkt automatisch 45 Minuten vor dem tatsächlichen Spielbeginn berechnen.
+  // Akzeptiert z. B. "17:30" oder "17:30 Uhr".
+  let meetingTimeLabel = null
+  const timeMatch = String(match.time || "").match(/(\d{1,2})\s*:\s*(\d{2})/)
+  if(timeMatch){
+    const kickoffMinutes = Number(timeMatch[1]) * 60 + Number(timeMatch[2])
+    const meetingMinutes = ((kickoffMinutes - 45) % 1440 + 1440) % 1440
+    const meetingHours = Math.floor(meetingMinutes / 60)
+    const meetingMins = meetingMinutes % 60
+    meetingTimeLabel = `${String(meetingHours).padStart(2, "0")}:${String(meetingMins).padStart(2, "0")}`
+  }
+
+  // WhatsApp-Text mit etwas Struktur, aber ohne Positionskürzel bei den Spielern.
   const rosterLines = sorted.map(player => player.name)
   const lines = [
-    `Kader – ${activeTeam}`,
-    `${activeTeam} vs. ${match.opponent || "Gegner offen"}`,
+    `⚽ *Kader | ${activeTeam}*`,
+    "────────────────────",
+    `*${activeTeam} – ${match.opponent || "Gegner offen"}*`,
     "",
-    dateLabel,
-    match.time ? `Spielbeginn: ${match.time} Uhr` : null,
+    `📅 ${dateLabel}`,
+    match.time ? `🕒 Spielbeginn: *${match.time.replace(/\s*Uhr\s*$/i, "")} Uhr*` : null,
+    meetingTimeLabel ? `📍 Treffpunkt: *${meetingTimeLabel} Uhr* (45 Min. vorher)` : null,
     "",
     venue || (address ? "Spielort" : null),
     address || null,
-    route ? `Route:\n${route}` : null,
+    route ? `🗺️ Route:\n${route}` : null,
     "",
-    `Kader (${sorted.length} Spieler)`,
-    rosterLines.length ? rosterLines.join("\n") : "Noch keine Spieler im Kader eingetragen."
+    "────────────────────",
+    `*Kader (${sorted.length} Spieler)*`,
+    rosterLines.length ? rosterLines.join("\n") : "Noch keine Spieler im Kader eingetragen.",
+    "",
+    "Auf geht's, SVR! ⚽"
   ]
 
   return lines.filter(line => line !== null && line !== undefined && line !== "").join("\n")
