@@ -8214,9 +8214,13 @@ function selectTeam(name){
   
 function deleteTeam(name){
 
-  // 🔐 Zugriff prüfen
-  if(!hasAccess(activeTeam) && !isAdmin()){
-    showToast("🔒 Kein Zugriff","info")
+  // Team löschen ist ausschließlich über den angemeldeten Admin (SV Testhausen) erlaubt.
+  if(!isAdmin()){
+    showToast("🔒 Teams können nur über den Admin-Zugang SV Testhausen gelöscht werden","info")
+    return
+  }
+  if(name === "SV Testhausen"){
+    showToast("🔒 Das Admin-Team kann nicht gelöscht werden","info")
     return
   }
 
@@ -8492,37 +8496,36 @@ html+=`
 <div class="team-actions">
 
 ${
-  accessCache[t] || isAdmin()
+  accessCache[t]
     ? `
       <button class="team-login active" title="Angemeldet">
         ✓ Eingeloggt
       </button>
       <button title="Team abmelden" aria-label="Team abmelden" onclick='event.stopPropagation(); logoutTeam(${JSON.stringify(t)})'>
-        ⏻
+        ↪️
       </button>
-
-      <button
-        ${getTooltipAttrs("Teamname ändern")}
-        onclick='event.stopPropagation(); editTeamName(${JSON.stringify(t)})'>
-        ✏️
-      </button>
-
-      <button
-        ${getTooltipAttrs("Team löschen")}
-        onclick='event.stopPropagation(); deleteTeam(${JSON.stringify(t)})'>
-        🗑
-      </button>
+      ${isAdmin() && t !== "SV Testhausen" ? `
+        <button ${getTooltipAttrs("Team löschen (nur Admin)")}
+          onclick='event.stopPropagation(); deleteTeam(${JSON.stringify(t)})'>🗑</button>
+      ` : `
+        <button ${getTooltipAttrs("Teamname ändern")}
+          onclick='event.stopPropagation(); editTeamName(${JSON.stringify(t)})'>✏️</button>
+      `}
     `
-    : `
-      <button
-        class="team-login"
-        ${getTooltipAttrs("Bei diesem Team einloggen")}
-        onclick='event.stopPropagation(); unlockTeamFromList(${JSON.stringify(t)})'>
-        🔐 Einloggen
-      </button>
-    `
+    : isAdmin() && t !== "SV Testhausen"
+      ? `
+        <button class="team-login active" title="Admin-Verwaltung">🛡 Admin</button>
+        <button ${getTooltipAttrs("Team löschen (nur Admin)")}
+          onclick='event.stopPropagation(); deleteTeam(${JSON.stringify(t)})'>🗑</button>
+      `
+      : `
+        <button class="team-login"
+          ${getTooltipAttrs("Bei diesem Team einloggen")}
+          onclick='event.stopPropagation(); unlockTeamFromList(${JSON.stringify(t)})'>
+          🔐 Einloggen
+        </button>
+      `
   }
-
 </div>
 
   </div>
