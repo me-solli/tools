@@ -7511,7 +7511,12 @@ function openFormModal(title, fields, onSubmit, options = {}){
   actions.appendChild(cancel)
   box.appendChild(actions)
 
+  // closeModal() setzt display:none; beim erneuten Öffnen muss display
+  // explizit zurückgesetzt werden, sonst bleibt das Login-Formular unsichtbar.
   modal.classList.remove("hidden")
+  modal.style.display = "flex"
+  modal.dataset.view = "form"
+  box.className = "modal-box"
 
   setTimeout(()=>{
     const first = document.getElementById(fields[0]?.id)
@@ -8492,8 +8497,8 @@ ${
       <button class="team-login active" title="Angemeldet">
         ✓ Eingeloggt
       </button>
-      <button title="Team abmelden" onclick='event.stopPropagation(); logoutTeam(${JSON.stringify(t)})'>
-        ↪️
+      <button title="Team abmelden" aria-label="Team abmelden" onclick='event.stopPropagation(); logoutTeam(${JSON.stringify(t)})'>
+        ⏻
       </button>
 
       <button
@@ -12892,6 +12897,7 @@ window.addEventListener("appinstalled", () => {
   justify-content:flex-start !important;
   gap:6px !important;
   margin:0 !important;
+  flex-wrap:wrap !important;
 }
 
 .team-chip-full .team-actions .team-login{
