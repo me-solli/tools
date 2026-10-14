@@ -4507,26 +4507,85 @@ body::after{
 
 .scorer-panel{
   min-height:220px;
+  padding:18px !important;
+  background:linear-gradient(155deg,rgba(21,37,46,.98),rgba(14,26,33,.98)) !important;
+  border:1px solid rgba(101,210,239,.10) !important;
 }
 
-.scorer-panel h2{
+.scorer-panel h2.scorer-title{
+  display:flex;
+  align-items:center;
+  gap:8px;
   margin:5px 0 2px !important;
-  font-size:21px !important;
+  font-size:20px !important;
+  letter-spacing:-.025em;
+}
+
+.scorer-title-icon{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:28px;
+  height:28px;
+  border-radius:9px;
+  background:rgba(93,211,241,.12);
+  border:1px solid rgba(93,211,241,.20);
+  font-size:15px;
 }
 
 .stats-caption{
-  color:#677680;
+  color:#8299a5;
   font-size:10px;
-  margin-bottom:14px;
+  margin:4px 0 14px;
 }
+
+.scorer-expand-hint{
+  color:#718d9a;
+  white-space:nowrap;
+}
+.scorer-expand-hint span{font-size:13px;color:#68d8f3}
 
 #scorerRanking{
-  gap:8px !important;
+  display:flex;
+  flex-direction:column;
+  gap:5px !important;
 }
 
-#scorerRanking > *{
+#scorerRanking > .stat-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto 18px;
+  align-items:center;
+  gap:8px;
+  min-height:39px;
+  padding:7px 9px !important;
+  border:1px solid rgba(130,160,174,.12) !important;
   border-radius:11px !important;
+  background:rgba(255,255,255,.025);
+  cursor:pointer;
+  transition:background .16s ease,border-color .16s ease,transform .16s ease;
+  border-bottom:1px solid rgba(130,160,174,.12) !important;
 }
+#scorerRanking > .stat-row:hover,
+#scorerRanking > .stat-row:focus-visible{
+  background:rgba(85,203,231,.09);
+  border-color:rgba(85,203,231,.42) !important;
+  outline:none;
+}
+#scorerRanking > .stat-row.is-expanded{
+  border-color:rgba(85,203,231,.48) !important;
+  background:rgba(85,203,231,.075);
+  border-bottom-left-radius:5px !important;
+  border-bottom-right-radius:5px !important;
+}
+.scorer-player-name{display:flex;align-items:center;min-width:0;gap:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.scorer-rank-crown{font-size:12px;filter:drop-shadow(0 1px 3px rgba(255,198,65,.28));flex:none}
+.scorer-goal-count{display:inline-flex;align-items:center;justify-content:center;min-width:30px;padding:4px 7px;border-radius:8px;background:rgba(89,218,157,.10);border:1px solid rgba(89,218,157,.22);color:#75e6ad;font-weight:800;font-size:12px;font-variant-numeric:tabular-nums}
+.scorer-chevron{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:5px;color:#7b9ba9;font-size:15px;transition:transform .16s ease,color .16s ease}
+.stat-row.is-expanded .scorer-chevron{transform:rotate(180deg);color:#69def5}
+#scorerRanking .player-stats{margin:-5px 0 3px;padding:8px 10px 8px 13px;background:rgba(7,17,23,.52);border:1px solid rgba(85,203,231,.23);border-top:0;border-left:2px solid #48cce9;border-radius:5px 5px 10px 10px;color:#c1d2d9;font-size:11px}
+#scorerRanking .player-stats > div{padding:7px 0 !important;border-bottom:1px solid rgba(130,160,174,.14) !important;font-size:11px !important;line-height:1.45}
+#scorerRanking .player-stats > div:last-child{border-bottom:0 !important}
+#scorerRanking .empty-state{padding:14px;border-radius:11px;background:rgba(255,255,255,.025);border:1px dashed rgba(130,160,174,.2)}
 
 /* ====== TOOLS ====== */
 
@@ -6831,9 +6890,8 @@ body:has(#liveMode:not(.hidden)){
       <div class="hub-eyebrow">TEAM HUB</div>
       <div class="hub-title">Deine Mannschaften</div>
     </div>
-    <div class="hub-icon">⚽</div>
+    <div class="hub-icon" aria-hidden="true">🛡️</div>
   </div>
-  <div class="hub-copy">Team auswählen, Zugang freischalten und direkt in den Spielbetrieb wechseln.</div>
   <button id="adminCreateTeamBtn" class="secondary add-btn" style="display:none" onclick="openModal('Neues Team','Teamname eingeben', addTeam)" aria-label="Neues Team anlegen" data-tooltip="Neues Team anlegen">
     <span>＋</span> Neues Team
   </button>
@@ -6884,11 +6942,7 @@ body:has(#liveMode:not(.hidden)){
 
 <div id="teamHeader" class="team-header">–</div>
 
-<div id="createMatchBox" class="panel">
-
-  <button class="secondary add-btn" onclick="toggleMatchForm()" aria-label="Spielformular öffnen" data-tooltip="Spielformular öffnen">
-    <span>➕</span> Spiel erstellen
-  </button>
+<div id="createMatchBox">
 
   <div id="matchForm" class="hidden">
 
@@ -6947,8 +7001,8 @@ body:has(#liveMode:not(.hidden)){
 
 <div class="panel scorer-panel">
   <div class="panel-eyebrow">TEAM STATS</div>
-  <h2>Top Scorer</h2>
-  <div class="stats-caption">Tore im aktuellen Team</div>
+  <h2 class="scorer-title"><span class="scorer-title-icon" aria-hidden="true">⚽</span> Top Scorer</h2>
+  <div class="stats-caption">Tore im aktuellen Team <span class="scorer-expand-hint">· Spieler antippen für Details <span aria-hidden="true">⌄</span></span></div>
   <div id="scorerRanking"></div>
 </div>
 
@@ -9810,8 +9864,8 @@ onclick="event.stopPropagation();togglePublicMatchInfo(${match.id})">
 <div class="match-body ${match.open ? 'open' : ''}">
 
 ${hasAccess(activeTeam) ? `<div class="planning-block planning-roster"><div class="section-title">
-Kader (${match.squad?.length || 0} Spieler)
-</div>` : ""}
+Kader <span class="planning-roster-count">${match.squad?.length || 0} ausgewählt</span>
+</div><div class="planning-roster-help">Wähle die Spieler aus, die für dieses Spiel im Kader stehen.</div>` : ""}
 `
 
 if(!hasAccess(activeTeam)){
@@ -9838,57 +9892,35 @@ onclick='toggleSquad(${match.id}, ${JSON.stringify(p.name)})'>
 `
 })
 
-html+=`</div><div class="planning-block planning-starting"><div class="section-title">Startelf</div>`
+html+=`</div>`
+
+if(Array.isArray(match.squad) && match.squad.length > 0){
+
+html+=`<div class="planning-block planning-starting"><div class="section-title">Startelf <small>${match.lineup.length} ausgewählt</small></div>`
 
 players
-.filter(p=>{
-return p.team===activeTeam
-&& (match.squad?.length ? match.squad.includes(p.name) : true)
-&& !match.bench.includes(p.name)
-})
-.sort((a, b) => {
-  return getPositionRank(a.pos) - getPositionRank(b.pos)
-})
+.filter(p=>p.team===activeTeam && match.squad.includes(p.name) && !match.bench.includes(p.name))
+.sort((a, b) => getPositionRank(a.pos) - getPositionRank(b.pos))
 .forEach(p=>{
-
-let active = match.lineup.includes(p.name)?"selected":""
-
-html+=`
-<span class="player-chip small pos-${p.pos} ${active}"
-onclick='toggleLineup(${match.id}, ${JSON.stringify(p.name)})'>
-
-<span class="pos">${p.pos}</span>${p.name}
-
-</span>
-`
-
+  let active = match.lineup.includes(p.name)?"selected":""
+  html+=`<span class="player-chip small pos-${p.pos} ${active}" onclick='toggleLineup(${match.id}, ${JSON.stringify(p.name)})'><span class="pos">${p.pos}</span>${p.name}</span>`
 })
 
-html+=`</div><div class="planning-block planning-bench"><div class="section-title">Bank wählen</div>`
+html+=`</div><div class="planning-block planning-bench"><div class="section-title">Bank wählen <small>${match.bench.length} ausgewählt</small></div>`
 
 players
-.filter(p=>{
-return p.team===activeTeam
-&& (match.squad?.length ? match.squad.includes(p.name) : true)
-&& !match.lineup.includes(p.name)
-})
+.filter(p=>p.team===activeTeam && match.squad.includes(p.name) && !match.lineup.includes(p.name))
 .sort((a,b)=>getPositionRank(a.pos)-getPositionRank(b.pos))
 .forEach(p=>{
-
-let active = match.bench.includes(p.name)?"selected":""
-
-html+=`
-<span class="player-chip small pos-${p.pos} ${active}"
-onclick='toggleBench(${match.id}, ${JSON.stringify(p.name)})'>
-
-<span class="pos">${p.pos}</span>${p.name}
-
-</span>
-`
-
+  let active = match.bench.includes(p.name)?"selected":""
+  html+=`<span class="player-chip small pos-${p.pos} ${active}" onclick='toggleBench(${match.id}, ${JSON.stringify(p.name)})'><span class="pos">${p.pos}</span>${p.name}</span>`
 })
 
 html+=`</div><div class="planning-pitch-area">` + renderPitch(match) + `</div>`
+
+}else{
+  html+=`<div class="planning-selection-hint"><span class="planning-selection-icon">✦</span><div><strong>Erst den Kader auswählen</strong><p>Tippe oben die Spieler an, die für dieses Spiel dabei sind. Danach erscheinen hier automatisch Startelf, Bank und Spielfeld.</p></div></div>`
+}
 
 html+=`<div class="planning-actions"><div class="planning-action-primary">
 
@@ -10052,7 +10084,7 @@ let list = Object.entries(goalMap)
 
 let html=""
 
-list.forEach(([name,goals])=>{
+list.forEach(([name,goals], rankIndex)=>{
 
 // Alte Spielereignisse können auf Spieler verweisen, die inzwischen aus dem Kader
 // entfernt oder umbenannt wurden. Das darf die gesamte öffentliche Statistik nicht
@@ -10060,12 +10092,14 @@ list.forEach(([name,goals])=>{
 const player = players.find(pl => pl.name === name && pl.team === activeTeam)
 const safeName = String(name || "Unbekannt")
 const escapedName = safeName.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")
-const escapedId = safeName.replace(/[^a-zA-Z0-9_-]/g,"_")
+const safePos = String(player?.pos || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+const isTopScorer = rankIndex === 0
 
 html+=`
-<div class="stat-row" data-player-name="${escapedName}" onclick="togglePlayerStats(this.dataset.playerName)">
-<span><span class="pos">${player?.pos || ""}</span>${escapedName}</span>
-<span>${goals}</span>
+<div class="stat-row" role="button" tabindex="0" aria-expanded="false" title="Spieldetails für ${escapedName} anzeigen" data-player-name="${escapedName}" onclick="togglePlayerStats(this.dataset.playerName, this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();togglePlayerStats(this.dataset.playerName, this)}">
+<span class="scorer-player-name">${isTopScorer ? '<span class="scorer-rank-crown" title="Platz 1" aria-label="Platz 1">👑</span>' : ''}<span class="pos">${safePos}</span><span>${escapedName}</span></span>
+<span class="scorer-goal-count" title="${goals} Tore">${goals}</span>
+<span class="scorer-chevron" aria-hidden="true">⌄</span>
 </div>
 
 <div id="player-${encodeURIComponent(safeName)}" class="player-stats hidden"></div>
@@ -10083,13 +10117,16 @@ html || `
 
 }
 
-function togglePlayerStats(name){
+function togglePlayerStats(name, row){
 
 let box = document.getElementById("player-"+encodeURIComponent(name))
+if(!box) return
+const rankingRow = row || Array.from(document.querySelectorAll("#scorerRanking .stat-row")).find(el => el.dataset.playerName === name)
 
 // toggle schließen
 if(!box.classList.contains("hidden")){
   box.classList.add("hidden")
+  if(rankingRow){ rankingRow.classList.remove("is-expanded"); rankingRow.setAttribute("aria-expanded","false") }
   return
 }
 
@@ -10117,6 +10154,7 @@ ${formatDate(m.date)} vs ${m.opponent}<br>
 
 box.innerHTML = html || "Keine Tore"
 box.classList.remove("hidden")
+if(rankingRow){ rankingRow.classList.add("is-expanded"); rankingRow.setAttribute("aria-expanded","true") }
 }
 
 /* SPIELBERICHT KOPIEREN */
@@ -13971,6 +14009,25 @@ body::after{
 .topbar-left .logo img{filter:drop-shadow(0 0 8px rgba(88,224,255,.12)) !important;}
 
 
+
+/* ===== Match planning editor: roster-first workflow ===== */
+.match-body.open .planning-roster{
+  border:1px solid rgba(88,224,255,.28)!important;
+  background:linear-gradient(145deg,rgba(21,48,61,.92),rgba(13,29,38,.82))!important;
+  box-shadow:inset 3px 0 0 rgba(88,224,255,.7),0 8px 22px rgba(0,0,0,.08);
+}
+.match-body.open .planning-roster .section-title{color:#d9f6ff!important;font-size:11px!important;letter-spacing:.1em}
+.planning-roster-count{margin-left:auto;padding:4px 8px;border-radius:999px;background:rgba(88,224,255,.1);border:1px solid rgba(88,224,255,.2);color:#76e2ff;font-size:9px;letter-spacing:.03em}
+.planning-roster-help{font-size:11px;line-height:1.45;color:#829aa7;margin:-3px 0 10px}
+.match-body.open .planning-roster .player-chip{min-height:32px;padding:7px 10px;border-radius:9px;transition:transform .12s ease,border-color .12s ease,background .12s ease}
+.match-body.open .planning-roster .player-chip:hover{transform:translateY(-1px);border-color:rgba(88,224,255,.48)}
+.match-body.open .planning-roster .player-chip.selected{border:2px solid #b9ef67!important;box-shadow:0 0 0 2px rgba(185,239,103,.08),0 3px 10px rgba(0,0,0,.14);background:rgba(185,239,103,.1)!important}
+.match-body.open .planning-starting .section-title small,.match-body.open .planning-bench .section-title small{margin-left:auto;font-size:9px;letter-spacing:0;color:#6e8997;font-weight:600}
+.planning-selection-hint{display:flex;align-items:flex-start;gap:12px;margin:10px 0 13px;padding:16px;border-radius:12px;border:1px dashed rgba(88,224,255,.28);background:linear-gradient(120deg,rgba(88,224,255,.055),rgba(169,140,255,.035));color:#d9e9ef}
+.planning-selection-icon{display:grid;place-items:center;flex:0 0 30px;height:30px;border-radius:9px;background:rgba(88,224,255,.1);color:#70dffb;font-size:16px}
+.planning-selection-hint strong{font-size:12px;color:#edf8fb}
+.planning-selection-hint p{margin:4px 0 0;color:#8ea5b0;font-size:11px;line-height:1.5}
+@media(max-width:760px){.match-body.open .planning-roster .player-chip{min-height:34px;padding:7px 9px}.planning-selection-hint{padding:12px}}
 
 /* ===== Match planning editor: cleaner grouping, same functionality ===== */
 .match-body.open{
