@@ -10395,7 +10395,7 @@ function buildSquadText(matchId){
     "",
     `📅 ${dateLabel}`,
     match.time ? `🕒 Spielbeginn: *${match.time.replace(/\s*Uhr\s*$/i, "")} Uhr*` : null,
-    meetingTimeLabel ? `📍 Treffpunkt: *${meetingTimeLabel} Uhr* (45 Min. vorher)` : null,
+    meetingTimeLabel ? `📍 Treffpunkt: *${meetingTimeLabel} Uhr*` : null,
     "",
     venue || (address ? "Spielort" : null),
     address || null,
@@ -10408,7 +10408,7 @@ function buildSquadText(matchId){
     "Auf geht's, SVR! ⚽"
   ]
 
-  return lines.filter(line => line !== null && line !== undefined && line !== "").join("\n")
+  return lines.filter(line => line !== null && line !== undefined).join("\n")
 }
 
 function shareTextOnWhatsApp(text){
