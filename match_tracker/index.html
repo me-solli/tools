@@ -10349,11 +10349,14 @@ function buildSquadText(matchId){
     .filter(Boolean)
     .sort((a,b) => getPositionRank(a.pos) - getPositionRank(b.pos))
 
-  const route = match.location
-    ? "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(String(match.location).trim())
+  // Kurzer, mobiltauglicher Maps-Link in einer eigenen Zeile.
+  // Die Zieladresse bleibt vollständig, aber ohne langen /dir/?api=1-Parameter.
+  const destination = [venue, address].filter(Boolean).join(" ") || String(match.location || "").trim()
+  const route = destination
+    ? "https://maps.google.com/?q=" + encodeURIComponent(destination)
     : ""
 
-  // Datum WhatsApp-freundlich und mit Wochentag darstellen, ohne UTC-Verschiebung.
+  // Datum lokal formatieren, damit es auf Geräten in unterschiedlichen Zeitzonen stabil bleibt.
   let dateLabel = formatDate(match.date).replace(/-/g, ".")
   const rawDate = String(match.date || "")
   let dateParts = null
@@ -10371,37 +10374,24 @@ function buildSquadText(matchId){
     dateLabel = `${weekday}, ${String(d).padStart(2,"0")}.${String(m).padStart(2,"0")}.${y}`
   }
 
-  const positionEmoji = {
-    "TW":"🧤", "IV":"🛡️", "LV":"⬅️", "RV":"➡️",
-    "LM":"⚽", "RM":"⚽", "ZM":"⚽", "OM":"🎯",
-    "ST":"🥅", "LF":"⚡", "RF":"⚡"
-  }
-
-  const rosterLines = sorted.map(player => {
-    const pos = String(player.pos || "").trim().toUpperCase()
-    const emoji = positionEmoji[pos] || "⚽"
-    return `${emoji} ${pos ? `*${pos}* · ` : ""}${player.name}`
-  })
-
+  // Für WhatsApp bewusst schlicht: keine Positionskürzel, wenig Formatierung und nur ein Emoji.
+  const rosterLines = sorted.map(player => player.name)
   const lines = [
-    `⚽ *KADER | ${activeTeam}*`,
+    `Kader – ${activeTeam}`,
+    `${activeTeam} vs. ${match.opponent || "Gegner offen"}`,
     "",
-    `🆚 *${activeTeam} – ${match.opponent || "Gegner offen"}*`,
-    `📅 ${dateLabel}`,
-    match.time ? `🕒 Spielbeginn: *${match.time} Uhr*` : null,
+    dateLabel,
+    match.time ? `Spielbeginn: ${match.time} Uhr` : null,
     "",
-    venue ? `📍 *${venue}*` : (address ? "📍 *Spielort*" : null),
+    venue || (address ? "Spielort" : null),
     address || null,
-    !address && locationParts.length > 1 ? locationParts.slice(1).join(", ") : null,
-    route ? `🗺️ Route: ${route}` : null,
+    route ? `Route:\n${route}` : null,
     "",
-    `👥 *Kader (${sorted.length} ${sorted.length === 1 ? "Spieler" : "Spieler"})*`,
-    rosterLines.length ? rosterLines.join("\n") : "Noch keine Spieler im Kader eingetragen.",
-    "",
-    "💙 *Auf geht’s, SVR!*"
+    `Kader (${sorted.length} Spieler)`,
+    rosterLines.length ? rosterLines.join("\n") : "Noch keine Spieler im Kader eingetragen."
   ]
 
-  return lines.filter(line => line !== null && line !== undefined).join("\n")
+  return lines.filter(line => line !== null && line !== undefined && line !== "").join("\n")
 }
 
 function shareTextOnWhatsApp(text){
