@@ -7408,6 +7408,7 @@ function applyLoadedData(sourceData){
 
   renderAll()
   maybeOpenPendingLiveMatch()
+  restoreSavedTeamSession()
 }
 
 function buildPlayerSelectionModal(title, entries, onSelect){
@@ -8083,155 +8084,129 @@ function hasAccess(team){
   return activeTeam === "SV Testhausen" && accessCache["SV Testhausen"]
 }
 
-function unlockTeam(){
+const TEAM_SESSION_STORAGE_KEY = "matchTrackerTeamSessions";
+const TEAM_SESSION_OPTIONS = [
+  {value:"6", label:"6 Stunden"},
+  {value:"24", label:"24 Stunden (empfohlen)"},
+  {value:"168", label:"7 Tage"}
+];
 
-  if(!activeTeam){
-    showToast("⚠️ Kein Team ausgewählt","info")
-    return
+function readTeamSessions(){
+  try { return JSON.parse(localStorage.getItem(TEAM_SESSION_STORAGE_KEY) || "{}"); }
+  catch { return {}; }
+}
+function writeTeamSessions(sessions){
+  localStorage.setItem(TEAM_SESSION_STORAGE_KEY, JSON.stringify(sessions || {}));
+}
+function getTeamSession(team){ return readTeamSessions()[team] || null; }
+
+function checkTeamSessionExpiry(){
+  const sessions=readTeamSessions();
+  let changed=false;
+  for(const [team,session] of Object.entries(sessions)){
+    if(!session || !session.expiresAt || session.expiresAt<=Date.now()){
+      delete sessions[team];
+      accessCache[team]=false;
+      if(team===activeTeam) isUnlocked=false;
+      changed=true;
+    }
   }
-
-  openModal("🔐 Passwort für " + activeTeam, "Passwort eingeben", (pw)=>{
-
-    if(!pw) return
-
-    fetch(API + "/check-team-access", {
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body: JSON.stringify({
-        team: activeTeam,
-        password: pw
-      })
-    })
-    .then(res=>res.json())
-    .then(data=>{
-
-      if(!data || data.ok !== true){
-        showToast("❌ Falsches Passwort","info")
-        return
-      }
-
-      // 🔥 EINZIGE WAHRHEIT
-      accessCache[activeTeam] = true
-
-      // 🔥 optional (für UI)
-      isUnlocked = true
-
-      save()
-      renderAll()
-
-      showToast("🔓 Freigeschaltet","info")
-
-    })
-
-  }, true)
+  if(changed){ writeTeamSessions(sessions); renderAll(); }
 }
 
-function unlockTeamFromList(team){
-
-  activeTeam = team
-
-  openModal("🔐 Passwort für " + team, "Passwort eingeben", (pw)=>{
-
-    if(!pw) return
-
-    fetch(API + "/check-team-access", {
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body: JSON.stringify({
-        team:team,
-        password:pw
-      })
-    })
-    .then(res=>res.json())
-    .then(data=>{
-
-      if(!data || data.ok !== true){
-        showToast("❌ Falsches Passwort","info")
-        return
-      }
-
-      // 🔥 EINZIGE WAHRHEIT
-      accessCache[team] = true
-
-      // optional UI
-      isUnlocked = true
-
-      save()
-      renderAll()
-
-      showToast("🔓 Freigeschaltet","info")
-
-    })
-
-  }, true)
-
+function restoreSavedTeamSession(){
+  if(isGuestTickerMode || isViewerMode || !activeTeam) return;
+  const session = getTeamSession(activeTeam);
+  if(!session || !session.token || (session.expiresAt && session.expiresAt <= Date.now())){
+    if(session){ const all=readTeamSessions(); delete all[activeTeam]; writeTeamSessions(all); }
+    accessCache[activeTeam] = false;
+    isUnlocked = false;
+    renderAll();
+    return;
+  }
+  fetch(API + "/team-session/check", {
+    method:"POST", headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({token:session.token})
+  }).then(r=>r.json()).then(result=>{
+    if(result && result.ok && result.team === activeTeam && result.expiresAt > Date.now()){
+      accessCache[activeTeam] = true;
+      isUnlocked = true;
+      const all=readTeamSessions(); all[activeTeam]={token:session.token, expiresAt:result.expiresAt}; writeTeamSessions(all);
+    }else{
+      const all=readTeamSessions(); delete all[activeTeam]; writeTeamSessions(all);
+      accessCache[activeTeam] = false; isUnlocked = false;
+    }
+    renderAll();
+  }).catch(()=>{
+    // Kein Offline-Login: ohne Serverbestätigung bleibt der Teamzugang gesperrt.
+    accessCache[activeTeam] = false; isUnlocked = false; renderAll();
+    showToast("⚠️ Team-Anmeldung konnte nicht geprüft werden", "info");
+  });
 }
-  
+
+function requestTeamLogin(team){
+  activeTeam = team;
+  localStorage.setItem("activeTeam", team);
+  openFormModal("🔐 Team-Zugang · " + team, [
+    {id:"teamLoginPassword", type:"password", placeholder:"Team-Passwort"},
+    {id:"teamLoginDuration", type:"select", value:"24", options:TEAM_SESSION_OPTIONS}
+  ], values=>{
+    const password=String(values.teamLoginPassword || "");
+    const durationHours=Number(values.teamLoginDuration || 24);
+    if(!password){ showToast("Bitte Passwort eingeben", "info"); return; }
+    fetch(API + "/team-session/login", {
+      method:"POST", headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({team, password, durationHours})
+    }).then(async response=>({ok:response.ok, data:await response.json()})).then(({ok,data:result})=>{
+      if(!ok || !result || result.ok !== true || !result.token){
+        showToast("❌ Falsches Passwort oder Anmeldung fehlgeschlagen", "info");
+        return;
+      }
+      const all=readTeamSessions(); all[team]={token:result.token, expiresAt:result.expiresAt}; writeTeamSessions(all);
+      accessCache[team]=true; isUnlocked=(activeTeam===team);
+      renderAll();
+      const selected=TEAM_SESSION_OPTIONS.find(o=>o.value===String(durationHours));
+      showToast("🔓 Angemeldet für " + (selected ? selected.label.replace(" (empfohlen)","").replace(" (privates Gerät)","") : durationHours+" Stunden"), "info");
+    }).catch(()=>showToast("⚠️ Server nicht erreichbar – Anmeldung nicht gespeichert", "info"));
+  }, {submitLabel:"Anmelden", cancelLabel:"Abbrechen"});
+}
+
+function unlockTeam(){
+  if(!activeTeam){ showToast("⚠️ Kein Team ausgewählt", "info"); return; }
+  requestTeamLogin(activeTeam);
+}
+
+function unlockTeamFromList(team){ requestTeamLogin(team); }
+
+function logoutTeam(team=activeTeam){
+  if(!team) return;
+  const sessions=readTeamSessions();
+  const session=sessions[team];
+  delete sessions[team]; writeTeamSessions(sessions);
+  accessCache[team]=false;
+  if(team===activeTeam) isUnlocked=false;
+  if(session && session.token){
+    fetch(API + "/team-session/logout", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({token:session.token})}).catch(()=>{});
+  }
+  renderAll();
+  showToast("🔒 Team abgemeldet", "info");
+}
+
 function ensureTeamAccessOnLoad(){
-
-  if(!activeTeam) return
-  if(accessCache[activeTeam]) return
-
-  openModal("🔐 Passwort für " + activeTeam, "Passwort eingeben", (pw)=>{
-
-if(!pw){
-  activeTeam = null
-  isUnlocked = false
-  renderAll()
-  return
-}
-
-    fetch(API + "/check-team-access", {
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body: JSON.stringify({
-        team:activeTeam,
-        password:pw
-      })
-    })
-    .then(res=>res.json())
-    .then(data=>{
-
-      if(!data.ok){
-        showToast("Kein Zugriff","info")
-        activeTeam = null
-        renderAll()
-        return
-      }
-
-      accessCache[activeTeam] = true
-      renderAll()
-
-    })
-  })
+  if(!activeTeam || accessCache[activeTeam]) return;
+  requestTeamLogin(activeTeam);
 }
 
 function selectTeam(name){
-
-  activeTeam = name
-
-  // 🔥 SPEICHERN
-  localStorage.setItem("activeTeam", name)
-
-  // 🔓 schon freigeschaltet → direkt rein
-  if(accessCache[name]){
-    isUnlocked = true
-    save()
-    renderAll()
-    return
-  }
-
-  // 👀 Besucher-Modus
-  isUnlocked = false
-  renderAll()
+  activeTeam=name;
+  localStorage.setItem("activeTeam", name);
+  if(accessCache[name]){ isUnlocked=true; save(); renderAll(); return; }
+  isUnlocked=false;
+  renderAll();
+  const session=getTeamSession(name);
+  if(session && session.token) restoreSavedTeamSession();
 }
-
+  
 function deleteTeam(name){
 
   // 🔐 Zugriff prüfen
@@ -8514,8 +8489,11 @@ html+=`
 ${
   accessCache[t] || isAdmin()
     ? `
-      <button class="team-login active">
+      <button class="team-login active" title="Angemeldet">
         ✓ Eingeloggt
+      </button>
+      <button title="Team abmelden" onclick='event.stopPropagation(); logoutTeam(${JSON.stringify(t)})'>
+        ↪️
       </button>
 
       <button
@@ -12774,10 +12752,12 @@ window.addEventListener("DOMContentLoaded", () => {
   bindTooltipEvents()
   loadFromServer()
   checkLiveFromURL()
+  window.setInterval(checkTeamSessionExpiry, 30000)
 })
 
 window.addEventListener("pageshow", () => {
   maybeRestoreLiveReturnState()
+  checkTeamSessionExpiry()
 })
 
 document.addEventListener("visibilitychange", () => {

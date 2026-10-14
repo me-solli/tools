@@ -17,6 +17,7 @@ const FILE = path.join(DATA_DIR, "data.json")
 const LIVE_PHOTO_FILE = path.join(DATA_DIR, "live_photos.json")
 const REACTIONS_FILE = path.join(DATA_DIR, "reactions.json")
 const GUEST_TOKENS_FILE = path.join(DATA_DIR, "guest_ticker_tokens.json")
+const TEAM_SESSIONS_FILE = path.join(DATA_DIR, "team_sessions.json")
 const LIVE_PHOTO_DIR = path.join(DATA_DIR, "live_photos")
 const STATIC_DIR = __dirname
 
@@ -102,6 +103,7 @@ function ensureStorage() {
     fs.writeFileSync(REACTIONS_FILE, JSON.stringify({ visitors: {}, matches: {} }, null, 2))
   }
   if (!fs.existsSync(GUEST_TOKENS_FILE)) fs.writeFileSync(GUEST_TOKENS_FILE, JSON.stringify({}, null, 2))
+  if (!fs.existsSync(TEAM_SESSIONS_FILE)) fs.writeFileSync(TEAM_SESSIONS_FILE, JSON.stringify({}, null, 2))
 }
 
 
@@ -1179,6 +1181,66 @@ app.post(
   }
 )
 
+
+// ============================================================
+// TIME-LIMITED TEAM SESSIONS
+// ============================================================
+
+function readTeamSessions(){
+  ensureStorage();
+  try { const parsed=JSON.parse(fs.readFileSync(TEAM_SESSIONS_FILE,"utf8")); return parsed && typeof parsed==="object" ? parsed : {}; }
+  catch { return {}; }
+}
+function writeTeamSessions(sessions){
+  ensureStorage(); fs.writeFileSync(TEAM_SESSIONS_FILE, JSON.stringify(sessions,null,2));
+}
+function hashTeamSession(token){ return crypto.createHash("sha256").update(String(token)).digest("hex"); }
+function validTeamPassword(team,password){
+  const current=readData();
+  const saved=TEAM_PASSWORDS[team] ?? current.teamPasswords?.[team];
+  return saved !== undefined && password === saved;
+}
+function cleanExpiredTeamSessions(sessions, now=Date.now()){
+  for(const [hash,session] of Object.entries(sessions)) if(!session || !Number.isFinite(session.expiresAt) || session.expiresAt<=now) delete sessions[hash];
+  return sessions;
+}
+
+app.post("/team-session/login", (req,res)=>{
+  try{
+    const {team,password,durationHours}=req.body||{};
+    const allowed=[1,6,24,168,720];
+    const hours=Number(durationHours);
+    if(typeof team!=="string" || !team.trim() || !allowed.includes(hours)) return res.status(400).json({ok:false,error:"Ungültige Anmeldedauer"});
+    if(!validTeamPassword(team,password)) return res.status(403).json({ok:false,error:"Team-Passwort stimmt nicht"});
+    const token=crypto.randomBytes(32).toString("base64url");
+    const expiresAt=Date.now()+hours*60*60*1000;
+    const sessions=cleanExpiredTeamSessions(readTeamSessions());
+    sessions[hashTeamSession(token)]={team,expiresAt,createdAt:Date.now()};
+    writeTeamSessions(sessions);
+    res.json({ok:true,token,team,expiresAt,durationHours:hours});
+  }catch(error){ console.error("TEAM SESSION LOGIN ERROR",error); res.status(500).json({ok:false,error:"Anmeldung fehlgeschlagen"}); }
+});
+
+app.post("/team-session/check", (req,res)=>{
+  try{
+    const token=String(req.body?.token||"");
+    if(!token) return res.status(400).json({ok:false});
+    const sessions=cleanExpiredTeamSessions(readTeamSessions());
+    const hash=hashTeamSession(token);
+    const session=sessions[hash];
+    writeTeamSessions(sessions);
+    if(!session) return res.status(401).json({ok:false});
+    res.json({ok:true,team:session.team,expiresAt:session.expiresAt});
+  }catch(error){ console.error("TEAM SESSION CHECK ERROR",error); res.status(500).json({ok:false}); }
+});
+
+app.post("/team-session/logout", (req,res)=>{
+  try{
+    const token=String(req.body?.token||"");
+    if(token){ const sessions=readTeamSessions(); delete sessions[hashTeamSession(token)]; writeTeamSessions(sessions); }
+    res.json({ok:true});
+  }catch(error){ console.error("TEAM SESSION LOGOUT ERROR",error); res.status(500).json({ok:false}); }
+});
 
 // ============================================================
 // TEAM ACCESS CHECK
