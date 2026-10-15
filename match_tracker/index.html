@@ -10374,13 +10374,13 @@ function buildSquadText(matchId){
     dateLabel = `${weekday}, ${String(d).padStart(2,"0")}.${String(m).padStart(2,"0")}.${y}`
   }
 
-  // Treffpunkt automatisch 45 Minuten vor dem tatsächlichen Spielbeginn berechnen.
+  // Treffpunkt automatisch 60 Minuten vor dem tatsächlichen Spielbeginn berechnen.
   // Akzeptiert z. B. "17:30" oder "17:30 Uhr".
   let meetingTimeLabel = null
   const timeMatch = String(match.time || "").match(/(\d{1,2})\s*:\s*(\d{2})/)
   if(timeMatch){
     const kickoffMinutes = Number(timeMatch[1]) * 60 + Number(timeMatch[2])
-    const meetingMinutes = ((kickoffMinutes - 45) % 1440 + 1440) % 1440
+    const meetingMinutes = ((kickoffMinutes - 60) % 1440 + 1440) % 1440
     const meetingHours = Math.floor(meetingMinutes / 60)
     const meetingMins = meetingMinutes % 60
     meetingTimeLabel = `${String(meetingHours).padStart(2, "0")}:${String(meetingMins).padStart(2, "0")}`
