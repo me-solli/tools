@@ -10623,22 +10623,6 @@ let lastMatchdayPhotoCache = {}
 const RECAP_PHOTO_CODE = "team123"
 let recapPhotoAccessGranted = sessionStorage.getItem("recapPhotoAccess") === "1"
 function lastMatchdayDateKey(match){ return match && match.date ? String(match.date).slice(0,10) : "" }
-function getPastMatchesForActiveTeam(){
-  const now = new Date();
-  const todayKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-${String(now.getDate()).padStart(2,"0")}`;
-  const currentTime = `${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
-  return (Array.isArray(matches) ? matches : []).filter(match => {
-    if(!match || !match.date || (activeTeam && match.team !== activeTeam)) return false;
-    const dateKey = lastMatchdayDateKey(match);
-    if(dateKey < todayKey) return true;
-    if(dateKey > todayKey) return false;
-    // Spiele ohne Uhrzeit gelten am Spieltag als vergangen, wie im Rückblick bisher.
-    return !match.time || String(match.time).slice(0,5) <= currentTime;
-  }).sort((a,b) =>
-    lastMatchdayDateKey(b).localeCompare(lastMatchdayDateKey(a)) ||
-    String(b.time || "23:59").slice(0,5).localeCompare(String(a.time || "23:59").slice(0,5))
-  );
-}
 function lastMatchdayResult(match){
   const goals=(match.events||[]).filter(eventCountsForUs).length
   const against=(match.events||[]).filter(eventCountsForOpponent).length
@@ -10664,7 +10648,16 @@ function renderLastMatchday(){
   const box=document.getElementById("lastMatchdayCard")
   if(!box) return
   if(!activeTeam){box.innerHTML="";return}
-  const past=getPastMatchesForActiveTeam()
+  const now=new Date()
+  const todayKey=now.toISOString().slice(0,10)
+  const currentTime=now.toTimeString().slice(0,5)
+  const past=matches.filter(m=>{
+    if(m.team!==activeTeam||!m.date) return false
+    const dateKey=lastMatchdayDateKey(m)
+    if(dateKey<todayKey) return true
+    if(dateKey>todayKey) return false
+    return !m.time || String(m.time).slice(0,5)<=currentTime
+  }).sort((a,b)=>new Date(b.date+" "+(b.time||"23:59"))-new Date(a.date+" "+(a.time||"23:59")))
   if(!past.length){box.innerHTML="";return}
   const latestDate=lastMatchdayDateKey(past[0])
   const dayMatches=past.filter(m=>lastMatchdayDateKey(m)===latestDate).sort((a,b)=>String(a.time||"23:59").localeCompare(String(b.time||"23:59")))
@@ -11157,7 +11150,16 @@ async function toggleReactionLight(emoji){
 function renderReactionLight(){
   const box=document.getElementById("reactionLightBox");
   if(!box) return;
-  const past=getPastMatchesForActiveTeam();
+  const now=new Date();
+  const today=now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0")+"-"+String(now.getDate()).padStart(2,"0");
+  const past=(Array.isArray(matches)?matches:[]).filter(m=>{
+    if(!m||!m.date) return false;
+    if(activeTeam && m.team!==activeTeam) return false;
+    const d=String(m.date).slice(0,10);
+    if(d<today) return true;
+    if(d>today) return false;
+    return !!m.time && String(m.time).slice(0,5)<=now.toTimeString().slice(0,5);
+  }).sort((a,b)=>String(b.date).localeCompare(String(a.date))||String(b.time||"").localeCompare(String(a.time||"")));
   const match=past[0];
   if(!match){
     box.dataset.matchId="";box.dataset.activeReaction="";
@@ -12164,21 +12166,15 @@ function getLiveClockState(){
   const endDisplay = livePeriod * 900
 
   if(livePhase !== "stoppage" && elapsed >= regularLimit){
-    // Viertelende unabhängig von Ereignissen: Timer bei 15:00 anhalten,
-    // damit das Viertel auch bei einem leeren Ticker sauber beendet werden kann.
     livePhase = "stoppage"
-    livePausedAt = Date.now()
-    let match = matches.find(m => String(m.id) === String(liveMatchId))
+    let match = matches.find(m => m.id === liveMatchId)
     if(match){
       ensureLiveState(match)
       match.liveState.phase = "stoppage"
       match.liveState.period = livePeriod
-      match.liveState.pausedAt = livePausedAt
-      match.liveState.periodPausedAt = livePausedAt
       save()
     }
-    showLiveStatusOverlay("⏸ VIERTELENDE · NACH SPIELLEITUNGS-ENTSCHEID WEITER")
-    updateLiveButton()
+    showLiveStatusOverlay("🔴 NACHSPIELZEIT")
   }
 
   if(livePhase === "stoppage"){
@@ -12475,7 +12471,9 @@ function updateLiveButton(){
   }
 
   if(quarterBtn){
-    const show = liveStartTime && livePausedAt && livePhase === "stoppage" && livePeriod <= 4
+    // Viertelabschluss ist an den Timerzustand gekoppelt, niemals an die Anzahl der Events.
+    // In der Nachspielzeit kann das Viertel auch direkt beendet werden; der Klick hält den Timer an.
+    const show = !!liveStartTime && livePhase === "stoppage" && livePeriod <= 4
     quarterBtn.classList.toggle("hidden", !show)
     quarterBtn.innerText = livePeriod === 4 ? "✓ Spiel beenden" : `✓ ${livePeriod}. Viertel beenden`
   }
@@ -12484,7 +12482,18 @@ function updateLiveButton(){
 function finishLiveQuarter(){
 
   let match = matches.find(m => m.id === liveMatchId)
-  if(!match || !liveStartTime || !livePausedAt || livePhase !== "stoppage") return
+  if(!match || !liveStartTime || livePhase !== "stoppage") return
+
+  // Auch ein leeres Viertel ist ein gültiges Viertel. Beim Beenden zuerst den Timer
+  // sauber einfrieren, damit die Nachspielzeit nicht während des Übergangs weiterläuft.
+  if(!livePausedAt){
+    livePausedAt = Date.now()
+    ensureLiveState(match)
+    match.liveState.pausedAt = livePausedAt
+    match.liveState.periodPausedAt = livePausedAt
+    match.liveState.phase = livePhase
+    match.liveState.period = livePeriod
+  }
 
   const finishedPeriod = livePeriod
 
