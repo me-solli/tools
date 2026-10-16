@@ -10648,19 +10648,16 @@ function renderLastMatchday(){
   const box=document.getElementById("lastMatchdayCard")
   if(!box) return
   if(!activeTeam){box.innerHTML="";return}
-  const now=new Date()
-  const todayKey=now.toISOString().slice(0,10)
-  const currentTime=now.toTimeString().slice(0,5)
-  const past=matches.filter(m=>{
-    if(m.team!==activeTeam||!m.date) return false
-    const dateKey=lastMatchdayDateKey(m)
-    if(dateKey<todayKey) return true
-    if(dateKey>todayKey) return false
-    return !m.time || String(m.time).slice(0,5)<=currentTime
-  }).sort((a,b)=>new Date(b.date+" "+(b.time||"23:59"))-new Date(a.date+" "+(a.time||"23:59")))
-  if(!past.length){box.innerHTML="";return}
-  const latestDate=lastMatchdayDateKey(past[0])
-  const dayMatches=past.filter(m=>lastMatchdayDateKey(m)===latestDate).sort((a,b)=>String(a.time||"23:59").localeCompare(String(b.time||"23:59")))
+  // Dieselbe Auswahl wie die Kachel „LETZTES SPIEL“ verwenden.
+  // toISOString() nutzt UTC und kann spät abends/früh morgens den lokalen Spieltag verschieben.
+  const latestMatch=getLatestPastTeamMatch()
+  if(!latestMatch){box.innerHTML="";return}
+  const latestDate=lastMatchdayDateKey(latestMatch)
+  const dayMatches=matches.filter(m=>{
+    if(m.team!==activeTeam || !m.date || lastMatchdayDateKey(m)!==latestDate) return false
+    const at=new Date(`${m.date}T${String(m.time||"23:59").slice(0,5)}:00`)
+    return !Number.isNaN(at.getTime()) && at<=new Date()
+  }).sort((a,b)=>String(a.time||"23:59").localeCompare(String(b.time||"23:59")))
   box.innerHTML=`
     <section class="last-matchday-card">
       <div class="last-matchday-head"><div><div class="last-matchday-kicker">RÜCKBLICK</div><div class="last-matchday-title">Letzter Spieltag</div><div class="last-matchday-date">📅 ${formatDate(latestDate)}</div></div><div class="last-matchday-count">${dayMatches.length} ${dayMatches.length===1?"Spiel":"Spiele"}</div></div>
