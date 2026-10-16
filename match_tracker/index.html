@@ -12485,8 +12485,12 @@ function resumeLiveGame(){
   const box = modal.querySelector(".modal-box")
   if(!modal || !box) return
 
+  const plannedSquad = Array.isArray(match.squad) ? match.squad : []
+  // Wenn noch kein Spielkader geplant wurde, bleibt der Live-Modus benutzbar:
+  // dann stehen ersatzweise alle Spieler des Teams zur Verfügung.
+  const hasPlannedSquad = plannedSquad.length > 0
   const teamPlayers = players
-    .filter(p => p.team === match.team)
+    .filter(p => p.team === match.team && (!hasPlannedSquad || plannedSquad.includes(p.name)))
     .sort((a,b) => getPositionRank(a.pos) - getPositionRank(b.pos) || a.name.localeCompare(b.name, "de"))
 
   const max = match.mode === "7" ? 7 : 11
@@ -12507,7 +12511,8 @@ function resumeLiveGame(){
           <div class="live-lineup-count">${lineup.length}/${max}</div>
         </div>
 
-        <div class="live-lineup-group">
+        ${!hasPlannedSquad ? `<div class="live-lineup-empty live-lineup-planning-hint">Für dieses Spiel wurde noch kein Kader geplant. Es werden vorübergehend alle Spieler der Mannschaft angezeigt.</div>` : ""}
+        ${teamPlayers.length ? `<div class="live-lineup-group">
           <div class="live-lineup-group-head">
             <span>STARTELF</span>
             <small>${canEdit ? "Antippen zum Ein-/Auswechseln" : "Nur Ansicht"}</small>
@@ -12522,11 +12527,11 @@ function resumeLiveGame(){
                   <span class="live-lineup-name">${p.name}</span>
                   <span class="live-lineup-check">${selected ? "✓" : onBench ? "BANK" : "+"}</span>
                 </button>`
-            }).join("") || `<div class="live-lineup-empty">Noch keine Spieler im Kader.</div>`}
+            }).join("") || `<div class="live-lineup-empty">Im geplanten Kader wurden keine Spieler gefunden.</div>`}
           </div>
-        </div>
+        </div>` : `<div class="live-lineup-empty">Keine Spieler für diese Mannschaft gefunden.</div>`}
 
-        <div class="live-lineup-group bench-group">
+        ${teamPlayers.length ? `<div class="live-lineup-group bench-group">
           <div class="live-lineup-group-head">
             <span>BANK</span>
             <small>${bench.length} Spieler</small>
@@ -12537,7 +12542,7 @@ function resumeLiveGame(){
               return `<span class="live-lineup-bench-chip"><b>${p?.pos || "–"}</b>${name}</span>`
             }).join("") || `<span class="live-lineup-empty">Keine Bankspieler ausgewählt.</span>`}
           </div>
-        </div>
+        </div>` : ""}
 
         <div class="modal-actions live-lineup-actions">
           <button type="button" class="primary" onclick="closeModal()">Fertig</button>
@@ -12547,6 +12552,10 @@ function resumeLiveGame(){
   }
 
   window.toggleLiveLineupPlayer = function(name){
+    if(hasPlannedSquad && !plannedSquad.includes(name)){
+      showToast("Nur Spieler aus dem geplanten Kader können aufgestellt werden","info")
+      return
+    }
     if(!isUnlocked){
       showToast("👀 Zuschauer-Modus – Aufstellung nur ansehen","info")
       return
@@ -12570,7 +12579,10 @@ function resumeLiveGame(){
   }
 
   renderLineupModal()
+  // closeModal() setzt display:none; beim erneuten Öffnen muss das Modal
+  // deshalb nicht nur die hidden-Klasse verlieren, sondern auch sichtbar werden.
   modal.classList.remove("hidden")
+  modal.style.display = "flex"
 }
 
 function openLivePlayerSelect(type){
@@ -12578,7 +12590,12 @@ function openLivePlayerSelect(type){
   let match = matches.find(m => m.id === liveMatchId)
   if(!match) return
 
-  let teamPlayers = players.filter(p => p.team === match.team)
+  // Torschützen und Karten müssen weiterhin für den gesamten Mannschaftskader
+  // auswählbar sein – unabhängig davon, ob die Spielplanung vollständig ist.
+  // Die Kaderbegrenzung gilt nur für Aufstellung und Wechsel.
+  let teamPlayers = players
+    .filter(p => p.team === match.team)
+    .sort((a,b) => getPositionRank(a.pos) - getPositionRank(b.pos) || a.name.localeCompare(b.name, "de"))
 
   let modal = document.getElementById("modal")
   let box = modal.querySelector(".modal-box")
