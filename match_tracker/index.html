@@ -12654,7 +12654,13 @@ if(type==="goal"){
 
   box.appendChild(cancel)
 
+  // closeModal() setzt display:none. Beim erneuten Öffnen muss das Spieler-Auswahlmodal
+  // deshalb explizit wieder sichtbar geschaltet werden – sonst erscheint nur der Toast
+  // „Event: goal“, während die Auswahl unsichtbar im DOM aufgebaut wird.
   modal.classList.remove("hidden")
+  modal.style.display = "flex"
+  modal.dataset.view = "live-player-select"
+  box.className = "modal-box"
 }
 
 function startLiveAutoUpdate(){
