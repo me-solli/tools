@@ -12393,15 +12393,60 @@ function resetLiveMatch(){
 
   document.getElementById("resetLiveEverythingBtn").onclick = async () => {
     closeModal();
+
+    // Alle Laufzeit-Variablen und gespeicherten Timerdaten auf einen echten Nullzustand setzen.
     resetClock();
+    liveStartTime = null;
+    livePausedAt = null;
+    livePausedTotal = 0;
+    livePeriod = 1;
+    livePhase = "regular";
+    lastGoalEventId = null;
+
+    // Events sind die maßgebliche Quelle für Tore und Spielstand.
     match.events = [];
+    match.liveState = {
+      startTime: null,
+      pausedAt: null,
+      pausedTotal: 0,
+      period: 1,
+      phase: "regular",
+      periodStartAt: null,
+      periodPausedAt: null,
+      periodPausedTotal: 0,
+      completed: false
+    };
     livePhotos = [];
+
+    // Während der Server-Speicherung darf die Auto-Synchronisierung keine alten Events
+    // zurück in den gerade geleerten Ticker kopieren.
+    window.liveResetPending = true;
+    data.teams = teams;
+    data.players = players;
+    data.matches = matches;
+    data.activeTeam = activeTeam;
+    try { localStorage.setItem("matchTrackerData", JSON.stringify(data)); } catch {}
+
     await clearLivePhotos(match.id);
-    save();
+    try {
+      const response = await fetch(API + "/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+      if (!response.ok) throw new Error("Server-Speicherung fehlgeschlagen");
+      // Pending-Flag bleibt bis zur nächsten Synchronisierung mit leerer Server-Eventliste aktiv.
+    } catch (error) {
+      window.liveResetPending = false;
+      showToast("⚠️ Reset lokal durchgeführt, Server-Speicherung fehlgeschlagen", "red");
+    }
+
     updateLiveScore();
     updateLiveFeed();
     updateLivePhotos();
+    updateLiveButton();
     startLiveTimer();
+    renderMatches();
     showToast("🔄 Live-Spiel komplett zurückgesetzt", "info");
   };
 
@@ -12738,6 +12783,13 @@ function startLiveAutoUpdate(){
           .find(m => m.id === liveMatchId)
 
         if(!serverMatch || !localMatch) return
+
+        // Nach einem vollständigen Reset alte Server-Events nicht wieder einspielen,
+        // solange der Server noch nicht den leeren Eventstand bestätigt hat.
+        if(window.liveResetPending){
+          if((serverMatch.events || []).length > 0) return;
+          window.liveResetPending = false;
+        }
 
         // 🔥 STABILER VERGLEICH
         let serverEvents = JSON.stringify(serverMatch.events || [])
