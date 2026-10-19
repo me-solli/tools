@@ -933,8 +933,24 @@ app.post("/guest-ticker/:token/update", (req,res)=>{
     if(!incoming.liveState || typeof incoming.liveState!=="object" || !Array.isArray(incoming.events)) return res.status(400).json({error:"Ungültige Live-Daten"});
     const data=readData(); const match=data.matches.find(m=>String(m.id)===String(rec.matchId)&&m.team===rec.team); if(!match) return res.status(404).json({error:"Spiel nicht gefunden"});
     const oldEvents=Array.isArray(match.events)?match.events:[]; const next=incoming.events;
-    if(next.length<oldEvents.length || next.length>oldEvents.length+1 || oldEvents.some((ev,i)=>JSON.stringify(ev)!==JSON.stringify(next[i]))) return res.status(403).json({error:"Gastzugriff darf bestehende Ereignisse nicht ändern oder löschen"});
-    if(next.length>oldEvents.length){ const ev=next[next.length-1]; const types=new Set(["goal","goalAgainst","ownGoal","yellow","red","substitution","sub","penalty"]); if(!ev || !types.has(ev.type) || !Number.isFinite(Number(ev.minute)) || Object.keys(ev).length>24) return res.status(400).json({error:"Ungültiges Live-Ereignis"}); }
+    // Gastticker darf neue Ereignisse hinzufügen oder genau einen vorhandenen Eintrag
+    // über das X löschen. Andere Änderungen an bestehenden Ereignissen bleiben gesperrt.
+    if(next.length===oldEvents.length+1){
+      if(oldEvents.some((ev,i)=>JSON.stringify(ev)!==JSON.stringify(next[i]))) return res.status(403).json({error:"Gastzugriff darf bestehende Ereignisse nicht ändern"});
+      const ev=next[next.length-1];
+      const types=new Set(["goal","goalAgainst","ownGoal","yellow","red","substitution","sub","penalty"]);
+      if(!ev || !types.has(ev.type) || !Number.isFinite(Number(ev.minute)) || Object.keys(ev).length>24) return res.status(400).json({error:"Ungültiges Live-Ereignis"});
+    } else if(next.length===oldEvents.length-1){
+      let skipped=false, j=0;
+      for(let i=0;i<oldEvents.length;i++){
+        if(j<next.length && JSON.stringify(oldEvents[i])===JSON.stringify(next[j])){ j++; continue; }
+        if(skipped) return res.status(403).json({error:"Gastzugriff darf nur einen Live-Eintrag auf einmal löschen"});
+        skipped=true;
+      }
+      if(!skipped || j!==next.length) return res.status(403).json({error:"Gastzugriff darf bestehende Ereignisse nicht ändern"});
+    } else if(next.length!==oldEvents.length || oldEvents.some((ev,i)=>JSON.stringify(ev)!==JSON.stringify(next[i]))) {
+      return res.status(403).json({error:"Gastzugriff darf bestehende Ereignisse nicht ändern oder löschen"});
+    }
     const state={...(match.liveState||{})}; for(const key of allowedState) if(Object.prototype.hasOwnProperty.call(incoming.liveState,key)) state[key]=incoming.liveState[key];
     if(state.startTime!==null && state.startTime!==undefined && !Number.isFinite(Number(state.startTime))) return res.status(400).json({error:"Ungültiger Timer"});
     if(state.pausedAt!==null && state.pausedAt!==undefined && !Number.isFinite(Number(state.pausedAt))) return res.status(400).json({error:"Ungültige Pause"});
