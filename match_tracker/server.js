@@ -934,7 +934,7 @@ app.post("/guest-ticker/:token/update", (req,res)=>{
     const data=readData(); const match=data.matches.find(m=>String(m.id)===String(rec.matchId)&&m.team===rec.team); if(!match) return res.status(404).json({error:"Spiel nicht gefunden"});
     const oldEvents=Array.isArray(match.events)?match.events:[]; const next=incoming.events;
     if(next.length<oldEvents.length || next.length>oldEvents.length+1 || oldEvents.some((ev,i)=>JSON.stringify(ev)!==JSON.stringify(next[i]))) return res.status(403).json({error:"Gastzugriff darf bestehende Ereignisse nicht ändern oder löschen"});
-    if(next.length>oldEvents.length){ const ev=next[next.length-1]; const types=new Set(["goal","goalAgainst","yellow","red","substitution","sub","penalty"]); if(!ev || !types.has(ev.type) || !Number.isFinite(Number(ev.minute)) || Object.keys(ev).length>24) return res.status(400).json({error:"Ungültiges Live-Ereignis"}); }
+    if(next.length>oldEvents.length){ const ev=next[next.length-1]; const types=new Set(["goal","goalAgainst","ownGoal","yellow","red","substitution","sub","penalty"]); if(!ev || !types.has(ev.type) || !Number.isFinite(Number(ev.minute)) || Object.keys(ev).length>24) return res.status(400).json({error:"Ungültiges Live-Ereignis"}); }
     const state={...(match.liveState||{})}; for(const key of allowedState) if(Object.prototype.hasOwnProperty.call(incoming.liveState,key)) state[key]=incoming.liveState[key];
     if(state.startTime!==null && state.startTime!==undefined && !Number.isFinite(Number(state.startTime))) return res.status(400).json({error:"Ungültiger Timer"});
     if(state.pausedAt!==null && state.pausedAt!==undefined && !Number.isFinite(Number(state.pausedAt))) return res.status(400).json({error:"Ungültige Pause"});
