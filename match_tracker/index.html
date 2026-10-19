@@ -2502,6 +2502,14 @@ box-shadow:
   box-shadow:0 0 10px rgba(110,168,255,.35);
 }
 .live-quarter-heading:first-child{margin-top:4px;}
+.live-quarter-empty{
+  margin:0 0 8px 17px;
+  padding:7px 10px;
+  color:rgba(220,230,238,.48);
+  font-size:11px;
+  font-style:italic;
+  border-left:1px solid rgba(255,255,255,.08);
+}
 .live-events{
     width:260px;
     flex-shrink:0;
@@ -11771,8 +11779,28 @@ if(latestEvent){
     html += `<div class="live-feed-milestone final-whistle"><div class="live-event-minute"></div><div class="live-event-icon" aria-hidden="true">■</div><div class="live-event-copy">Abpfiff</div></div>`
   }
 
+  // Alle tatsächlich begonnenen/abgeschlossenen Viertel anzeigen, auch ohne Events.
+  // Wenn ein Viertel beendet wurde, steht liveState.period bereits auf dem nächsten
+  // vorbereiteten Viertel; ohne startTime zählt dieses noch nicht als gespielt.
+  const liveState = match.liveState || {}
+  const statePeriod = Math.max(1, Math.min(4, Number(liveState.period) || 1))
+  const statePlayedThrough = liveState.completed ? 4 : (liveState.startTime ? statePeriod : statePeriod - 1)
+  const eventPlayedThrough = events.reduce((max, event) => Math.max(max, getEventPeriod(event)), 0)
+  const playedThrough = Math.max(1, Math.min(4, statePlayedThrough, 4), eventPlayedThrough)
+  const firstEventPeriod = events.length ? getEventPeriod(events[0]) : 0
+
   // Keine künstliche Begrenzung auf 10 Events – der komplette Ticker bleibt sichtbar.
   let lastPeriod = null
+  const addQuarterHeading = (period, empty=false) => {
+    html += `<div class="live-quarter-heading"><span>${period}. Viertel</span></div>`
+    if(empty) html += `<div class="live-quarter-empty">Keine Ereignisse in diesem Viertel</div>`
+  }
+
+  // Leere Viertel oberhalb des neuesten Events ergänzen.
+  for(let period = playedThrough; period > firstEventPeriod; period--){
+    addQuarterHeading(period, true)
+    lastPeriod = period
+  }
 
   events.forEach(e=>{
 
@@ -11815,10 +11843,15 @@ if(latestEvent){
     let minute = formatTickerEventTime(e)
     const period = getEventPeriod(e)
 
-    // Viertel als eigene Überschrift – nicht mehr vor jedem Event.
+    // Viertel als eigene Überschrift – leere Lücken werden ebenfalls dargestellt.
     if(period !== lastPeriod){
+      if(lastPeriod !== null){
+        for(let missingPeriod = lastPeriod - 1; missingPeriod > period; missingPeriod--){
+          addQuarterHeading(missingPeriod, true)
+        }
+      }
+      addQuarterHeading(period, false)
       lastPeriod = period
-      html += `<div class="live-quarter-heading"><span>${period}. Viertel</span></div>`
     }
 
     const eventKey = e.id != null ? String(e.id) : `${e.time || 0}_${e.minute || 0}_${e.type}_${chronologicalEvents.indexOf(e)}`
@@ -11840,6 +11873,17 @@ if(latestEvent){
 </div>
 `
   })
+
+  // Auch nach dem letzten Event fehlende, bereits gespielte Viertel anzeigen.
+  if(lastPeriod === null){
+    for(let period = playedThrough; period >= 1; period--){
+      addQuarterHeading(period, true)
+    }
+  } else {
+    for(let missingPeriod = lastPeriod - 1; missingPeriod >= 1; missingPeriod--){
+      addQuarterHeading(missingPeriod, true)
+    }
+  }
 
   // Anpfiff erscheint am chronologischen Ende des Tickers, sobald der Timer erstmals gestartet wurde.
   if(liveWasStarted){
