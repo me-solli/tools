@@ -12588,7 +12588,12 @@ function finishLiveQuarter(){
     match.liveState.period = 4
     match.liveState.pausedAt = livePausedAt
     save()
+    // Abpfiff-Marker erst nach dem finalen Status sofort in den Spielverlauf rendern.
+    // Das ist sowohl im normalen Admin-Ticker als auch im Gastticker wichtig.
     updateLiveButton()
+    updateLiveScore()
+    updateLiveFeed()
+    renderMatches()
     showLiveStatusOverlay("🏁 SPIEL BEENDET")
     showToast("🏁 Spiel beendet","info")
     return
