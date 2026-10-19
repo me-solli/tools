@@ -12258,16 +12258,20 @@ function getLiveClockState(){
 
 function formatLiveClock(state){
   if(!state) return "00:00"
-  const end = state.period * 900
-  const mins = Math.floor(state.displaySeconds / 60)
-  const secs = state.displaySeconds % 60
-  const base = String(mins).padStart(2,"0") + ":" + String(secs).padStart(2,"0")
+  // In der Nachspielzeit bleibt die reguläre Uhr am Viertelende stehen.
+  // Nur der Zusatz zählt weiter: z.B. 15:00 + 13:34, nicht 28:34 + 13:34.
   if(state.phase === "stoppage" || state.phase === "ended"){
-    const sm = Math.floor(state.stoppageSeconds / 60)
-    const ss = state.stoppageSeconds % 60
+    const endSeconds = Math.max(1, Number(state.period) || 1) * 900
+    const base = String(Math.floor(endSeconds / 60)).padStart(2,"0") + ":" + String(endSeconds % 60).padStart(2,"0")
+    const added = Math.max(0, Number(state.stoppageSeconds) || 0)
+    const sm = Math.floor(added / 60)
+    const ss = added % 60
     return base + " + " + String(sm).padStart(2,"0") + ":" + String(ss).padStart(2,"0")
   }
-  return base
+  const seconds = Math.max(0, Number(state.displaySeconds) || 0)
+  const mins = Math.floor(seconds / 60)
+  const secs = seconds % 60
+  return String(mins).padStart(2,"0") + ":" + String(secs).padStart(2,"0")
 }
 
 function getLiveMinute(){
@@ -12277,15 +12281,19 @@ function getLiveMinute(){
 
 function getLiveEventClock(){
   const state = getLiveClockState()
-  const mins = Math.floor(state.displaySeconds / 60)
-  const secs = state.displaySeconds % 60
+  const clockSeconds = (state.phase === "stoppage" || state.phase === "ended")
+    ? Math.max(1, Number(state.period) || 1) * 900
+    : Math.max(0, Number(state.displaySeconds) || 0)
+  const mins = Math.floor(clockSeconds / 60)
+  const secs = clockSeconds % 60
   const base = String(mins).padStart(2,"0") + ":" + String(secs).padStart(2,"0")
+  const added = Math.max(0, Number(state.stoppageSeconds) || 0)
   return {
     period: state.period,
     phase: state.phase,
-    seconds: state.displaySeconds,
-    stoppageSeconds: state.stoppageSeconds,
-    label: state.phase === "stoppage" ? `${state.period}. Viertel · ${base} + ${String(Math.floor(state.stoppageSeconds/60)).padStart(2,"0")}:${String(state.stoppageSeconds%60).padStart(2,"0")}` : `${state.period}. Viertel · ${base}`
+    seconds: clockSeconds + ((state.phase === "stoppage" || state.phase === "ended") ? added : 0),
+    stoppageSeconds: added,
+    label: state.phase === "stoppage" || state.phase === "ended" ? `${state.period}. Viertel · ${base} + ${String(Math.floor(added/60)).padStart(2,"0")}:${String(added%60).padStart(2,"0")}` : `${state.period}. Viertel · ${base}`
   }
 }
 
