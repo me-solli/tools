@@ -7807,8 +7807,26 @@ function save(){
   if(isGuestTickerMode){
     const guestMatch=matches.find(m=>String(m.id)===String(liveMatchId));
     if(!guestMatch) return;
-    fetch(API + "/guest-ticker/" + encodeURIComponent(guestTickerToken) + "/update", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({liveState:guestMatch.liveState,events:guestMatch.events||[]})})
-      .then(r=>r.json()).then(r=>{if(r.error) showToast(r.error,"red")}).catch(()=>showToast("⚠️ Speichern fehlgeschlagen","red"));
+    // Gast-Speicherungen nacheinander abarbeiten. Mehrere schnelle Aktionen (z.B.
+    // Ereignis + Timerwechsel oder Löschen + neues Ereignis) dürfen sich serverseitig
+    // nicht gegenseitig mit älteren Snapshots überschreiben.
+    const saveVersion = (window.guestTickerSaveVersion || 0) + 1;
+    window.guestTickerSaveVersion = saveVersion;
+    window.guestTickerSavePending = true;
+    const payload = JSON.stringify({liveState:guestMatch.liveState,events:guestMatch.events||[]});
+    const sendGuestSave = () => fetch(API + "/guest-ticker/" + encodeURIComponent(guestTickerToken) + "/update", {
+      method:"POST",headers:{"Content-Type":"application/json"},body:payload
+    }).then(r=>r.json()).then(r=>{
+      if(r.error) showToast(r.error,"red");
+      return r;
+    });
+    window.guestTickerSaveQueue = (window.guestTickerSaveQueue || Promise.resolve())
+      .catch(()=>{})
+      .then(sendGuestSave)
+      .catch(()=>showToast("⚠️ Speichern fehlgeschlagen","red"))
+      .finally(()=>{
+        if(window.guestTickerSaveVersion === saveVersion) window.guestTickerSavePending = false;
+      });
     return;
   }
 
@@ -11548,7 +11566,6 @@ function openLiveMode(matchId){
   livePausedTotal = match.liveState.pausedTotal
   livePeriod = match.liveState.period || 1
   livePhase = match.liveState.phase || "regular"
-  if(livePhase === "ended") livePhase = "stoppage"
 
   let box = document.getElementById("liveMode")
 
@@ -12206,7 +12223,7 @@ function getLiveClockState(){
   const startDisplay = livePeriod === 1 ? 0 : (livePeriod - 1) * 900 + 1
   const endDisplay = livePeriod * 900
 
-  if(livePhase !== "stoppage" && elapsed >= regularLimit){
+  if(livePhase !== "stoppage" && livePhase !== "ended" && elapsed >= regularLimit){
     livePhase = "stoppage"
     let match = matches.find(m => m.id === liveMatchId)
     if(match){
@@ -12218,11 +12235,11 @@ function getLiveClockState(){
     showLiveStatusOverlay("🔴 NACHSPIELZEIT")
   }
 
-  if(livePhase === "stoppage"){
+  if(livePhase === "stoppage" || livePhase === "ended"){
     const stoppage = Math.max(0, elapsed - regularLimit)
     return {
       period: livePeriod,
-      phase: "stoppage",
+      phase: livePhase,
       regularSeconds: regularLimit,
       stoppageSeconds: stoppage,
       displaySeconds: endDisplay + stoppage
@@ -12245,7 +12262,7 @@ function formatLiveClock(state){
   const mins = Math.floor(state.displaySeconds / 60)
   const secs = state.displaySeconds % 60
   const base = String(mins).padStart(2,"0") + ":" + String(secs).padStart(2,"0")
-  if(state.phase === "stoppage"){
+  if(state.phase === "stoppage" || state.phase === "ended"){
     const sm = Math.floor(state.stoppageSeconds / 60)
     const ss = state.stoppageSeconds % 60
     return base + " + " + String(sm).padStart(2,"0") + ":" + String(ss).padStart(2,"0")
@@ -12320,7 +12337,14 @@ function startLiveTimer(){
     }
 
     if(!liveStartTime){
-      el.innerText = "00:00"
+      // Zwischen zwei Vierteln ist der Timer vorbereitet, aber noch nicht gestartet.
+      // Die Anzeige muss deshalb den Startwert des nächsten Viertels zeigen (z.B. 15:01),
+      // statt irreführend auf 00:00 zurückzuspringen.
+      const readyState = getLiveClockState()
+      el.innerText = formatLiveClock(readyState)
+      const readyTimer = document.getElementById("liveTimer")
+      const readyPhase = readyTimer && readyTimer.querySelector(".live-phase")
+      if(readyPhase) readyPhase.innerText = `${readyState.period}. VIERTEL · BEREIT`
       updateLiveButton()
       return
     }
@@ -12332,7 +12356,7 @@ function startLiveTimer(){
     if(timer){
       const phase = timer.querySelector(".live-phase")
       if(phase){
-        phase.innerText = state.phase === "stoppage" ? `🔴 NACHSPIELZEIT · ${state.period}. VIERTEL` : `${state.period}. VIERTEL`
+        phase.innerText = state.phase === "ended" ? "🏁 SPIEL BEENDET" : state.phase === "stoppage" ? `🔴 NACHSPIELZEIT · ${state.period}. VIERTEL` : `${state.period}. VIERTEL`
       }
     }
 
@@ -12500,6 +12524,16 @@ function updateLiveButton(){
   let quarterBtn = document.getElementById("liveQuarterBtn")
   if(!btn) return
 
+  const currentMatch = matches.find(m => String(m.id) === String(liveMatchId))
+  const gameCompleted = !!(currentMatch && currentMatch.liveState && currentMatch.liveState.completed) || livePhase === "ended"
+  if(gameCompleted){
+    btn.innerText = "🏁 Spiel beendet"
+    btn.className = "secondary"
+    btn.disabled = true
+    if(quarterBtn) quarterBtn.classList.add("hidden")
+    return
+  }
+
   if(!liveStartTime){
     btn.innerText = "▶ Start"
     btn.className = "primary"
@@ -12540,6 +12574,7 @@ function finishLiveQuarter(){
 
   if(finishedPeriod >= 4){
     ensureLiveState(match)
+    livePhase = "ended"
     match.liveState.completed = true
     match.liveState.phase = "ended"
     match.liveState.period = 4
@@ -12585,13 +12620,15 @@ function resumeLiveGame(){
     liveStartTime = Date.now()
     livePausedTotal = 0
     livePausedAt = null
-    livePeriod = livePeriod || 1
+    // Beim Start nach einem Viertelabschluss das vorbereitete Viertel beibehalten.
+    // Nur ein echter Neustart ohne gültige Viertelnummer beginnt bei Viertel 1.
+    livePeriod = Number.isInteger(Number(livePeriod)) && Number(livePeriod) >= 1 && Number(livePeriod) <= 4 ? Number(livePeriod) : 1
     livePhase = "regular"
 
     match.liveState.startTime = liveStartTime
     match.liveState.pausedTotal = 0
     match.liveState.pausedAt = null
-    match.liveState.period = 1
+    match.liveState.period = livePeriod
     match.liveState.phase = "regular"
     match.liveState.periodStartAt = liveStartTime
     match.liveState.periodPausedAt = null
@@ -12830,6 +12867,10 @@ function startLiveAutoUpdate(){
       .then(res => res.json())
       .then(serverData => {
 
+        // Während einer laufenden Gast-Speicherung nicht mit einem älteren Poll-Stand
+        // überschreiben; sonst könnten gerade hinzugefügte/gelöschte Events zurückspringen.
+        if(isGuestTickerMode && window.guestTickerSavePending) return;
+
         let serverMatch = (serverData.matches || [])
           .find(m => m.id === liveMatchId)
 
@@ -12845,15 +12886,19 @@ function startLiveAutoUpdate(){
           window.liveResetPending = false;
         }
 
-        // 🔥 STABILER VERGLEICH
+        // Events UND Timerzustand vergleichen. Der alte reine Eventvergleich hat
+        // Timeränderungen (Start, Pause, Viertelwechsel, Abpfiff) ignoriert, wenn
+        // gerade kein neues Ereignis eingetragen wurde.
         let serverEvents = JSON.stringify(serverMatch.events || [])
         let localEvents = JSON.stringify(localMatch.events || [])
+        let serverLiveState = JSON.stringify(serverMatch.liveState || {})
+        let localLiveState = JSON.stringify(localMatch.liveState || {})
 
-        if(serverEvents === localEvents){
+        if(serverEvents === localEvents && serverLiveState === localLiveState){
           return
         }
 
-        // 🔥 UPDATE
+        // UPDATE
         Object.assign(localMatch, serverMatch)
 
         // 🔥 TIMER SYNC FIX
