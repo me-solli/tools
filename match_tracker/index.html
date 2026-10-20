@@ -9541,8 +9541,14 @@ RENDER
 
 function genericOpponentCrest(name){
   const text = String(name || "Gegner").trim()
-  const clean = text.replace(/\b(U11|U11-2|U11 2|U11 3|U11 4)\b/gi, '').replace(/\s+/g,' ').trim()
-  const key = clean.toLowerCase()
+  // Alters-/Mannschaftszusätze am Ende entfernen, bevor das Vereinswappen
+  // zugeordnet wird. Deckt U11, U11 2, U11-2, U11 3 und U11 4 ab.
+  const clean = text
+    .replace(/[\s_-]+U\s*11(?:[\s_-]*[2-4])?\s*$/i, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+  // ß/ss vereinheitlichen, damit z. B. Schleißheim und Schleissheim passen.
+  const key = clean.toLowerCase().replace(/ß/g, 'ss')
   const uid='crest_'+Math.abs(Array.from(text).reduce((h,c)=>((h<<5)-h+c.charCodeAt(0))|0,0))
 
   // Eigene SVG-Nachbauten: optisch deutlich näher an den Vereinswappen,
@@ -9609,7 +9615,7 @@ function genericOpponentCrest(name){
       <text x="58" y="38" text-anchor="middle" font-size="5.2" font-weight="900" fill="#111">INHAUSER</text>
       <text x="58" y="47" text-anchor="middle" font-size="5.2" font-weight="900" fill="#111">MOOS</text>`
   }
-  else if(key==='fc phönix schleissheim'){
+  else if(key==='fc phönix schleissheim' || key==='fc phoenix schleissheim'){
     art=`<ellipse cx="50" cy="50" rx="39" ry="45" fill="#091f76" stroke="#fff" stroke-width="3"/>
       <ellipse cx="50" cy="50" rx="29" ry="35" fill="#27a9e0"/>
       <text x="50" y="18" text-anchor="middle" font-size="5.5" font-weight="900" fill="#fff">F.C. PHÖNIX</text>
