@@ -9540,62 +9540,190 @@ RENDER
 ========================= */
 
 function genericOpponentCrest(name){
-  const text = String(name || "Gegner").trim();
-  // Normalisierung: Team-/Jahrgangszusätze entfernen, Schreibweisen angleichen.
+  const text = String(name || "Gegner").trim()
+  // Alters-/Mannschaftszusätze am Ende entfernen, bevor das Vereinswappen
+  // zugeordnet wird. Deckt U11, U11 2, U11-2, U11 3 und U11 4 ab.
   const clean = text
-    .replace(/\bU\s*11(?:\s*[-–]?\s*[2-4])?\b/gi, " ")
-    .replace(/\s+/g, " ").trim();
-  const key = clean.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-    .replace(/ß/g,"ss").toLowerCase().replace(/[.]/g,"").replace(/\s+/g," ").trim();
-  const uid='pxcrest_'+Math.abs(Array.from(text).reduce((h,c)=>((h<<5)-h+c.charCodeAt(0))|0,0));
+    .replace(/[\s_-]+U\s*11(?:[\s_-]*[2-4])?\s*$/i, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+  // ß/ss vereinheitlichen, damit z. B. Schleißheim und Schleissheim passen.
+  const key = clean.toLowerCase().replace(/ß/g, 'ss')
+  const uid='crest_'+Math.abs(Array.from(text).reduce((h,c)=>((h<<5)-h+c.charCodeAt(0))|0,0))
 
-  // Eigenständige Pixel-Art: grobe Farbwelt und Grundform als Inspiration,
-  // keine Originalbilddateien oder pixelgenauen Logo-Nachzeichnungen.
-  const clubs = [
-    {match:/^tsv allach(?: \d+)?$/, id:'allach', initials:'TA', shape:'round', a:'#48a82e', b:'#176b3a', c:'#ffffff', motif:'cross'},
-    {match:/^vfr garching$/, id:'garching', initials:'VfR', shape:'round', a:'#ffffff', b:'#161616', c:'#ffffff', motif:'rings'},
-    {match:/^sv nord munchen-lerchenau$/, id:'nord', initials:'SN', shape:'shield', a:'#1975d2', b:'#f4cf38', c:'#ffffff', motif:'bars'},
-    {match:/^fc alte haide-dsc$/, id:'altehaide', initials:'AH', shape:'round', a:'#15944c', b:'#101b17', c:'#ffffff', motif:'diagonal'},
-    {match:/^sv lohhof$/, id:'lohhof', initials:'SL', shape:'shield', a:'#e92740', b:'#181818', c:'#ffffff', motif:'diagonal'},
-    {match:/^sc inhauser moos$/, id:'inhauser', initials:'IM', shape:'shield', a:'#b10e2e', b:'#ffffff', c:'#202020', motif:'split'},
-    {match:/^fc phonix schleissheim$/, id:'phoenix', initials:'FP', shape:'oval', a:'#2aa6df', b:'#132a7d', c:'#ffffff', motif:'rings'},
-    {match:/^sv weichs$/, id:'weichs', initials:'SW', shape:'round', a:'#f4cb32', b:'#141b1a', c:'#ffffff', motif:'star'},
-    {match:/^vfb sparta munchen$/, id:'sparta', initials:'SP', shape:'shield', a:'#e62740', b:'#ffffff', c:'#151515', motif:'bars'},
-    {match:/^spvgg feldmoching$/, id:'feldmoching', initials:'SF', shape:'round', a:'#ffffff', b:'#161616', c:'#ffffff', motif:'rings'},
-    {match:/^vfl egenburg$/, id:'egenburg', initials:'VE', shape:'diamond', a:'#214ca1', b:'#f2d23d', c:'#ffffff', motif:'diagonal'},
-    {match:/^fc ismaning$/, id:'ismaning', initials:'FI', shape:'shield', a:'#ffffff', b:'#293f9a', c:'#293f9a', motif:'bars'},
-    {match:/^\(sg\) amperland$|^sg amperland$/, id:'amperland', initials:'SG', shape:'shield', a:'#ffffff', b:'#202020', c:'#e4b72f', motif:'diagonal'},
-    {match:/^fc d griechen a pontos$/, id:'pontos', initials:'GP', shape:'round', a:'#e0b437', b:'#171717', c:'#ffffff', motif:'rings'},
-    {match:/^sv istiklal munchen$/, id:'istiklal', initials:'SI', shape:'shield', a:'#ffffff', b:'#e32635', c:'#171717', motif:'split'},
-    {match:/^sv untermenzing$/, id:'untermenzing', initials:'SU', shape:'shield', a:'#174e9b', b:'#d92740', c:'#ffffff', motif:'bars'},
-    {match:/^tsv milbertshofen$/, id:'milbertshofen', initials:'TM', shape:'square', a:'#e53636', b:'#ffffff', c:'#ffffff', motif:'rings'},
-    {match:/^tsv eching$/, id:'eching', initials:'TE', shape:'shield', a:'#d92d36', b:'#ffffff', c:'#191919', motif:'diagonal'},
-    {match:/^fc croatia munchen$/, id:'croatia', initials:'FC', shape:'shield', a:'#d91e32', b:'#21478a', c:'#ffffff', motif:'cross'},
-    {match:/^sv riedmoos(?: \d+)?$/, id:'riedmoos', initials:'SR', shape:'shield', a:'#28783e', b:'#ffffff', c:'#174a2b', motif:'diagonal'}
-  ];
-  const club=clubs.find(c=>c.match.test(key));
-  let hash=0; for(const ch of key) hash=((hash<<5)-hash+ch.charCodeAt(0))|0;
-  const palette=[['#487eaa','#19364e','#ffffff'],['#9a4b65','#3a1c2b','#ffffff'],['#7d713c','#3d351b','#ffffff'],['#527d72','#203e38','#ffffff']];
-  const chosen=club || {id:'generic', initials:(clean.match(/[A-Za-zÄÖÜäöüß]/g)||[]).slice(0,3).join('').toUpperCase()||'FC', shape:'shield', a:palette[Math.abs(hash)%palette.length][0], b:palette[Math.abs(hash)%palette.length][1], c:'#ffffff', motif:'diagonal'};
-  const {a,b,c,initials,shape,motif}=chosen;
-  const frame = shape==='round' ? '<circle cx="50" cy="50" r="43"' : shape==='oval' ? '<ellipse cx="50" cy="50" rx="39" ry="44"' : shape==='diamond' ? '<path d="M50 5 L92 50 L50 95 L8 50Z"' : shape==='square' ? '<path d="M14 14 H86 V86 H14Z"' : '<path d="M15 9 H85 V59 Q85 80 50 95 Q15 80 15 59Z"';
-  const frameClose = shape==='round' ? '/>' : shape==='oval' ? '/>' : shape==='diamond' ? '/>' : shape==='square' ? '/>' : '/>';
-  let motifSvg='';
-  if(motif==='rings') motifSvg='<circle cx="50" cy="50" r="31" fill="none" stroke="'+c+'" stroke-width="5"/><circle cx="50" cy="50" r="21" fill="none" stroke="'+b+'" stroke-width="5"/>';
-  else if(motif==='bars') motifSvg='<path d="M23 18 V82 M38 18 V82 M62 18 V82 M77 18 V82" stroke="'+c+'" stroke-width="7" opacity=".95"/>';
-  else if(motif==='split') motifSvg='<path d="M50 10 V90" stroke="'+c+'" stroke-width="5"/><path d="M18 50 H82" stroke="'+b+'" stroke-width="5"/>';
-  else if(motif==='star') motifSvg='<path d="M50 23 L57 41 L76 42 L61 54 L66 73 L50 62 L34 73 L39 54 L24 42 L43 41Z" fill="'+b+'" stroke="'+c+'" stroke-width="2"/>';
-  else if(motif==='cross') motifSvg='<path d="M42 18 H58 V42 H82 V58 H58 V82 H42 V58 H18 V42 H42Z" fill="'+c+'" opacity=".95"/>';
-  else if(motif==='diagonal') motifSvg='<path d="M14 65 L75 15 H88 L88 32 L27 82 H14Z" fill="'+c+'" opacity=".96"/><path d="M14 75 L75 25" stroke="'+b+'" stroke-width="4"/>';
-  else motifSvg='<path d="M18 35 H82 M18 65 H82" stroke="'+c+'" stroke-width="5"/>';
-  // Pixel-like edge blocks and a compact, custom monogram make the set coherent.
-  const pixels=`<g fill="${c}" opacity=".95"><rect x="20" y="17" width="7" height="7"/><rect x="73" y="17" width="7" height="7"/><rect x="14" y="34" width="6" height="6"/><rect x="80" y="34" width="6" height="6"/><rect x="21" y="76" width="7" height="7"/><rect x="72" y="76" width="7" height="7"/></g>`;
-  const svg=`<svg viewBox="0 0 100 100" role="img" aria-hidden="true" shape-rendering="crispEdges"><defs><filter id="${uid}_s" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#000" flood-opacity=".2"/></filter></defs><g filter="url(#${uid}_s)"><rect x="8" y="8" width="84" height="84" rx="${shape==='round'?42:shape==='square'?5:2}" fill="#fff" opacity=".9"/>${frame.replace('/>',` fill="${a}" stroke="${b}" stroke-width="5"${frameClose}`)}<g>${motifSvg}${pixels}</g><rect x="23" y="39" width="54" height="22" fill="${b}" stroke="${c}" stroke-width="2"/><text x="50" y="54.5" text-anchor="middle" font-family="Arial,sans-serif" font-size="${initials.length>2?12:15}" font-weight="900" fill="${c}" stroke="${b}" stroke-width=".6" paint-order="stroke">${initials}</text><path d="M31 67 H69" stroke="${c}" stroke-width="3"/><rect x="38" y="72" width="24" height="5" fill="${b}"/></g></svg>`;
-  return `<span class="opponent-crest club-crest" aria-label="Eigenständiges Pixel-Art-Wappen für ${text}" title="Eigenständige Pixel-Art – ${text}">${svg}</span>`;
+  // Eigene SVG-Nachbauten: optisch deutlich näher an den Vereinswappen,
+  // aber als neu gezeichnete, kompakte Matchday-Varianten.
+  const defs=`<defs>
+    <linearGradient id="${uid}_g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#e7e7e7"/></linearGradient>
+    <filter id="${uid}_s" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="1" stdDeviation="0.7" flood-color="#000" flood-opacity=".18"/></filter>
+  </defs>`
+
+  let art=''
+  let vb='0 0 100 100'
+
+  if(key==='tsv allach' || key==='tsv allach 4'){
+    const four=key==='tsv allach 4'
+    art=`<circle cx="50" cy="50" r="45" fill="#fff" stroke="#2d693f" stroke-width="4"/>
+      <circle cx="50" cy="50" r="39" fill="#58a92e" stroke="#2d693f" stroke-width="3"/>
+      <path d="M50 31 C42 22 29 27 31 39 C22 35 15 45 22 52 C15 60 24 70 34 66 C31 77 43 84 50 74 C57 84 69 77 66 66 C76 70 85 60 78 52 C85 45 78 35 69 39 C71 27 58 22 50 31Z" fill="#2c6b3d"/>
+      <text x="50" y="49" text-anchor="middle" font-size="16" font-weight="900" fill="#fff">TSV</text>
+      <text x="50" y="60" text-anchor="middle" font-size="5.8" font-weight="900" fill="#62b32e">${four?'4':'19  S  09'}</text>
+      <text x="50" y="15" text-anchor="middle" font-size="6.2" font-weight="900" fill="#fff">TSV ALLACH</text>
+      <text x="50" y="88" text-anchor="middle" font-size="5.2" font-weight="900" fill="#fff">FUSSBALL</text>`
+  }
+  else if(key==='vfr garching'){
+    art=`<circle cx="50" cy="50" r="46" fill="#fff" stroke="#111" stroke-width="4"/>
+      <circle cx="50" cy="50" r="36" fill="#fff" stroke="#111" stroke-width="4"/>
+      <circle cx="50" cy="50" r="24" fill="#111"/>
+      <text x="50" y="57" text-anchor="middle" font-size="23" font-weight="900" fill="#fff">VfR</text>
+      <text x="50" y="15" text-anchor="middle" font-size="6.5" font-weight="900" fill="#111">VfR Garching</text>
+      <text x="50" y="88" text-anchor="middle" font-size="5.8" font-weight="900" fill="#111">VON 1921 e.V.</text>`
+  }
+  else if(key==='sv nord münchen-lerchenau'){
+    art=`<path d="M50 5 L91 18 V58 C91 76 76 89 50 96 C24 89 9 76 9 58V18Z" fill="#1769dc" stroke="#111" stroke-width="4"/>
+      <path d="M10 19 L90 19 L90 39 L10 39Z" fill="#f7f7f7"/>
+      <path d="M8 43 H92" stroke="#111" stroke-width="10"/>
+      <text x="50" y="30" text-anchor="middle" font-size="13" font-weight="900" fill="#f0cf16">SV</text>
+      <text x="50" y="54" text-anchor="middle" font-size="7" font-family="Georgia,serif" fill="#f0cf16">MÜNCHEN</text>
+      <text x="50" y="76" text-anchor="middle" font-size="13" font-weight="900" font-style="italic" fill="#f0cf16">Nord</text>`
+  }
+  else if(key==='fc alte haide-dsc'){
+    art=`<circle cx="50" cy="50" r="46" fill="#fff" stroke="#07863e" stroke-width="3"/>
+      <circle cx="50" cy="50" r="41" fill="#111" stroke="#fff" stroke-width="3"/>
+      <path d="M11 59 L89 17 A41 41 0 0 1 87 82 L13 82Z" fill="#079542"/>
+      <path d="M11 59 L89 17" stroke="#111" stroke-width="4"/>
+      <path d="M29 29 l16 -7 10 6 -3 15 -16 3z" fill="#fff" stroke="#111" stroke-width="1.8"/>
+      <text x="37" y="34" text-anchor="middle" font-size="5.5" font-weight="900" fill="#111">F.C.A.H.</text>
+      <path d="M51 55 q-9 8 -3 18 l7 -4 7 4 q6-10-3-18 l-4-4z" fill="#111"/>
+      <path d="M46 62 l-7 3 7 2 M61 62 l7 3-7 2" stroke="#111" stroke-width="2" fill="none"/>
+      <text x="50" y="13" text-anchor="middle" font-size="5.5" font-weight="800" fill="#fff">ALTE HAIDE-DSC</text>
+      <text x="50" y="92" text-anchor="middle" font-size="5" font-weight="800" fill="#fff">MÜNCHEN</text>`
+  }
+  else if(key==='sv lohhof'){
+    art=`<path d="M17 10 H83 V64 C83 78 69 90 50 96 C31 90 17 78 17 64Z" fill="#171717" stroke="#111" stroke-width="4"/>
+      <path d="M20 14 H80 V43 H20Z" fill="#ef1738"/>
+      <path d="M17 49 L83 20" stroke="#fff" stroke-width="13"/>
+      <path d="M17 49 L83 20" stroke="#111" stroke-width="2"/>
+      <text x="51" y="43" text-anchor="middle" font-size="7.5" font-weight="900" fill="#111" transform="rotate(-24 51 43)">SV Lohhof e.V.</text>`
+  }
+  else if(key==='sc inhauser moos'){
+    art=`<path d="M17 9 L50 16 L83 9 V70 C83 83 68 92 50 96 C32 92 17 83 17 70Z" fill="#f5f5f5" stroke="#111" stroke-width="3"/>
+      <path d="M17 9 L40 14 V67 C40 77 34 82 24 84 L17 80Z" fill="#a10e2c"/>
+      <text x="27" y="35" text-anchor="middle" font-size="12" font-weight="900" fill="#fff">SG</text>
+      <text x="28" y="54" text-anchor="middle" font-size="5.5" font-weight="900" fill="#fff">MOOS</text>
+      <text x="58" y="28" text-anchor="middle" font-size="6" font-weight="900" fill="#a10e2c">SC</text>
+      <text x="58" y="38" text-anchor="middle" font-size="5.2" font-weight="900" fill="#111">INHAUSER</text>
+      <text x="58" y="47" text-anchor="middle" font-size="5.2" font-weight="900" fill="#111">MOOS</text>`
+  }
+  else if(key==='fc phönix schleissheim' || key==='fc phoenix schleissheim'){
+    art=`<ellipse cx="50" cy="50" rx="39" ry="45" fill="#091f76" stroke="#fff" stroke-width="3"/>
+      <ellipse cx="50" cy="50" rx="29" ry="35" fill="#27a9e0"/>
+      <text x="50" y="18" text-anchor="middle" font-size="5.5" font-weight="900" fill="#fff">F.C. PHÖNIX</text>
+      <text x="50" y="25" text-anchor="middle" font-size="5.5" font-weight="900" fill="#fff">SCHLEISSHEIM</text>
+      <text x="50" y="61" text-anchor="middle" font-size="27" font-weight="900" fill="#fff">FC</text>
+      <text x="50" y="84" text-anchor="middle" font-size="7" font-weight="900" fill="#fff">1919</text>`
+  }
+  else if(key==='sv weichs'){
+    art=`<circle cx="50" cy="50" r="45" fill="#10191b" stroke="#f2c94c" stroke-width="4"/>
+      <path d="M25 32 Q50 18 75 32 L70 66 Q50 82 30 66Z" fill="#f2c94c"/>
+      <path d="M29 35 Q50 27 71 35 L68 62 Q50 72 32 62Z" fill="#f7f7f7"/>
+      <path d="M50 34 L57 43 L52 62 L48 62 L43 43Z" fill="#111"/>
+      <text x="50" y="18" text-anchor="middle" font-size="7" font-weight="900" fill="#f2c94c">SV</text>
+      <text x="50" y="78" text-anchor="middle" font-size="5.5" font-weight="900" fill="#f2c94c">WEICHS</text>`
+  }
+  else if(key==='vfb sparta münchen'){
+    art=`<path d="M18 7 H82 V60 C82 78 68 91 50 96 C32 91 18 78 18 60Z" fill="#e51c3a" stroke="#111" stroke-width="3"/>
+      <path d="M8 34 Q50 24 92 34 L92 53 Q50 43 8 53Z" fill="#fff" stroke="#111" stroke-width="2"/>
+      <text x="50" y="26" text-anchor="middle" font-size="17" font-weight="900" fill="#111">VfB</text>
+      <text x="50" y="44" text-anchor="middle" font-size="7" font-family="Georgia,serif" font-weight="700" fill="#111">Sparta München</text>
+      <path d="M41 61 q-8 5-3 12 l7-2 5 6 5-6 7 2q5-7-3-12l-2-10-8 5-8-5z" fill="#fff" stroke="#111" stroke-width="2"/>
+      <path d="M43 52 q7-9 14 0" stroke="#e51c3a" stroke-width="3" fill="none"/>`
+  }
+  else if(key==='spvgg feldmoching'){
+    art=`<circle cx="50" cy="50" r="45" fill="#5687d6" stroke="#111" stroke-width="6"/>
+      <text x="48" y="63" text-anchor="middle" font-size="48" font-weight="900" font-family="Arial,sans-serif" fill="#111">SVF</text>`
+  }
+  else if(key==='fc ismaning'){
+    art=`<path d="M16 13 Q50 22 84 13 V63 C84 78 68 90 50 96 C32 90 16 78 16 63Z" fill="#fff" stroke="#29429a" stroke-width="3"/>
+      <path d="M17 14 Q50 23 83 14 L83 46 L17 46Z" fill="#29429a"/>
+      <text x="39" y="40" text-anchor="middle" font-size="25" font-weight="900" fill="#fff">FC</text>
+      <path d="M17 48 L83 25" stroke="#29429a" stroke-width="3"/>
+      <text x="57" y="62" text-anchor="middle" font-size="8" font-weight="900" fill="#29429a" transform="rotate(-35 57 62)">ISMANING</text>`
+  }
+  else if(key==='sv istiklal münchen'){
+    art=`<path d="M17 9 H83 V68 C83 82 68 93 50 97 C32 93 17 82 17 68Z" fill="#f5f5f5" stroke="#111" stroke-width="3"/>
+      <path d="M17 55 L83 22 V68 C83 82 68 93 50 97 C32 93 17 82 17 68Z" fill="#ef1d2d"/>
+      <text x="50" y="24" text-anchor="middle" font-size="6.2" font-weight="900" fill="#111">SV İSTİKLAL</text>
+      <text x="50" y="31" text-anchor="middle" font-size="5.3" font-weight="900" fill="#111">München e.V.</text>
+      <circle cx="39" cy="52" r="13" fill="#ef1d2d"/>
+      <circle cx="42" cy="49" r="8" fill="#fff"/>
+      <circle cx="45" cy="47" r="8" fill="#ef1d2d"/>
+      <path d="M47 42 l2 4 4 0-3 3 1 4-4-2-4 2 1-4-3-3 4 0z" fill="#fff"/>
+      <circle cx="64" cy="56" r="11" fill="#fff" stroke="#111" stroke-width="1.5"/>
+      <path d="M58 50l5-3 5 4-1 6-6 2-4-4z" fill="#111"/>`
+  }
+  else if(key==='tsv milbertshofen'){
+    art=`<path d="M19 9 H81 L91 19 V81 L81 91 H19 L9 81 V19Z" fill="#e4312f" stroke="#fff" stroke-width="4"/>
+      <path d="M24 17 H76 L83 24 V76 L76 83 H24 L17 76 V24Z" fill="none" stroke="#fff" stroke-width="3"/>
+      <text x="50" y="31" text-anchor="middle" font-size="7" font-weight="900" fill="#fff">München</text>
+      <text x="50" y="60" text-anchor="middle" font-size="18" font-weight="900" fill="#fff">MℳM</text>
+      <text x="50" y="78" text-anchor="middle" font-size="6" font-weight="900" fill="#fff">Milbertshofen</text>`
+  }
+  else if(key==='sv untermenzing'){
+    art=`<path d="M18 9 H82 V64 C82 80 68 91 50 96 C32 91 18 80 18 64Z" fill="#174b96" stroke="#111" stroke-width="3"/>
+      <path d="M19 9 H81 V42 H19Z" fill="#d51f38"/>
+      <path d="M18 44 L82 28" stroke="#fff" stroke-width="5"/>
+      <text x="50" y="29" text-anchor="middle" font-size="13" font-weight="900" fill="#fff">SVU</text>
+      <text x="50" y="73" text-anchor="middle" font-size="6" font-weight="900" fill="#fff">UNTERMENZING</text>`
+  }
+  else if(key==='(sg) amperland'){
+    art=`<path d="M18 10 H82 V65 C82 79 68 91 50 96 C32 91 18 79 18 65Z" fill="#fff" stroke="#111" stroke-width="3"/>
+      <path d="M18 63 L82 26" stroke="#111" stroke-width="15"/>
+      <path d="M22 60 L78 28" stroke="#e4b62f" stroke-width="4"/>
+      <text x="50" y="27" text-anchor="middle" font-size="13" font-weight="900" fill="#111">SG</text>
+      <text x="50" y="57" text-anchor="middle" font-size="5.8" font-weight="900" fill="#fff">AMPERLAND</text>`
+  }
+  else if(key==='fc d. griechen a. pontos'){
+    art=`<circle cx="50" cy="50" r="45" fill="#111" stroke="#d9ad36" stroke-width="4"/>
+      <circle cx="50" cy="50" r="31" fill="#d9ad36"/>
+      <circle cx="50" cy="50" r="21" fill="#111"/>
+      <text x="50" y="47" text-anchor="middle" font-size="8" font-weight="900" fill="#fff">FC</text>
+      <text x="50" y="57" text-anchor="middle" font-size="6" font-weight="900" fill="#d9ad36">GP</text>`
+  }
+  else if(key==='tsv eching'){
+    art=`<path d="M17 10 H83 V65 C83 80 68 91 50 96 C32 91 17 80 17 65Z" fill="#d92d2d" stroke="#111" stroke-width="3"/>
+      <path d="M20 45 L80 20" stroke="#fff" stroke-width="18"/>
+      <text x="50" y="30" text-anchor="middle" font-size="13" font-weight="900" fill="#fff">TSV</text>
+      <text x="50" y="51" text-anchor="middle" font-size="7" font-weight="900" fill="#111" transform="rotate(-22 50 51)">ECHING</text>`
+  }
+  else if(key==='fc croatia münchen'){
+    art=`<path d="M18 10 H82 V64 C82 79 68 91 50 96 C32 91 18 79 18 64Z" fill="#dc1f32" stroke="#173e83" stroke-width="5"/>
+      <path d="M23 23 L77 78 M77 23 L23 78" stroke="#fff" stroke-width="7" opacity=".9"/>
+      <text x="50" y="38" text-anchor="middle" font-size="12" font-weight="900" fill="#173e83">FC</text>
+      <text x="50" y="50" text-anchor="middle" font-size="6" font-weight="900" fill="#fff">CROATIA</text>`
+  }
+  else if(key==='vfl egenburg'){
+    art=`<path d="M50 6 L90 46 L50 94 L10 46Z" fill="#fff" stroke="#1e9b58" stroke-width="4"/>
+      <path d="M17 46 L50 13 L83 46 L50 83Z" fill="#1e9b58"/>
+      <text x="50" y="59" text-anchor="middle" font-size="30" font-weight="900" fill="#fff">VfL</text>`
+  }
+  else {
+    let hash=0
+    for(let i=0;i<text.length;i++) hash=((hash<<5)-hash+text.charCodeAt(i))|0
+    const colors=[['#3c78a8','#16344e'],['#8b4c63','#3b1d2b'],['#7a6b3f','#3c331b'],['#526c82','#24333f'],['#6a4e8e','#30223f'],['#3d7b67','#19382f']]
+    const pair=colors[Math.abs(hash)%colors.length]
+    const initials=(clean.match(/[A-Za-zÄÖÜäöüß]/g)||[]).slice(0,3).join('').toUpperCase()||'FC'
+    art=`<path d="M20 9 H80 V62 C80 79 67 90 50 96 C33 90 20 79 20 62Z" fill="${pair[0]}" stroke="#fff" stroke-width="3"/>
+      <text x="50" y="42" text-anchor="middle" font-size="17" font-weight="900" fill="#fff">${initials}</text>
+      <path d="M29 52 H71" stroke="#fff" stroke-width="3" opacity=".8"/>`
+  }
+
+  return `<span class="opponent-crest club-crest" aria-label="Stilisiertes Wappen ${text}" title="Stilisiertes Wappen – ${text}"><svg viewBox="${vb}" role="img" aria-hidden="true">${defs}<g filter="url(#${uid}_s)">${art}</g></svg></span>`
 }
+
 function teamCrestMarkup(name){
   const n = String(name || "")
-  if(/^SV\s+Riedmoos(?:\s+U11(?:\s*[-–]?\s*[2-4])?)?$/i.test(n.trim())){
+  if(/^SV Riedmoos/i.test(n)){
     return `<img class="match-team-crest match-team-crest-real" src="https://11teamsports-heimstetten.de/media/image/category/50/md/sv-riedmoos_2.png" alt="SV Riedmoos">`
   }
   if(/^SV Testhausen$/i.test(n)) return testhausenCrest()
