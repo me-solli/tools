@@ -5900,7 +5900,7 @@ body{
   background:rgba(4,12,17,.48);
   border:1px solid rgba(255,255,255,.07);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
-  font-size:clamp(16px,2vw,24px);
+  font-size:clamp(15px,1.75vw,21px);
   line-height:1.15;
   color:#f4f8fa;
 }
@@ -6874,14 +6874,14 @@ body:has(#liveMode:not(.hidden)){
 .next-game-card .next-game-title .match-team-crest,
 .next-game-card .next-game-title .opponent-crest,
 .next-game-card .next-game-title .club-crest{
-  width:22px !important; height:27px !important; flex:0 0 22px !important; max-width:22px !important; max-height:27px !important; object-fit:contain !important; display:inline-flex !important;
+  width:30px !important; height:34px !important; flex:0 0 30px !important; max-width:30px !important; max-height:34px !important; object-fit:contain !important; display:inline-flex !important;
 }
 .next-game-card .next-game-title .opponent-crest svg{width:100% !important;height:100% !important;display:block !important;}
 .next-game-card .next-game-title .vs-pill{justify-self:center !important; flex:0 0 50px !important; width:50px !important; min-width:50px !important;}
 @media(max-width:820px){
  .next-game-card .next-game-title{grid-template-columns:minmax(0,1fr) 44px minmax(0,1fr) !important;gap:5px !important;}
  .next-game-card .next-game-title .team-home,.next-game-card .next-game-title .team-away{gap:5px !important;font-size:clamp(13px,3.4vw,18px) !important;}
- .next-game-card .next-game-title .match-team-crest,.next-game-card .next-game-title .opponent-crest,.next-game-card .next-game-title .club-crest{width:19px !important;height:23px !important;flex-basis:19px !important;max-width:19px !important;max-height:23px !important;}
+ .next-game-card .next-game-title .match-team-crest,.next-game-card .next-game-title .opponent-crest,.next-game-card .next-game-title .club-crest{width:26px !important;height:30px !important;flex-basis:26px !important;max-width:26px !important;max-height:30px !important;}
  .next-game-card .next-game-title .vs-pill{width:42px !important;min-width:42px !important;flex-basis:42px !important;}
 }
 </style>
@@ -14537,9 +14537,9 @@ body::after{
 
 /* Vereinswappen in den drei Paarungsanzeigen – Größen konsequent begrenzen */
 .pairing-team-name{min-width:0;overflow-wrap:anywhere}
-.next-game-title{display:flex;align-items:center;justify-content:center;gap:8px;min-width:0;flex-wrap:wrap}
-.next-game-title .team-home,.next-game-title .team-away{display:inline-flex;align-items:center;gap:5px;min-width:0}
-.next-game-title>.match-team-crest,.next-game-title>.opponent-crest,.next-game-title .team-home .match-team-crest,.next-game-title .team-away .opponent-crest{width:26px!important;height:28px!important;max-width:26px!important;max-height:28px!important;flex:0 0 26px!important;object-fit:contain;display:inline-flex;align-items:center;justify-content:center;overflow:hidden}
+.next-game-card .next-game-title{display:grid!important;grid-template-columns:minmax(0,1fr) 50px minmax(0,1fr)!important;align-items:center;justify-content:stretch;gap:10px;min-width:0;flex-wrap:nowrap}
+.next-game-card .next-game-title .team-home,.next-game-card .next-game-title .team-away{display:inline-flex;align-items:center;gap:8px;min-width:0;font-size:clamp(16px,1.55vw,20px)!important;line-height:1.15}
+.next-game-card .next-game-title>.match-team-crest,.next-game-card .next-game-title>.opponent-crest,.next-game-card .next-game-title .team-home .match-team-crest,.next-game-card .next-game-title .team-away .opponent-crest{width:34px!important;height:38px!important;max-width:34px!important;max-height:38px!important;flex:0 0 34px!important;object-fit:contain;display:inline-flex;align-items:center;justify-content:center;overflow:hidden}
 .next-game-title .match-team-crest img,.next-game-title .match-team-crest svg,.next-game-title .opponent-crest img,.next-game-title .opponent-crest svg{width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain;display:block}
 .last-recap-team{display:inline-flex;align-items:center;gap:7px;min-width:0;max-width:100%}
 .last-recap-team.home{justify-content:flex-end}
@@ -14555,8 +14555,9 @@ body::after{
 .live-event-copy .live-event-crest + span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .live-event-copy .live-event-delete{flex:0 0 auto}
 @media(max-width:620px){
- .next-game-title .team-home,.next-game-title .team-away{gap:5px}
- .next-game-title .match-team-crest,.next-game-title .opponent-crest{width:24px!important;height:27px!important;max-width:24px!important;max-height:27px!important;flex-basis:24px!important}
+ .next-game-card .next-game-title{grid-template-columns:minmax(0,1fr) 42px minmax(0,1fr)!important;gap:5px!important}
+ .next-game-card .next-game-title .team-home,.next-game-card .next-game-title .team-away{gap:5px;font-size:clamp(13px,3.2vw,16px)!important}
+ .next-game-card .next-game-title .match-team-crest,.next-game-card .next-game-title .opponent-crest{width:29px!important;height:32px!important;max-width:29px!important;max-height:32px!important;flex-basis:29px!important}
  .last-recap-team{gap:4px;white-space:normal}
  .last-recap-team .match-team-crest,.last-recap-team .opponent-crest{width:22px!important;height:24px!important;max-width:22px!important;max-height:24px!important;flex-basis:22px!important}
  .live-team-block .match-team-crest,.live-team-block .opponent-crest{width:24px!important;height:26px!important;max-width:24px!important;max-height:26px!important;flex-basis:24px!important}
