@@ -14606,6 +14606,47 @@ body::after{
  .live-team-block .match-team-crest,.live-team-block .opponent-crest{width:24px!important;height:26px!important;max-width:24px!important;max-height:26px!important;flex-basis:24px!important}
 }
 
+
+/* ===== FINAL RECAP CARD LAYOUT: matchup full-width, details + photos below ===== */
+.last-recap-match{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(260px,.92fr) !important;
+  grid-template-areas:"pair pair" "meta media" "events media" "actions media";
+  align-items:start !important;
+  column-gap:18px !important;
+  row-gap:6px !important;
+  padding:12px 16px 13px !important;
+}
+.last-recap-main{display:contents !important}
+.last-recap-top{grid-area:pair;display:grid !important;grid-template-columns:minmax(0,1fr);gap:5px !important;align-items:center !important}
+.last-recap-opponent{display:flex !important;align-items:center !important;justify-content:center !important;gap:10px !important;min-width:0;width:100%;flex-wrap:nowrap !important;overflow:visible !important}
+.last-recap-team{display:inline-flex !important;align-items:center !important;gap:7px !important;min-width:0 !important;max-width:calc(50% - 28px) !important;font-size:12px !important;line-height:1.2;white-space:normal !important;overflow-wrap:normal !important;word-break:normal !important}
+.last-recap-team.home{justify-content:flex-end !important;text-align:right !important}
+.last-recap-team.away{justify-content:flex-start !important;text-align:left !important}
+.last-recap-team .match-team-crest,.last-recap-team .opponent-crest,.last-recap-team .home-crest,.last-recap-team .away-crest{flex:0 0 25px !important;width:25px !important;height:27px !important;max-width:25px !important;max-height:27px !important;overflow:hidden;object-fit:contain}
+.last-recap-team .match-team-crest img,.last-recap-team .match-team-crest svg,.last-recap-team .opponent-crest img,.last-recap-team .opponent-crest svg,.last-recap-team .home-crest img,.last-recap-team .away-crest img{display:block;width:100% !important;height:100% !important;max-width:100% !important;max-height:100% !important;object-fit:contain}
+.last-recap-vs{flex:0 0 auto !important;padding:3px 7px !important;font-size:10px !important}
+.last-recap-scoreline{display:flex !important;align-items:center !important;justify-content:center !important;gap:9px !important;min-height:28px}
+.last-recap-score{min-width:49px !important;padding:5px 9px !important;font-size:14px !important}
+.last-recap-meta{grid-area:meta;margin-top:1px !important;line-height:1.4}
+.last-recap-events{grid-area:events;margin-top:0 !important;align-content:start;gap:4px !important}
+.match-report-actions{grid-area:actions;margin-top:0 !important;align-self:start}
+.last-recap-media{grid-area:media;align-self:stretch !important;display:flex !important;align-items:center !important;gap:7px !important;width:100%;min-height:0 !important;padding:0 !important;overflow-x:auto}
+.last-recap-photo{flex:0 0 56px !important;width:56px !important;height:56px !important}
+.last-recap-photo-lock{min-height:56px !important}
+@media(max-width:780px){
+ .last-recap-match{grid-template-columns:minmax(0,1fr) !important;grid-template-areas:"pair" "meta" "events" "media" "actions" !important;row-gap:7px !important;padding:11px 13px !important}
+ .last-recap-opponent{gap:6px !important}
+ .last-recap-team{font-size:11px !important;gap:4px !important;max-width:calc(50% - 20px) !important}
+ .last-recap-team .match-team-crest,.last-recap-team .opponent-crest,.last-recap-team .home-crest,.last-recap-team .away-crest{flex-basis:22px !important;width:22px !important;height:24px !important;max-width:22px !important;max-height:24px !important}
+ .last-recap-media{min-height:54px !important}
+ .last-recap-photo{flex-basis:54px !important;width:54px !important;height:54px !important}
+ .match-report-actions{margin-top:1px !important}
+}
+@media(max-width:420px){
+ .last-recap-team{font-size:10px !important;max-width:calc(50% - 18px) !important}
+ .last-recap-vs{padding:3px 4px !important}
+}
 </style>
 </body>
 </html>
