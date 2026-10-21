@@ -10751,9 +10751,9 @@ function renderLastMatchday(){
           }).join("")
           return `<article class="last-recap-match"><div class="last-recap-main"><div class="last-recap-top">
   <div class="last-recap-opponent">
-    <span>${getMatchSides(match).home}</span>
+    <span class="last-recap-team home">${teamCrestMarkup(getMatchSides(match).home)}<span>${getMatchSides(match).home}</span></span>
     <span class="last-recap-vs">vs</span>
-    <span>${getMatchSides(match).away}</span>
+    <span class="last-recap-team away"><span>${getMatchSides(match).away}</span>${teamCrestMarkup(getMatchSides(match).away)}</span>
   </div>
   <div class="last-recap-score">${getMatchScore(match).home} : ${getMatchScore(match).away}</div>
   <div class="last-recap-result ${result.cls}">${result.text}</div>
@@ -10872,9 +10872,9 @@ function renderNextGameCard(){
         <div class="next-game-main">
         <div class="next-game-teams">
           <div class="next-game-title">
-            <span class="team-home">${getMatchSides(liveMatch).home}</span>
+            <span class="team-home">${teamCrestMarkup(getMatchSides(liveMatch).home)}<span class="pairing-team-name">${getMatchSides(liveMatch).home}</span></span>
             <span class="vs-pill">vs</span>
-            <span class="team-away">${getMatchSides(liveMatch).away}</span>
+            <span class="team-away"><span class="pairing-team-name">${getMatchSides(liveMatch).away}</span>${teamCrestMarkup(getMatchSides(liveMatch).away)}</span>
           </div>
           <div class="next-game-sub">🔴 Live läuft gerade${liveMatch.time ? " • 🕒 " + liveMatch.time : ""}</div>
           ${locationText}
@@ -10914,9 +10914,9 @@ function renderNextGameCard(){
       <div class="next-game-main">
         <div class="next-game-teams">
           <div class="next-game-title">
-            <span class="team-home">${getMatchSides(match).home}</span>
+            <span class="team-home">${teamCrestMarkup(getMatchSides(match).home)}<span class="pairing-team-name">${getMatchSides(match).home}</span></span>
             <span class="vs-pill">vs</span>
-            <span class="team-away">${getMatchSides(match).away}</span>
+            <span class="team-away"><span class="pairing-team-name">${getMatchSides(match).away}</span>${teamCrestMarkup(getMatchSides(match).away)}</span>
           </div>
           <div class="next-game-sub">📅 ${formatDate(match.date)}${match.time ? " • 🕒 " + match.time : ""} • ${placeText}${modeText}</div>
           ${match.location ? `<div class="next-game-location">📍 ${match.location}</div>` : ""}
@@ -11634,6 +11634,7 @@ function openLiveMode(matchId){
 
   <div class="live-score-big" id="liveScoreBig">
     <div class="live-team-block home">
+      ${teamCrestMarkup(getMatchSides(match).home)}
       <span class="team">${getMatchSides(match).home}</span>
       <small>HEIM</small>
     </div>
@@ -11643,6 +11644,7 @@ function openLiveMode(matchId){
       <div class="live-minute"><span id="liveTimeValue">00:00</span></div>
     </div>
     <div class="live-team-block away">
+      ${teamCrestMarkup(getMatchSides(match).away)}
       <span class="team">${getMatchSides(match).away}</span>
       <small>GAST</small>
     </div>
@@ -11913,6 +11915,14 @@ if(latestEvent){
       lastPeriod = period
     }
 
+    // Kleines Vereinswappen je Live-Ereignis: eigene Aktionen zeigen unser Team,
+    // Gegentore bzw. gegnerische Eigentore zeigen den Gegner.
+    const eventTeamName = (e.type === "goalAgainst" || (e.type === "ownGoal" && e.ownGoalResult !== "forUs"))
+      ? (match.opponent || "Gegner")
+      : (match.team || "")
+    const eventCrest = teamCrestMarkup(eventTeamName)
+      .replace('class="match-team-crest match-team-crest-real"', 'class="live-event-crest match-team-crest-real"')
+      .replace('class="opponent-crest club-crest"', 'class="live-event-crest opponent-crest club-crest"')
     const eventKey = e.id != null ? String(e.id) : `${e.time || 0}_${e.minute || 0}_${e.type}_${chronologicalEvents.indexOf(e)}`
     const eventScore = scoreAfterEvent.get(eventKey)
     // Spielstand nur bei Ereignissen anzeigen, die den Spielstand verändern.
@@ -11927,7 +11937,7 @@ if(latestEvent){
 <div class="live-feed-item ${e.type}${e.type === "ownGoal" ? (e.ownGoalResult === "forUs" ? " goal" : " goalAgainst") : ""}">
   <div class="live-event-minute">${minute}</div>
   <div class="live-event-icon">${icon}</div>
-  <div class="live-event-copy"><span>${e.type === "ownGoal" ? text : text.replace(/^[^ ]+ /,"")}</span><button class="live-event-delete" type="button" title="Diesen Eintrag löschen" aria-label="Diesen Eintrag löschen" onclick='deleteLiveTickerEvent(${deleteArg})'>×</button></div>
+  <div class="live-event-copy">${eventCrest}<span>${e.type === "ownGoal" ? text : text.replace(/^[^ ]+ /,"")}</span><button class="live-event-delete" type="button" title="Diesen Eintrag löschen" aria-label="Diesen Eintrag löschen" onclick='deleteLiveTickerEvent(${deleteArg})'>×</button></div>
   ${scoreMarkup}
 </div>
 `
@@ -14474,5 +14484,36 @@ body::after{
 }
 
 </style>
-</body>
+</
+<style id="pairing-team-crest-additions">
+/* Vereinswappen in den drei Paarungsanzeigen */
+.pairing-team-name{min-width:0;overflow-wrap:anywhere}
+.next-game-title .team-home,.next-game-title .team-away{display:inline-flex;align-items:center;gap:8px;min-width:0}
+.next-game-title .match-team-crest,.next-game-title .opponent-crest{width:30px;height:32px;flex:0 0 30px;object-fit:contain;display:inline-flex;align-items:center;justify-content:center}
+.next-game-title .opponent-crest svg{width:100%;height:100%;display:block}
+.last-recap-team{display:inline-flex;align-items:center;gap:7px;min-width:0;max-width:100%}
+.last-recap-team.home{justify-content:flex-end}
+.last-recap-team.away{justify-content:flex-start}
+.last-recap-team .match-team-crest,.last-recap-team .opponent-crest{width:27px;height:29px;flex:0 0 27px;object-fit:contain;display:inline-flex;align-items:center;justify-content:center}
+.last-recap-team .opponent-crest svg{width:100%;height:100%;display:block}
+.live-team-block .match-team-crest,.live-team-block .opponent-crest{width:46px;height:48px;flex:0 0 46px;object-fit:contain;display:inline-flex;align-items:center;justify-content:center}
+.live-team-block .opponent-crest svg{width:100%;height:100%;display:block}
+.live-team-block .team{max-width:100%;overflow-wrap:anywhere}
+@media(max-width:620px){
+ .next-game-title .team-home,.next-game-title .team-away{gap:5px}
+ .next-game-title .match-team-crest,.next-game-title .opponent-crest{width:24px;height:27px;flex-basis:24px}
+ .last-recap-team{gap:4px;white-space:normal}
+ .last-recap-team .match-team-crest,.last-recap-team .opponent-crest{width:22px;height:24px;flex-basis:22px}
+ .live-team-block .match-team-crest,.live-team-block .opponent-crest{width:32px;height:34px;flex-basis:32px}
+}
+</style>
+body>
 </html>
+
+<style id="live-event-team-crest-addition">
+.live-event-copy{display:flex;align-items:center;justify-content:space-between;gap:6px;min-width:0}
+.live-event-copy .live-event-crest{display:inline-flex;align-items:center;justify-content:center;flex:0 0 17px;width:17px;height:19px;max-width:17px;max-height:19px;object-fit:contain;overflow:hidden;margin-right:2px}
+.live-event-copy .live-event-crest svg{display:block;width:100%;height:100%;max-width:17px;max-height:19px}
+.live-event-copy .live-event-crest + span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.live-event-copy .live-event-delete{flex:0 0 auto}
+</style>
