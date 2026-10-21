@@ -10751,12 +10751,13 @@ function renderLastMatchday(){
           }).join("")
           return `<article class="last-recap-match"><div class="last-recap-main"><div class="last-recap-top">
   <div class="last-recap-opponent">
-    <span class="last-recap-team home">${teamCrestMarkup(getMatchSides(match).home)}<span>${getMatchSides(match).home}</span></span>
+    <span class="last-recap-team home"><span>${getMatchSides(match).home}</span></span>
+    <span class="last-recap-team home-crest">${teamCrestMarkup(getMatchSides(match).home)}</span>
     <span class="last-recap-vs">vs</span>
-    <span class="last-recap-team away"><span>${getMatchSides(match).away}</span>${teamCrestMarkup(getMatchSides(match).away)}</span>
+    <span class="last-recap-team away-crest">${teamCrestMarkup(getMatchSides(match).away)}</span>
+    <span class="last-recap-team away"><span>${getMatchSides(match).away}</span></span>
   </div>
-  <div class="last-recap-score">${getMatchScore(match).home} : ${getMatchScore(match).away}</div>
-  <div class="last-recap-result ${result.cls}">${result.text}</div>
+  <div class="last-recap-scoreline"><div class="last-recap-score">${getMatchScore(match).home} : ${getMatchScore(match).away}</div><div class="last-recap-result ${result.cls}">${result.text}</div></div>
 </div><div class="last-recap-meta">${match.time?"🕒 "+match.time:""}${location} • ${eventCount} Tracker-Ereignis${eventCount===1?"":"se"}</div><div class="last-recap-events">${eventPills||`<span class="last-event-pill">Keine Events</span>`}</div><div class="match-report-actions">${(match.report?.text||match.report?.attachment?.dataUrl)?`<button type="button" class="secondary match-report-button" onclick="openMatchReport('${match.id}')">📄 Spielbericht ansehen${hasAccess(activeTeam)?" / bearbeiten":""}</button>`:(hasAccess(activeTeam)?`<button type="button" class="secondary match-report-button" onclick="openMatchReport('${match.id}')">＋ Spielbericht hinzufügen</button>`:"")}</div></div><div class="last-recap-media" id="last-recap-media-${match.id}"><span class="last-recap-no-photo">📷 Bilder werden geladen …</span></div></article>`
         }).join("")}
       </div>
@@ -10872,9 +10873,11 @@ function renderNextGameCard(){
         <div class="next-game-main">
         <div class="next-game-teams">
           <div class="next-game-title">
-            <span class="team-home">${teamCrestMarkup(getMatchSides(liveMatch).home)}<span class="pairing-team-name">${getMatchSides(liveMatch).home}</span></span>
+            <span class="team-home"><span class="pairing-team-name">${getMatchSides(liveMatch).home}</span></span>
+            ${teamCrestMarkup(getMatchSides(liveMatch).home)}
             <span class="vs-pill">vs</span>
-            <span class="team-away"><span class="pairing-team-name">${getMatchSides(liveMatch).away}</span>${teamCrestMarkup(getMatchSides(liveMatch).away)}</span>
+            ${teamCrestMarkup(getMatchSides(liveMatch).away)}
+            <span class="team-away"><span class="pairing-team-name">${getMatchSides(liveMatch).away}</span></span>
           </div>
           <div class="next-game-sub">🔴 Live läuft gerade${liveMatch.time ? " • 🕒 " + liveMatch.time : ""}</div>
           ${locationText}
@@ -10914,9 +10917,11 @@ function renderNextGameCard(){
       <div class="next-game-main">
         <div class="next-game-teams">
           <div class="next-game-title">
-            <span class="team-home">${teamCrestMarkup(getMatchSides(match).home)}<span class="pairing-team-name">${getMatchSides(match).home}</span></span>
+            <span class="team-home"><span class="pairing-team-name">${getMatchSides(match).home}</span></span>
+            ${teamCrestMarkup(getMatchSides(match).home)}
             <span class="vs-pill">vs</span>
-            <span class="team-away"><span class="pairing-team-name">${getMatchSides(match).away}</span>${teamCrestMarkup(getMatchSides(match).away)}</span>
+            ${teamCrestMarkup(getMatchSides(match).away)}
+            <span class="team-away"><span class="pairing-team-name">${getMatchSides(match).away}</span></span>
           </div>
           <div class="next-game-sub">📅 ${formatDate(match.date)}${match.time ? " • 🕒 " + match.time : ""} • ${placeText}${modeText}</div>
           ${match.location ? `<div class="next-game-location">📍 ${match.location}</div>` : ""}
@@ -14484,17 +14489,31 @@ body::after{
 }
 
 
+/* Paarungszeile im Rückblick: Ergebnis und Resultat zentriert unter „vs“ */
+.last-recap-top{display:flex;flex-direction:column;align-items:stretch;gap:7px;min-width:0}
+.last-recap-opponent{display:flex;align-items:center;justify-content:center;gap:8px;min-width:0;white-space:normal;overflow:visible}
+.last-recap-team{display:inline-flex;align-items:center;gap:6px;min-width:0;max-width:calc(50% - 18px);color:#f2f7f8;font-size:13px;font-weight:850;white-space:normal;overflow-wrap:anywhere}
+.last-recap-team.home{justify-content:flex-end;text-align:right}
+.last-recap-team.away{justify-content:flex-start;text-align:left}
+.last-recap-team.home-crest,.last-recap-team.away-crest{flex:0 0 27px;max-width:27px;padding:0;justify-content:center}
+.last-recap-vs{flex:0 0 auto;color:#8fdff0;font-size:10px;font-weight:900;text-transform:uppercase}
+.last-recap-scoreline{display:flex;align-items:center;justify-content:center;gap:8px}
+.last-recap-score{min-width:49px;text-align:center}
+.last-recap-result{flex:0 0 auto}
+@media(max-width:620px){.last-recap-team{font-size:11px;gap:4px;max-width:calc(50% - 16px)}.last-recap-opponent{gap:5px}.last-recap-scoreline{gap:7px}}
+
 /* Vereinswappen in den drei Paarungsanzeigen – Größen konsequent begrenzen */
 .pairing-team-name{min-width:0;overflow-wrap:anywhere}
-.next-game-title .team-home,.next-game-title .team-away{display:inline-flex;align-items:center;gap:8px;min-width:0}
-.next-game-title .match-team-crest,.next-game-title .opponent-crest{width:30px!important;height:32px!important;max-width:30px!important;max-height:32px!important;flex:0 0 30px!important;object-fit:contain;display:inline-flex;align-items:center;justify-content:center;overflow:hidden}
+.next-game-title{display:flex;align-items:center;justify-content:center;gap:8px;min-width:0;flex-wrap:wrap}
+.next-game-title .team-home,.next-game-title .team-away{display:inline-flex;align-items:center;gap:5px;min-width:0}
+.next-game-title>.match-team-crest,.next-game-title>.opponent-crest,.next-game-title .team-home .match-team-crest,.next-game-title .team-away .opponent-crest{width:26px!important;height:28px!important;max-width:26px!important;max-height:28px!important;flex:0 0 26px!important;object-fit:contain;display:inline-flex;align-items:center;justify-content:center;overflow:hidden}
 .next-game-title .match-team-crest img,.next-game-title .match-team-crest svg,.next-game-title .opponent-crest img,.next-game-title .opponent-crest svg{width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain;display:block}
 .last-recap-team{display:inline-flex;align-items:center;gap:7px;min-width:0;max-width:100%}
 .last-recap-team.home{justify-content:flex-end}
 .last-recap-team.away{justify-content:flex-start}
 .last-recap-team .match-team-crest,.last-recap-team .opponent-crest{width:27px!important;height:29px!important;max-width:27px!important;max-height:29px!important;flex:0 0 27px!important;object-fit:contain;display:inline-flex;align-items:center;justify-content:center;overflow:hidden}
 .last-recap-team .match-team-crest img,.last-recap-team .match-team-crest svg,.last-recap-team .opponent-crest img,.last-recap-team .opponent-crest svg{width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain;display:block}
-.live-team-block .match-team-crest,.live-team-block .opponent-crest{width:38px!important;height:40px!important;max-width:38px!important;max-height:40px!important;flex:0 0 38px!important;object-fit:contain;display:inline-flex;align-items:center;justify-content:center;overflow:hidden}
+.live-team-block .match-team-crest,.live-team-block .opponent-crest{width:27px!important;height:29px!important;max-width:27px!important;max-height:29px!important;flex:0 0 27px!important;object-fit:contain;display:inline-flex;align-items:center;justify-content:center;overflow:hidden}
 .live-team-block .match-team-crest img,.live-team-block .match-team-crest svg,.live-team-block .opponent-crest img,.live-team-block .opponent-crest svg{width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain;display:block}
 .live-team-block .team{max-width:100%;overflow-wrap:anywhere}
 .live-event-copy{display:flex;align-items:center;justify-content:space-between;gap:6px;min-width:0}
@@ -14507,7 +14526,7 @@ body::after{
  .next-game-title .match-team-crest,.next-game-title .opponent-crest{width:24px!important;height:27px!important;max-width:24px!important;max-height:27px!important;flex-basis:24px!important}
  .last-recap-team{gap:4px;white-space:normal}
  .last-recap-team .match-team-crest,.last-recap-team .opponent-crest{width:22px!important;height:24px!important;max-width:22px!important;max-height:24px!important;flex-basis:22px!important}
- .live-team-block .match-team-crest,.live-team-block .opponent-crest{width:30px!important;height:32px!important;max-width:30px!important;max-height:32px!important;flex-basis:30px!important}
+ .live-team-block .match-team-crest,.live-team-block .opponent-crest{width:24px!important;height:26px!important;max-width:24px!important;max-height:26px!important;flex-basis:24px!important}
 }
 
 </style>
