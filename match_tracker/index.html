@@ -6847,6 +6847,43 @@ body:has(#liveMode:not(.hidden)){
 .quickbar-status-pending{color:#ffd27a;background:rgba(170,117,28,.18);border-color:rgba(255,193,74,.42)}
 .quickbar-status-done{color:#8ce0ac;background:rgba(36,119,74,.16);border-color:rgba(89,205,133,.28)}
 .todo-status-pill{color:#ffd27a;background:rgba(170,117,28,.18);border:1px solid rgba(255,193,74,.35);border-radius:6px;padding:2px 5px}
+
+/* FIX: next-match pairing keeps each crest attached to its team name */
+.next-game-card .next-game-title{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) 50px minmax(0,1fr) !important;
+  align-items:center !important;
+  gap:10px !important;
+  width:100% !important;
+}
+.next-game-card .next-game-title .team-home,
+.next-game-card .next-game-title .team-away{
+  display:flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  padding:0 !important;
+  white-space:normal !important;
+  overflow-wrap:normal !important;
+  word-break:normal !important;
+}
+.next-game-card .next-game-title .team-home{justify-content:flex-end !important; text-align:right !important;}
+.next-game-card .next-game-title .team-away{justify-content:flex-start !important; text-align:left !important;}
+.next-game-card .next-game-title .pairing-team-name{display:block !important; min-width:0 !important; overflow-wrap:normal !important; word-break:normal !important;}
+.next-game-card .next-game-title .match-team-crest,
+.next-game-card .next-game-title .opponent-crest,
+.next-game-card .next-game-title .club-crest{
+  width:22px !important; height:27px !important; flex:0 0 22px !important; max-width:22px !important; max-height:27px !important; object-fit:contain !important; display:inline-flex !important;
+}
+.next-game-card .next-game-title .opponent-crest svg{width:100% !important;height:100% !important;display:block !important;}
+.next-game-card .next-game-title .vs-pill{justify-self:center !important; flex:0 0 50px !important; width:50px !important; min-width:50px !important;}
+@media(max-width:820px){
+ .next-game-card .next-game-title{grid-template-columns:minmax(0,1fr) 44px minmax(0,1fr) !important;gap:5px !important;}
+ .next-game-card .next-game-title .team-home,.next-game-card .next-game-title .team-away{gap:5px !important;font-size:clamp(13px,3.4vw,18px) !important;}
+ .next-game-card .next-game-title .match-team-crest,.next-game-card .next-game-title .opponent-crest,.next-game-card .next-game-title .club-crest{width:19px !important;height:23px !important;flex-basis:19px !important;max-width:19px !important;max-height:23px !important;}
+ .next-game-card .next-game-title .vs-pill{width:42px !important;min-width:42px !important;flex-basis:42px !important;}
+}
 </style>
 </head>
 <body>
@@ -10873,11 +10910,9 @@ function renderNextGameCard(){
         <div class="next-game-main">
         <div class="next-game-teams">
           <div class="next-game-title">
-            <span class="team-home"><span class="pairing-team-name">${getMatchSides(liveMatch).home}</span></span>
-            ${teamCrestMarkup(getMatchSides(liveMatch).home)}
+            <span class="team-home"><span class="pairing-team-name">${getMatchSides(liveMatch).home}</span>${teamCrestMarkup(getMatchSides(liveMatch).home)}</span>
             <span class="vs-pill">vs</span>
-            ${teamCrestMarkup(getMatchSides(liveMatch).away)}
-            <span class="team-away"><span class="pairing-team-name">${getMatchSides(liveMatch).away}</span></span>
+            <span class="team-away">${teamCrestMarkup(getMatchSides(liveMatch).away)}<span class="pairing-team-name">${getMatchSides(liveMatch).away}</span></span>
           </div>
           <div class="next-game-sub">🔴 Live läuft gerade${liveMatch.time ? " • 🕒 " + liveMatch.time : ""}</div>
           ${locationText}
@@ -10917,11 +10952,9 @@ function renderNextGameCard(){
       <div class="next-game-main">
         <div class="next-game-teams">
           <div class="next-game-title">
-            <span class="team-home"><span class="pairing-team-name">${getMatchSides(match).home}</span></span>
-            ${teamCrestMarkup(getMatchSides(match).home)}
+            <span class="team-home"><span class="pairing-team-name">${getMatchSides(match).home}</span>${teamCrestMarkup(getMatchSides(match).home)}</span>
             <span class="vs-pill">vs</span>
-            ${teamCrestMarkup(getMatchSides(match).away)}
-            <span class="team-away"><span class="pairing-team-name">${getMatchSides(match).away}</span></span>
+            <span class="team-away">${teamCrestMarkup(getMatchSides(match).away)}<span class="pairing-team-name">${getMatchSides(match).away}</span></span>
           </div>
           <div class="next-game-sub">📅 ${formatDate(match.date)}${match.time ? " • 🕒 " + match.time : ""} • ${placeText}${modeText}</div>
           ${match.location ? `<div class="next-game-location">📍 ${match.location}</div>` : ""}
