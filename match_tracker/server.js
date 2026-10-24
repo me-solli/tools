@@ -719,9 +719,11 @@ app.post(
       )
 
 
-      res.status(500).json({
-        error:
-          "Fehler beim Hochladen"
+      const diskFull = error && (error.code === "ENOSPC" || error.code === "EDQUOT")
+      res.status(diskFull ? 507 : 500).json({
+        error: diskFull
+          ? "Server-Speicher voll – Foto wurde nicht gespeichert"
+          : "Fehler beim Hochladen"
       })
     }
   }

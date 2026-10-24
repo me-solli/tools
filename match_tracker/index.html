@@ -7735,8 +7735,16 @@ function maybeRestoreLiveReturnState(){
       return
     }
 
-    if(liveMatchId === saved.matchId){
+    if(liveMatchId === Number(saved.matchId) || liveMatchId === saved.matchId){
+      // Same live match is already open; keep the current view and clear the marker.
       clearLiveReturnState()
+      if(!isViewerMode && !isGuestTickerMode){
+        const match = matches.find(item => Number(item.id) === Number(saved.matchId))
+        if(match && match.liveState && match.liveState.completed){
+          livePhase = "ended"
+          updateLiveButton()
+        }
+      }
       return
     }
 
@@ -7884,8 +7892,17 @@ function save(){
   data.matches = matches
   data.activeTeam = activeTeam
 
-  // 🔥 LOCAL SPEICHERN
-  localStorage.setItem("matchTrackerData", JSON.stringify(data))
+  // Lokal speichern, aber ein volles Browser-Speicherquota darf die Serverspeicherung
+  // und weitere Live-Aktionen nicht abbrechen.
+  try{
+    localStorage.setItem("matchTrackerData", JSON.stringify(data))
+  }catch(error){
+    console.warn("Lokaler Speicher nicht verfügbar/voll; speichere weiter auf dem Server.", error)
+    if(!window.matchTrackerStorageWarningShown){
+      window.matchTrackerStorageWarningShown = true
+      showToast("⚠️ Browser-Speicher voll – Daten werden weiter auf dem Server gespeichert", "info")
+    }
+  }
 
   // Gastticker darf ausschließlich den freigegebenen Spielstatus speichern.
   if(isGuestTickerMode){
@@ -9428,6 +9445,10 @@ cancel.onclick = closeModal
 box.appendChild(cancel)
 
 modal.classList.remove("hidden")
+// openModal/confirmModal schließen das Modal vor dem Callback und setzen
+// dabei display:none. Beim Wechsel von Minute zu Spielerauswahl muss es
+// deshalb explizit wieder sichtbar gemacht werden.
+modal.style.display = "flex"
 
 })
 
@@ -10626,7 +10647,9 @@ function findActiveLiveMatch(){
     match.team === activeTeam &&
     match.liveState &&
     match.liveState.startTime &&
-    !match.liveState.pausedAt
+    !match.liveState.pausedAt &&
+    !match.liveState.completed &&
+    match.liveState.phase !== "ended"
   ) || null
 }
 
@@ -12175,54 +12198,78 @@ function openLivePhotoPicker(){
   input.click()
 }
 
-function uploadLivePhotos(input){
+async function prepareLivePhoto(file){
+  if(!file || !file.type || !file.type.startsWith("image/")) throw new Error("Ungültiges Bild")
+
+  // Decode and downscale before creating the upload payload to reduce memory use.
+  const sourceUrl = URL.createObjectURL(file)
+  try{
+    const image = new Image()
+    image.decoding = "async"
+    image.src = sourceUrl
+    await new Promise((resolve, reject) => {
+      image.onload = resolve
+      image.onerror = () => reject(new Error("Foto konnte nicht gelesen werden"))
+    })
+
+    const maxSide = 1600
+    const scale = Math.min(1, maxSide / Math.max(image.naturalWidth || image.width, image.naturalHeight || image.height))
+    const canvas = document.createElement("canvas")
+    canvas.width = Math.max(1, Math.round((image.naturalWidth || image.width) * scale))
+    canvas.height = Math.max(1, Math.round((image.naturalHeight || image.height) * scale))
+    const ctx = canvas.getContext("2d", { alpha:false })
+    if(!ctx) throw new Error("Bildbearbeitung nicht verfügbar")
+    ctx.fillStyle = "#fff"
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+    ctx.drawImage(image, 0, 0, canvas.width, canvas.height)
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/jpeg", 0.82))
+    if(!blob) throw new Error("Foto konnte nicht verkleinert werden")
+    return await new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onload = () => resolve(reader.result)
+      reader.onerror = () => reject(new Error("Foto konnte nicht vorbereitet werden"))
+      reader.readAsDataURL(blob)
+    })
+  }finally{
+    URL.revokeObjectURL(sourceUrl)
+  }
+}
+
+async function uploadLivePhotos(input){
   const files = Array.from(input.files || [])
-  if(files.length === 0 || !liveMatchId){
+  const matchId = liveMatchId
+  if(files.length === 0 || !matchId){
     clearLiveReturnState()
     return
   }
 
-  const readers = files.map(file => new Promise((resolve, reject) => {
-    if(!file.type.startsWith("image/")){
-      reject(new Error("Ungültiges Bild"))
-      return
-    }
-
-    const reader = new FileReader()
-    reader.onload = () => resolve(reader.result)
-    reader.onerror = reject
-    reader.readAsDataURL(file)
-  }))
-
-  Promise.all(readers)
-    .then(images => Promise.all(images.map(imageData =>
-      fetch(API + "/live-photos/upload", {
+  try{
+    let uploaded = 0
+    // Process one image at a time so several full-resolution photos are not held in memory together.
+    for(const file of files){
+      const imageData = await prepareLivePhoto(file)
+      const response = await fetch(API + "/live-photos/upload", {
         method:"POST",
-        headers:{
-          "Content-Type":"application/json"
-        },
-        body: JSON.stringify({
-          matchId: liveMatchId,
-          imageData
-        })
-      }).then(res => res.json())
-    )))
-    .then(results => {
-      const failed = results.find(item => item.error)
-      if(failed){
-        showToast(failed.error,"info")
-        clearLiveReturnState()
-        return
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ matchId, imageData })
+      })
+      let result
+      try{ result = await response.json() }catch{ result = {} }
+      if(!response.ok || result.error || !result.ok){
+        throw new Error(result.error || `Foto-Upload fehlgeschlagen (HTTP ${response.status})`)
       }
-
-      showToast("📷 Bilder hochgeladen","info")
-      clearLiveReturnState()
-      fetchLivePhotos()
-    })
-    .catch(() => {
-      clearLiveReturnState()
-      showToast("⚠️ Upload fehlgeschlagen","info")
-    })
+      uploaded++
+    }
+    showToast(uploaded === 1 ? "📷 Foto hochgeladen" : `📷 ${uploaded} Fotos hochgeladen`, "info")
+    await fetchLivePhotos()
+  }catch(error){
+    console.error("Live-Foto-Upload fehlgeschlagen:", error)
+    showToast("⚠️ " + (error.message || "Foto-Upload fehlgeschlagen"), "info")
+  }finally{
+    clearLiveReturnState()
+    // Release the file selection so the same photo can be selected again if needed.
+    try{ input.value = "" }catch{}
+  }
 }
 
 function setLiveEvent(type, e){
@@ -13209,6 +13256,15 @@ window.addEventListener("pageshow", () => {
 document.addEventListener("visibilitychange", () => {
   if(document.visibilityState === "visible"){
     maybeRestoreLiveReturnState()
+    renderNextGameCard()
+    if(liveMatchId){
+      const currentMatch = matches.find(match => Number(match.id) === Number(liveMatchId))
+      if(currentMatch && currentMatch.liveState && currentMatch.liveState.completed){
+        livePhase = "ended"
+        updateLiveButton()
+        updateLiveScore()
+      }
+    }
   }
 })
 
