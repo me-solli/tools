@@ -7914,34 +7914,35 @@ function save(){
     return;
   }
 
-  // 🔥 SERVER SPEICHERN (optional)
-  fetch(API + "/save", {
+  // SERVER SPEICHERN: Snapshots strikt in Aufrufreihenfolge senden.
+  // Live-Timer, Viertelwechsel und Events können in kurzer Folge save() auslösen.
+  // Parallele POSTs mit älteren Snapshots konnten sonst einen neueren Event-Stand
+  // serverseitig wieder überschreiben (scheinbar verschwundene/verschobene Viertel).
+  const saveSnapshot = JSON.stringify(data)
+  const saveVersion = (window.matchTrackerSaveVersion || 0) + 1
+  window.matchTrackerSaveVersion = saveVersion
+  const sendSave = () => fetch(API + "/save", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(data)
+    headers: { "Content-Type": "application/json" },
+    body: saveSnapshot
+  }).then(res => res.json()).then(res => {
+    if(res.error){
+      showToast(res.error,"info")
+      // Nur der aktuellste fehlgeschlagene Snapshot darf einen Reload auslösen.
+      if(window.matchTrackerSaveVersion === saveVersion) loadFromServer()
+      return
+    }
+    if(status && window.matchTrackerSaveVersion === saveVersion){
+      status.innerText = "✓ gespeichert"
+      setTimeout(()=> { if(status.innerText === "✓ gespeichert") status.innerText = "" }, 1500)
+    }
   })
-.then(res => res.json())
-.then(res => {
-
-  if(res.error){
-    showToast(res.error,"info")
-
-    // 🔥 WICHTIG → Daten neu laden
-    loadFromServer()
-
-    return
-  }
-
-  if(status){
-    status.innerText = "✓ gespeichert"
-    setTimeout(()=> status.innerText = "", 1500)
-  }
-})
-  .catch(() => {
-    if(status) status.innerText = "⚠️ nur lokal gespeichert"
-  })
+  window.matchTrackerSaveQueue = (window.matchTrackerSaveQueue || Promise.resolve())
+    .catch(() => {})
+    .then(sendSave)
+    .catch(() => {
+      if(status && window.matchTrackerSaveVersion === saveVersion) status.innerText = "⚠️ nur lokal gespeichert"
+    })
 }
 
 function forceSyncToServer(){
