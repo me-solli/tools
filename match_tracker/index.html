@@ -10376,10 +10376,12 @@ function formatReportEventTime(event){
   if(event.period && event.clockSeconds != null){
     const seconds = Number(event.clockSeconds) || 0
     const mins = Math.floor(seconds / 60)
-    return String(mins)
+    return String(Math.max(1, mins))
   }
 
-  return String(event.minute ?? "")
+  // Matchminuten beginnen bei 1; ältere Ereignisse können noch Minute 0 enthalten.
+  const minute = Number(event.minute)
+  return String(Number.isFinite(minute) ? Math.max(1, minute) : 1)
 }
 
 function formatTickerEventTime(event){
@@ -10435,17 +10437,22 @@ function buildReportText(matchId){
   let scorers = {}
   let lines = []
   let currentPeriod = null
+  // Den Spielbericht immer mit allen vier Vierteln aufbauen, auch wenn ein Viertel leer ist.
+  const eventsByPeriod = [1,2,3,4].map(period => ({
+    period,
+    events: events.filter(event => getEventPeriod(event) === period)
+  }))
 
-  events.forEach(e=>{
-    const period = getEventPeriod(e)
-    const eventTime = formatReportEventTime(e)
-
-    // Viertel als eigene Überschrift im kopierten/geteilten Spielbericht.
-    if(period !== currentPeriod){
-      currentPeriod = period
-      if(lines.length) lines.push("")
-      lines.push(`${period}. Viertel`)
+  eventsByPeriod.forEach(({period, events: periodEvents})=>{
+    if(lines.length) lines.push("")
+    lines.push(`${period}. Viertel`)
+    if(!periodEvents.length){
+      lines.push("Keine Ereignisse in diesem Viertel")
+      return
     }
+
+    periodEvents.forEach(e=>{
+    const eventTime = formatReportEventTime(e)
 
     if(e.type==="goal"){
       lines.push(`⚽ ${eventTime}' ${e.player}`)
@@ -10466,6 +10473,7 @@ function buildReportText(matchId){
     else if(e.type==="sub"){
       lines.push(`🔁 ${eventTime}' ${e.player} → ${e.in}`)
     }
+    })
   })
 
   let reportTitle = "⚽ Spielbericht"
