@@ -7352,6 +7352,134 @@ button.danger-outline{
 }
 </style>
 
+
+<style id="responsive-layout-contrast-final">
+/* DESKTOP: use the available width instead of constraining the live ticker to a narrow column. */
+@media screen and (min-width: 769px){
+  #liveMode{
+    box-sizing:border-box !important;
+    width:100% !important;
+    padding:18px 28px 28px !important;
+    background:#344852 !important;
+  }
+  #liveMode .live-ticker-shell{
+    box-sizing:border-box !important;
+    width:min(1320px, calc(100% - 12px)) !important;
+    max-width:1320px !important;
+    margin:0 auto !important;
+    padding:14px 18px 28px !important;
+    gap:14px !important;
+  }
+  #liveMode .live-body{
+    grid-template-columns:minmax(0, 1.7fr) minmax(280px, .8fr) !important;
+    gap:14px !important;
+  }
+}
+/* MOBILE: keep a visible blue-grey frame around the actual dark cards. */
+@media screen and (max-width: 768px){
+  #liveMode{
+    box-sizing:border-box !important;
+    width:100% !important;
+    padding:18px 26px 24px !important;
+    overflow-x:hidden !important;
+    background:#344852 !important;
+  }
+  #liveMode .live-ticker-shell{
+    box-sizing:border-box !important;
+    width:100% !important;
+    max-width:100% !important;
+    margin:0 auto !important;
+    padding:0 !important;
+    gap:14px !important;
+  }
+  #liveMode .live-score-big,
+  #liveMode .live-header,
+  #liveMode .live-feed,
+  #liveMode .live-photos,
+  #liveMode .live-control-card,
+  #liveMode .live-feed-scroll-btn{
+    box-sizing:border-box !important;
+    width:calc(100% - 16px) !important;
+    max-width:calc(100% - 16px) !important;
+    min-width:0 !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+  }
+  #liveMode .live-header,
+  #liveMode .live-feed,
+  #liveMode .live-photos,
+  #liveMode .live-control-card{
+    padding-left:12px !important;
+    padding-right:12px !important;
+  }
+}
+/* Higher readability: clearer separation between the blue-grey surround and dark cards. */
+#liveMode{
+  color:#f4f9fc !important;
+}
+#liveMode .live-header,
+#liveMode .live-feed,
+#liveMode .live-photos,
+#liveMode .live-control-card{
+  background:linear-gradient(145deg,#172a34 0%,#101e26 100%) !important;
+  border:1px solid #395764 !important;
+  box-shadow:0 8px 22px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.035) !important;
+}
+#liveMode .live-section-title{
+  color:#8ceaff !important;
+}
+#liveMode .live-section-title small,
+#liveMode .live-photos-head span:last-child{
+  color:#a6c1cd !important;
+}
+#liveMode .live-feed .quarter-title,
+#liveMode .live-feed .period-title{
+  color:#f4fbff !important;
+}
+#liveMode .live-feed .empty,
+#liveMode .live-feed .empty-state{
+  color:#c4d3da !important;
+}
+#liveMode .live-header-actions button,
+#liveMode .live-control-card button:not(.btn-live):not(#liveToggleBtn){
+  background:#314b58 !important;
+  color:#f5fbff !important;
+  border:1px solid #6b8b9a !important;
+  box-shadow:0 2px 0 rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.07) !important;
+}
+#liveMode .live-header-actions button:hover,
+#liveMode .live-control-card button:not(.btn-live):not(#liveToggleBtn):hover{
+  background:#3b5a69 !important;
+  border-color:#9abac8 !important;
+}
+#liveMode .btn-live{
+  box-shadow:0 2px 0 rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.07) !important;
+  font-weight:800 !important;
+}
+#liveMode .live-control-card .btn-live.goal{
+  background:#24543a !important;color:#e4ffed !important;border-color:#78d49a !important;
+}
+#liveMode .live-control-card .btn-live.against{
+  background:#214552 !important;color:#e5f9ff !important;border-color:#7bd9ed !important;
+}
+#liveMode .live-control-card .btn-live.yellow{
+  background:#59481f !important;color:#fff4cd !important;border-color:#e0bd5c !important;
+}
+#liveMode .live-control-card .btn-live.red{
+  background:#592a35 !important;color:#ffe8ed !important;border-color:#f07e91 !important;
+}
+#liveMode #liveToggleBtn{
+  background:#2d5837 !important;
+  color:#e2ffcf !important;
+  border:1px solid #8bd26a !important;
+}
+#liveMode .live-event-copy,
+#liveMode .live-event-time,
+#liveMode .live-feed-item{
+  color:#edf6fa !important;
+}
+</style>
+
 </head>
 <body>
 
