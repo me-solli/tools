@@ -7919,6 +7919,42 @@ button[title*="löschen" i]:hover{
 }
 </style>
 
+
+<style id="live-score-crests-readable-size">
+/* Restore prominent club crests in the live scoreboard without changing other page logos. */
+#liveMode .live-score-big .live-team-block > .match-team-crest,
+#liveMode .live-score-big .live-team-block > .opponent-crest,
+#liveMode .live-score-big .live-team-block > .testhausen-crest{
+  width:40px !important;
+  height:44px !important;
+  max-width:40px !important;
+  max-height:44px !important;
+  flex:0 0 40px !important;
+  object-fit:contain !important;
+}
+#liveMode .live-score-big .live-team-block > .match-team-crest img,
+#liveMode .live-score-big .live-team-block > .opponent-crest img,
+#liveMode .live-score-big .live-team-block > .testhausen-crest img{
+  display:block !important;
+  width:100% !important;
+  height:100% !important;
+  max-width:100% !important;
+  max-height:100% !important;
+  object-fit:contain !important;
+}
+@media(max-width:768px){
+  #liveMode .live-score-big .live-team-block > .match-team-crest,
+  #liveMode .live-score-big .live-team-block > .opponent-crest,
+  #liveMode .live-score-big .live-team-block > .testhausen-crest{
+    width:34px !important;
+    height:38px !important;
+    max-width:34px !important;
+    max-height:38px !important;
+    flex:0 0 34px !important;
+  }
+}
+</style>
+
 </head>
 <body>
 
