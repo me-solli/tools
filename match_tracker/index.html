@@ -7283,6 +7283,75 @@ button.danger-outline{
 }
 </style>
 
+
+<style id="live-mobile-gutter-calendar-restore">
+/* Live-Ticker auf Mobilgeräten: deutlich breiterer blaugrauer Rahmen um die dunklen Karten. */
+@media screen and (max-width: 600px){
+  #liveMode{
+    box-sizing:border-box !important;
+    width:100% !important;
+    padding:16px 28px 22px !important;
+    overflow-x:hidden !important;
+    background:#2b3e47 !important;
+  }
+  #liveMode .live-ticker-shell{
+    box-sizing:border-box !important;
+    width:100% !important;
+    max-width:100% !important;
+    margin:0 auto !important;
+    padding:0 !important;
+    gap:14px !important;
+  }
+  #liveMode .live-score-big,
+  #liveMode .live-header,
+  #liveMode .live-feed,
+  #liveMode .live-photos,
+  #liveMode .live-control-card,
+  #liveMode .live-feed-scroll-btn{
+    box-sizing:border-box !important;
+    width:calc(100% - 16px) !important;
+    max-width:calc(100% - 16px) !important;
+    min-width:0 !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+  }
+  #liveMode .live-header,
+  #liveMode .live-feed,
+  #liveMode .live-photos,
+  #liveMode .live-control-card{
+    padding-left:12px !important;
+    padding-right:12px !important;
+  }
+  #liveMode .live-ticker-brand,
+  #liveMode .live-competition,
+  #liveMode .live-section-title{
+    padding-left:10px !important;
+    padding-right:10px !important;
+  }
+}
+
+/* Kalender: Tage wieder schlicht, ohne durchgehende farbige Kacheln. */
+.calendar-day{
+  background:transparent !important;
+  border:1px solid transparent !important;
+  box-shadow:none !important;
+}
+.calendar-day:hover{
+  background:rgba(88,224,255,.045) !important;
+}
+.calendar-day.today{
+  background:transparent !important;
+  border-color:rgba(88,224,255,.38) !important;
+}
+.calendar-day.selected{
+  background:rgba(88,224,255,.08) !important;
+  border-color:rgba(88,224,255,.30) !important;
+}
+.calendar-day.muted{
+  background:transparent !important;
+}
+</style>
+
 </head>
 <body>
 
