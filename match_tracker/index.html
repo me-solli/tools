@@ -7132,6 +7132,157 @@ button.danger-outline{
 }
 </style>
 
+
+<style id="live-ticker-spacing-override">
+/* Mehr Außenluft: Ticker nicht mehr bis direkt an den Bildschirmrand ziehen. */
+#liveMode{
+  padding:12px !important;
+}
+#liveMode .live-ticker-shell{
+  width:100% !important;
+  max-width:620px !important;
+  margin:0 auto !important;
+  padding:12px 8px 22px !important;
+  gap:12px !important;
+}
+/* Einzelne Bereiche bekommen innen ebenfalls etwas Luft. */
+#liveMode .live-header,
+#liveMode .live-feed,
+#liveMode .live-photos,
+#liveMode .live-control-card{
+  border-radius:14px !important;
+}
+#liveMode .live-header{
+  padding:12px !important;
+  margin-bottom:0 !important;
+}
+#liveMode .live-feed{
+  padding:12px !important;
+}
+#liveMode .live-photos{
+  padding:12px !important;
+}
+#liveMode .live-control-card{
+  padding:12px !important;
+}
+#liveMode .live-header-actions{
+  gap:8px !important;
+  flex-wrap:wrap !important;
+}
+#liveMode .live-header-actions button{
+  flex:0 1 auto !important;
+  min-width:0 !important;
+}
+#liveMode .live-row{
+  gap:10px !important;
+}
+#liveMode .live-events{
+  gap:10px !important;
+}
+#liveMode .live-control{
+  margin-top:12px !important;
+}
+@media(max-width:600px){
+  #liveMode{
+    padding:8px !important;
+  }
+  #liveMode .live-ticker-shell{
+    padding:8px 4px 16px !important;
+    gap:10px !important;
+  }
+  #liveMode .live-header,
+  #liveMode .live-feed,
+  #liveMode .live-photos,
+  #liveMode .live-control-card{
+    padding:10px !important;
+  }
+}
+</style>
+
+
+<style id="mobile-side-gutter-fix-v2">
+/* Mobil deutlich mehr Seitenrand: 26px je Seite, unabhängig von älteren Layout-Regeln. */
+@media screen and (max-width: 600px){
+  #liveMode{
+    box-sizing:border-box !important;
+    width:100% !important;
+    max-width:100% !important;
+    padding-left:26px !important;
+    padding-right:26px !important;
+    overflow-x:hidden !important;
+  }
+  #liveMode .live-ticker-shell{
+    box-sizing:border-box !important;
+    width:100% !important;
+    max-width:100% !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    padding-left:0 !important;
+    padding-right:0 !important;
+  }
+  #liveMode .live-ticker-brand,
+  #liveMode .live-competition,
+  #liveMode .live-score-big,
+  #liveMode .live-header,
+  #liveMode .live-feed,
+  #liveMode .live-photos,
+  #liveMode .live-control-card,
+  #liveMode .live-feed-scroll-btn{
+    box-sizing:border-box !important;
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+  }
+}
+@media screen and (min-width: 601px){
+  #liveMode{
+    padding-left:12px !important;
+    padding-right:12px !important;
+  }
+}
+</style>
+
+
+<style id="mobile-card-inset-v3">
+/* Gewünschter Look: blaugrauer Außenrahmen bleibt sichtbar, dunkle Karten rücken deutlich nach innen. */
+@media screen and (max-width: 600px){
+  #liveMode{
+    box-sizing:border-box !important;
+    width:100% !important;
+    padding:12px 18px 18px !important;
+    overflow-x:hidden !important;
+    background:#2b3e47 !important;
+  }
+  #liveMode .live-ticker-shell{
+    box-sizing:border-box !important;
+    width:100% !important;
+    max-width:100% !important;
+    margin:0 auto !important;
+    padding:0 !important;
+    gap:12px !important;
+  }
+  /* Die dunklen Platten bekommen einen zusätzlichen Einzug, nicht nur die äußere Hülle. */
+  #liveMode .live-score-big,
+  #liveMode .live-header,
+  #liveMode .live-feed,
+  #liveMode .live-photos,
+  #liveMode .live-control-card,
+  #liveMode .live-feed-scroll-btn{
+    box-sizing:border-box !important;
+    width:calc(100% - 12px) !important;
+    max-width:calc(100% - 12px) !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+  }
+  #liveMode .live-ticker-brand,
+  #liveMode .live-competition,
+  #liveMode .live-section-title{
+    padding-left:8px !important;
+    padding-right:8px !important;
+  }
+}
+</style>
+
 </head>
 <body>
 
@@ -11976,7 +12127,8 @@ function openLiveMode(matchId){
     </div>
 
     <div class="live-header-actions">
-      <button class="secondary live-lineup-btn" ${getTooltipAttrs(isUnlocked ? "Aufstellung während des Live-Spiels bearbeiten" : "Aufstellung anzeigen")} onclick="openLiveLineup()">👥 Aufstellung</button>
+
+
       ${isUnlocked ? `
         <button class="secondary" onclick="createGuestTickerLink()">🔐 Gastticker-Link</button>
         <button class="secondary" onclick="revokeGuestTickerLink()">⛔ Gastlink widerrufen</button>
