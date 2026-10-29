@@ -7480,6 +7480,58 @@ button.danger-outline{
 }
 </style>
 
+
+<style id="mobile-gutter-final-hard-override">
+/* Final mobile override: clearly visible blue-grey frame around the dark surfaces. */
+@media screen and (max-width: 768px){
+  #liveMode{
+    padding:22px 36px 28px !important;
+    background:#3b515d !important;
+    box-sizing:border-box !important;
+    overflow-x:hidden !important;
+  }
+  #liveMode .live-ticker-shell{
+    width:100% !important;
+    max-width:100% !important;
+    margin:0 auto !important;
+    padding:0 !important;
+    gap:16px !important;
+    box-sizing:border-box !important;
+  }
+  #liveMode .live-score-big,
+  #liveMode .live-header,
+  #liveMode .live-feed,
+  #liveMode .live-photos,
+  #liveMode .live-control-card,
+  #liveMode .live-feed-scroll-btn{
+    width:calc(100% - 18px) !important;
+    max-width:calc(100% - 18px) !important;
+    min-width:0 !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    box-sizing:border-box !important;
+  }
+  #liveMode .live-header,
+  #liveMode .live-feed,
+  #liveMode .live-photos,
+  #liveMode .live-control-card{
+    background:linear-gradient(145deg,#172a34 0%,#0f1d25 100%) !important;
+    border:1px solid #456574 !important;
+  }
+}
+@media screen and (min-width:769px){
+  #liveMode{
+    padding:20px 32px 30px !important;
+    box-sizing:border-box !important;
+  }
+  #liveMode .live-ticker-shell{
+    width:min(1480px,calc(100% - 8px)) !important;
+    max-width:1480px !important;
+    margin:0 auto !important;
+  }
+}
+</style>
+
 </head>
 <body>
 
