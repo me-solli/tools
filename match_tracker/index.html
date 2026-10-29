@@ -7745,6 +7745,59 @@ button.danger-outline{
 }
 </style>
 
+
+<style id="admin-panel-and-delete-x-fix">
+/* Verwaltungsleiste als eigene, sichtbare Platte statt lose am unteren Rand. */
+#liveMode .live-header{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  flex-wrap:wrap !important;
+  gap:10px !important;
+  padding:12px 14px !important;
+  margin:12px 0 16px !important;
+  border:1px solid #456574 !important;
+  border-radius:14px !important;
+  background:linear-gradient(145deg,#172a34,#101e26) !important;
+  box-shadow:0 8px 22px rgba(0,0,0,.22) !important;
+}
+#liveMode .live-header-actions{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  gap:8px !important;
+  justify-content:flex-end !important;
+}
+/* Restore the familiar red X for event deletion controls. */
+.event button.secondary,
+.event-row button.secondary,
+.match-event button.secondary,
+button[aria-label*="löschen" i],
+button[title*="löschen" i]{
+  min-width:34px !important;
+  width:34px !important;
+  height:34px !important;
+  padding:0 !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  background:rgba(255,75,105,.12) !important;
+  color:#ff4f78 !important;
+  border:1px solid rgba(255,79,120,.38) !important;
+  border-radius:8px !important;
+  font-size:19px !important;
+  font-weight:900 !important;
+  line-height:1 !important;
+}
+.event button.secondary:hover,
+.event-row button.secondary:hover,
+.match-event button.secondary:hover,
+button[aria-label*="löschen" i]:hover,
+button[title*="löschen" i]:hover{
+  background:rgba(255,75,105,.22) !important;
+  border-color:#ff4f78 !important;
+}
+</style>
+
 </head>
 <body>
 
@@ -12582,6 +12635,28 @@ function openLiveMode(matchId){
 
 
 
+  <div class="live-header">
+    <div class="live-left">
+      <div id="liveTimer" class="live-timer">
+        <span class="live-dot paused"></span>
+        <span class="live-phase">SPIELZEIT</span>
+      </div>
+    </div>
+
+    <div class="live-header-actions">
+
+
+      ${isUnlocked ? `
+        <button class="secondary" onclick="createGuestTickerLink()">🔐 Gastticker-Link</button>
+        <button class="secondary" onclick="revokeGuestTickerLink()">⛔ Gastlink widerrufen</button>
+        <button class="secondary" ${getTooltipAttrs("Live-Spiel zurücksetzen")} onclick="resetLiveMatch()">↺ Reset</button>
+        <button class="secondary" ${getTooltipAttrs("Bilder aufnehmen oder hochladen")} onclick="openLivePhotoPicker()">📷 Bilder</button>
+      ` : ""}
+      <button class="secondary" ${getTooltipAttrs("Live-Link kopieren")} onclick="shareLiveMatch()">🔗 Teilen</button>
+    </div>
+  </div>
+
+
   <div class="live-body">
     <section class="live-main-column">
       <div class="live-section-title"><span>SPIELVERLAUF</span><small>Neueste Ereignisse zuerst</small></div>
@@ -12620,26 +12695,6 @@ function openLiveMode(matchId){
     </aside>
   </div>
 
-  <div class="live-header">
-    <div class="live-left">
-      <div id="liveTimer" class="live-timer">
-        <span class="live-dot paused"></span>
-        <span class="live-phase">SPIELZEIT</span>
-      </div>
-    </div>
-
-    <div class="live-header-actions">
-
-
-      ${isUnlocked ? `
-        <button class="secondary" onclick="createGuestTickerLink()">🔐 Gastticker-Link</button>
-        <button class="secondary" onclick="revokeGuestTickerLink()">⛔ Gastlink widerrufen</button>
-        <button class="secondary" ${getTooltipAttrs("Live-Spiel zurücksetzen")} onclick="resetLiveMatch()">↺ Reset</button>
-        <button class="secondary" ${getTooltipAttrs("Bilder aufnehmen oder hochladen")} onclick="openLivePhotoPicker()">📷 Bilder</button>
-      ` : ""}
-      <button class="secondary" ${getTooltipAttrs("Live-Link kopieren")} onclick="shareLiveMatch()">🔗 Teilen</button>
-    </div>
-  </div>
 </div>
 
 <input id="livePhotoInput" type="file" accept="image/*" capture="environment" multiple hidden onchange="uploadLivePhotos(this)">
