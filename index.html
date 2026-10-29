@@ -6885,6 +6885,320 @@ body:has(#liveMode:not(.hidden)){
  .next-game-card .next-game-title .vs-pill{width:42px !important;min-width:42px !important;flex-basis:42px !important;}
 }
 </style>
+
+<style id="last-recap-layout-redesign">
+/* Kompakter, klar gegliederter Rückblick */
+.last-recap-match{
+  display:grid !important;
+  grid-template-columns:minmax(0,1.08fr) minmax(220px,.92fr) !important;
+  align-items:center !important;
+  gap:14px !important;
+  padding:12px 16px !important;
+}
+.last-recap-main{min-width:0;display:flex;flex-direction:column;align-items:stretch}
+.last-recap-top{display:flex !important;flex-direction:column !important;align-items:stretch !important;gap:5px !important;min-width:0}
+.last-recap-opponent{display:flex !important;align-items:center !important;justify-content:center !important;gap:7px !important;min-width:0;flex-wrap:wrap}
+.last-recap-opponent .last-recap-team{min-width:0;max-width:100%;white-space:normal;overflow-wrap:normal;word-break:normal}
+.last-recap-opponent .last-recap-team.home,.last-recap-opponent .last-recap-team.away{font-size:12px;font-weight:800}
+.last-recap-opponent .home-crest,.last-recap-opponent .away-crest{display:inline-flex;align-items:center;justify-content:center;flex:0 0 25px;width:25px;height:27px}
+.last-recap-opponent .home-crest img,.last-recap-opponent .away-crest img,.last-recap-opponent .home-crest svg,.last-recap-opponent .away-crest svg{display:block;width:25px !important;height:27px !important;max-width:25px !important;max-height:27px !important;object-fit:contain}
+.last-recap-vs{flex:0 0 auto;padding:3px 5px}
+.last-recap-scoreline{display:flex !important;align-items:center;justify-content:center;gap:9px;min-height:28px}
+.last-recap-score{min-width:48px;padding:5px 8px;font-size:14px}
+.last-recap-result{font-size:8px}
+.last-recap-meta{margin-top:5px;line-height:1.4}
+.last-recap-events{margin-top:6px;gap:4px}
+.last-event-pill{padding:4px 6px;font-size:9px}
+.match-report-actions{margin-top:7px}
+.last-recap-media{align-self:center;width:100%;gap:7px;min-height:56px;padding:0 !important}
+.last-recap-photo{flex-basis:56px;width:56px;height:56px}
+.last-recap-photo-lock{min-height:56px}
+@media(max-width:780px){
+ .last-recap-match{grid-template-columns:minmax(0,1fr) !important;gap:9px !important;padding:11px 14px !important}
+ .last-recap-top{gap:4px !important}
+ .last-recap-opponent{gap:5px !important}
+ .last-recap-opponent .last-recap-team.home,.last-recap-opponent .last-recap-team.away{font-size:11px}
+ .last-recap-media{min-height:54px}
+ .last-recap-photo{flex-basis:54px;width:54px;height:54px}
+}
+@media(max-width:420px){
+ .last-recap-opponent .last-recap-team.home,.last-recap-opponent .last-recap-team.away{font-size:10px}
+ .last-recap-opponent .home-crest,.last-recap-opponent .away-crest{flex-basis:22px;width:22px;height:24px}
+ .last-recap-opponent .home-crest img,.last-recap-opponent .away-crest img,.last-recap-opponent .home-crest svg,.last-recap-opponent .away-crest svg{width:22px !important;height:24px !important;max-width:22px !important;max-height:24px !important}
+}
+</style>
+
+
+<style id="live-flow-modal-style">
+.live-flow-backdrop{position:fixed;inset:0;z-index:100500;background:rgba(2,8,12,.78);backdrop-filter:blur(7px);display:flex;align-items:center;justify-content:center;padding:18px}
+.live-flow-card{width:min(420px,100%);background:linear-gradient(180deg,#17262e,#0e171d);border:1px solid rgba(126,190,211,.3);border-radius:18px;padding:22px;box-shadow:0 24px 70px rgba(0,0,0,.65);color:#eef7fa}
+.live-flow-card h2{font-size:19px;margin:0 0 8px;line-height:1.25;color:#fff}
+.live-flow-card p{font-size:13px;line-height:1.5;color:#b8c9d0;margin:0 0 16px}
+.live-flow-actions{display:grid;gap:9px}
+.live-flow-actions button{width:100%;min-height:44px;justify-content:center;margin:0;border-radius:10px;font-weight:700}
+.live-flow-actions .live-flow-primary{background:rgba(84,190,124,.16);border:1px solid rgba(116,224,153,.4);color:#a8f3c1}
+.live-flow-actions .live-flow-secondary{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#e0e9ed}
+.live-flow-actions .live-flow-warning{background:rgba(244,190,78,.12);border:1px solid rgba(244,190,78,.32);color:#f5d28a}
+.live-flow-actions .live-flow-cancel{background:transparent;border:1px solid rgba(255,255,255,.09);color:#93a5ad}
+</style>
+
+
+<style id="daylight-button-contrast">
+/* Mehr Kontrast bei Tageslicht: Buttons heben sich klar von den Panels ab. */
+button{
+  background-color:#263943;
+  color:#f2f8fb;
+  border:1px solid #49616d;
+  box-shadow:0 2px 0 rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.055);
+  font-weight:650;
+}
+button:hover{
+  filter:brightness(1.12);
+  border-color:#7894a1;
+}
+button:focus-visible{
+  outline:3px solid #8bdcff;
+  outline-offset:2px;
+}
+button:disabled{
+  opacity:.55;
+  filter:none;
+  cursor:not-allowed;
+}
+/* Sekundäre Buttons bekommen eine erkennbare, hellere Fläche. */
+button.secondary,
+button:not(.primary):not(.success):not(.goal):not(.yellow):not(.red):not(.sub):not(.danger):not(.danger-outline){
+  background-color:#263943;
+  color:#edf6fa;
+  border:1px solid #49616d;
+}
+/* Farbige Aktionen: kräftigere Fläche und klarer Textkontrast. */
+button.primary{
+  background:#203e58;
+  color:#d8edff;
+  border-color:#5b9ac5;
+}
+button.success, button.goal{
+  background:#214b35;
+  color:#c9ffdc;
+  border:1px solid #4e9c6a;
+}
+button.yellow{
+  background:#4a3c1d;
+  color:#ffedb6;
+  border:1px solid #b99642;
+}
+button.red, button.danger{
+  background:#4a252d;
+  color:#ffd9df;
+  border:1px solid #b85a6a;
+}
+button.sub{
+  background:#342d58;
+  color:#e4ddff;
+  border:1px solid #8073c7;
+}
+button.danger-outline{
+  background:#2b2024;
+  color:#ffb9c3;
+  border-color:#bd6675;
+}
+/* Live-Ticker: größere Aktionsflächen klar von der dunklen Platte absetzen. */
+#liveMode button{
+  background-color:#263943;
+  color:#f2f8fb;
+  border-color:#526d79;
+  min-height:38px;
+}
+#liveMode button.success,
+#liveMode button.goal,
+#liveMode button.live-flow-primary{
+  background:#214b35;
+  color:#d1ffe0;
+  border-color:#62b77f;
+}
+#liveMode button.yellow,
+#liveMode button.live-flow-warning{
+  background:#4a3c1d;
+  color:#fff0bf;
+  border-color:#c5a34c;
+}
+#liveMode button.red,
+#liveMode button.danger{
+  background:#4a252d;
+  color:#ffe0e5;
+  border-color:#c86a7a;
+}
+#liveMode button.primary{
+  background:#203e58;
+  color:#e1f2ff;
+  border-color:#69a8d2;
+}
+/* Auch die neuen Start-/Pause-Popups erhalten deutliche Buttonflächen. */
+.live-flow-actions button{
+  min-height:46px;
+  font-size:14px;
+  border-width:1px;
+  box-shadow:0 2px 0 rgba(0,0,0,.25);
+}
+.live-flow-actions .live-flow-primary{
+  background:#24583b;
+  color:#d6ffe4;
+  border-color:#6bc18b;
+}
+.live-flow-actions .live-flow-secondary{
+  background:#2b414c;
+  color:#f0f8fb;
+  border-color:#607b87;
+}
+.live-flow-actions .live-flow-warning{
+  background:#58451e;
+  color:#fff0bd;
+  border-color:#d0ae56;
+}
+.live-flow-actions .live-flow-cancel{
+  background:#202d34;
+  color:#d7e4e9;
+  border-color:#52646d;
+}
+</style>
+
+
+<style id="daylight-button-contrast-v2">
+/* Kontrast-Override für den Live-Ticker: bestehende !important-Regeln gezielt überschreiben. */
+#liveMode .live-control-card .btn-live{
+  background:#263b46 !important;
+  color:#f5fbff !important;
+  border:1px solid #66818e !important;
+  box-shadow:0 2px 0 rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.08) !important;
+  font-weight:800 !important;
+}
+#liveMode .live-control-card .btn-live.goal{
+  background:#214c35 !important;
+  color:#e0ffea !important;
+  border-color:#65b982 !important;
+  border-left:4px solid #8fe0a9 !important;
+}
+#liveMode .live-control-card .btn-live.against{
+  background:#203e4a !important;
+  color:#e1f8ff !important;
+  border-color:#65b6ce !important;
+  border-left:4px solid #68d8f4 !important;
+}
+#liveMode .live-control-card .btn-live.yellow{
+  background:#51421f !important;
+  color:#fff3c9 !important;
+  border-color:#c6a651 !important;
+  border-left:4px solid #f1c45c !important;
+}
+#liveMode .live-control-card .btn-live.red{
+  background:#512832 !important;
+  color:#ffe5e9 !important;
+  border-color:#cf7180 !important;
+  border-left:4px solid #ff7185 !important;
+}
+#liveMode .live-control-card .btn-live:hover:not(:disabled){
+  filter:brightness(1.15) !important;
+  box-shadow:0 3px 10px rgba(0,0,0,.3) !important;
+}
+#liveMode .live-control-card .btn-live:focus-visible,
+#liveMode #liveToggleBtn:focus-visible{
+  outline:3px solid #a8e8ff !important;
+  outline-offset:2px !important;
+}
+#liveMode #liveToggleBtn{
+  background:#294b2d !important;
+  color:#d9ffd0 !important;
+  border:1px solid #78b95f !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.1), 0 3px 0 rgba(0,0,0,.25) !important;
+  font-weight:900 !important;
+}
+#liveMode #liveToggleBtn:hover{
+  background:#315c35 !important;
+  filter:brightness(1.08) !important;
+}
+/* Auch die kleinen Verwaltungsbuttons auf klaren Flächen darstellen. */
+#liveMode .live-header-actions button,
+#liveMode .live-control-card button:not(.btn-live):not(#liveToggleBtn){
+  background:#263b46 !important;
+  color:#edf7fb !important;
+  border:1px solid #526d79 !important;
+  box-shadow:0 2px 0 rgba(0,0,0,.2) !important;
+}
+#liveMode .live-header-actions button:hover,
+#liveMode .live-control-card button:not(.btn-live):not(#liveToggleBtn):hover{
+  filter:brightness(1.15) !important;
+  border-color:#86a6b4 !important;
+}
+</style>
+
+
+<style id="live-ticker-spacing-override">
+/* Mehr Außenluft: Ticker nicht mehr bis direkt an den Bildschirmrand ziehen. */
+#liveMode{
+  padding:12px !important;
+}
+#liveMode .live-ticker-shell{
+  width:100% !important;
+  max-width:620px !important;
+  margin:0 auto !important;
+  padding:12px 8px 22px !important;
+  gap:12px !important;
+}
+/* Einzelne Bereiche bekommen innen ebenfalls etwas Luft. */
+#liveMode .live-header,
+#liveMode .live-feed,
+#liveMode .live-photos,
+#liveMode .live-control-card{
+  border-radius:14px !important;
+}
+#liveMode .live-header{
+  padding:12px !important;
+  margin-bottom:0 !important;
+}
+#liveMode .live-feed{
+  padding:12px !important;
+}
+#liveMode .live-photos{
+  padding:12px !important;
+}
+#liveMode .live-control-card{
+  padding:12px !important;
+}
+#liveMode .live-header-actions{
+  gap:8px !important;
+  flex-wrap:wrap !important;
+}
+#liveMode .live-header-actions button{
+  flex:0 1 auto !important;
+  min-width:0 !important;
+}
+#liveMode .live-row{
+  gap:10px !important;
+}
+#liveMode .live-events{
+  gap:10px !important;
+}
+#liveMode .live-control{
+  margin-top:12px !important;
+}
+@media(max-width:600px){
+  #liveMode{
+    padding:8px !important;
+  }
+  #liveMode .live-ticker-shell{
+    padding:8px 4px 16px !important;
+    gap:10px !important;
+  }
+  #liveMode .live-header,
+  #liveMode .live-feed,
+  #liveMode .live-photos,
+  #liveMode .live-control-card{
+    padding:10px !important;
+  }
+}
+</style>
+
 </head>
 <body>
 
@@ -7692,8 +8006,16 @@ function maybeRestoreLiveReturnState(){
       return
     }
 
-    if(liveMatchId === saved.matchId){
+    if(liveMatchId === Number(saved.matchId) || liveMatchId === saved.matchId){
+      // Same live match is already open; keep the current view and clear the marker.
       clearLiveReturnState()
+      if(!isViewerMode && !isGuestTickerMode){
+        const match = matches.find(item => Number(item.id) === Number(saved.matchId))
+        if(match && match.liveState && match.liveState.completed){
+          livePhase = "ended"
+          updateLiveButton()
+        }
+      }
       return
     }
 
@@ -7841,8 +8163,17 @@ function save(){
   data.matches = matches
   data.activeTeam = activeTeam
 
-  // 🔥 LOCAL SPEICHERN
-  localStorage.setItem("matchTrackerData", JSON.stringify(data))
+  // Lokal speichern, aber ein volles Browser-Speicherquota darf die Serverspeicherung
+  // und weitere Live-Aktionen nicht abbrechen.
+  try{
+    localStorage.setItem("matchTrackerData", JSON.stringify(data))
+  }catch(error){
+    console.warn("Lokaler Speicher nicht verfügbar/voll; speichere weiter auf dem Server.", error)
+    if(!window.matchTrackerStorageWarningShown){
+      window.matchTrackerStorageWarningShown = true
+      showToast("⚠️ Browser-Speicher voll – Daten werden weiter auf dem Server gespeichert", "info")
+    }
+  }
 
   // Gastticker darf ausschließlich den freigegebenen Spielstatus speichern.
   if(isGuestTickerMode){
@@ -7871,34 +8202,35 @@ function save(){
     return;
   }
 
-  // 🔥 SERVER SPEICHERN (optional)
-  fetch(API + "/save", {
+  // SERVER SPEICHERN: Snapshots strikt in Aufrufreihenfolge senden.
+  // Live-Timer, Viertelwechsel und Events können in kurzer Folge save() auslösen.
+  // Parallele POSTs mit älteren Snapshots konnten sonst einen neueren Event-Stand
+  // serverseitig wieder überschreiben (scheinbar verschwundene/verschobene Viertel).
+  const saveSnapshot = JSON.stringify(data)
+  const saveVersion = (window.matchTrackerSaveVersion || 0) + 1
+  window.matchTrackerSaveVersion = saveVersion
+  const sendSave = () => fetch(API + "/save", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(data)
+    headers: { "Content-Type": "application/json" },
+    body: saveSnapshot
+  }).then(res => res.json()).then(res => {
+    if(res.error){
+      showToast(res.error,"info")
+      // Nur der aktuellste fehlgeschlagene Snapshot darf einen Reload auslösen.
+      if(window.matchTrackerSaveVersion === saveVersion) loadFromServer()
+      return
+    }
+    if(status && window.matchTrackerSaveVersion === saveVersion){
+      status.innerText = "✓ gespeichert"
+      setTimeout(()=> { if(status.innerText === "✓ gespeichert") status.innerText = "" }, 1500)
+    }
   })
-.then(res => res.json())
-.then(res => {
-
-  if(res.error){
-    showToast(res.error,"info")
-
-    // 🔥 WICHTIG → Daten neu laden
-    loadFromServer()
-
-    return
-  }
-
-  if(status){
-    status.innerText = "✓ gespeichert"
-    setTimeout(()=> status.innerText = "", 1500)
-  }
-})
-  .catch(() => {
-    if(status) status.innerText = "⚠️ nur lokal gespeichert"
-  })
+  window.matchTrackerSaveQueue = (window.matchTrackerSaveQueue || Promise.resolve())
+    .catch(() => {})
+    .then(sendSave)
+    .catch(() => {
+      if(status && window.matchTrackerSaveVersion === saveVersion) status.innerText = "⚠️ nur lokal gespeichert"
+    })
 }
 
 function forceSyncToServer(){
@@ -9384,6 +9716,10 @@ cancel.onclick = closeModal
 box.appendChild(cancel)
 
 modal.classList.remove("hidden")
+// openModal/confirmModal schließen das Modal vor dem Callback und setzen
+// dabei display:none. Beim Wechsel von Minute zu Spielerauswahl muss es
+// deshalb explizit wieder sichtbar gemacht werden.
+modal.style.display = "flex"
 
 })
 
@@ -10311,10 +10647,12 @@ function formatReportEventTime(event){
   if(event.period && event.clockSeconds != null){
     const seconds = Number(event.clockSeconds) || 0
     const mins = Math.floor(seconds / 60)
-    return String(mins)
+    return String(Math.max(1, mins))
   }
 
-  return String(event.minute ?? "")
+  // Matchminuten beginnen bei 1; ältere Ereignisse können noch Minute 0 enthalten.
+  const minute = Number(event.minute)
+  return String(Number.isFinite(minute) ? Math.max(1, minute) : 1)
 }
 
 function formatTickerEventTime(event){
@@ -10370,17 +10708,22 @@ function buildReportText(matchId){
   let scorers = {}
   let lines = []
   let currentPeriod = null
+  // Den Spielbericht immer mit allen vier Vierteln aufbauen, auch wenn ein Viertel leer ist.
+  const eventsByPeriod = [1,2,3,4].map(period => ({
+    period,
+    events: events.filter(event => getEventPeriod(event) === period)
+  }))
 
-  events.forEach(e=>{
-    const period = getEventPeriod(e)
-    const eventTime = formatReportEventTime(e)
-
-    // Viertel als eigene Überschrift im kopierten/geteilten Spielbericht.
-    if(period !== currentPeriod){
-      currentPeriod = period
-      if(lines.length) lines.push("")
-      lines.push(`${period}. Viertel`)
+  eventsByPeriod.forEach(({period, events: periodEvents})=>{
+    if(lines.length) lines.push("")
+    lines.push(`${period}. Viertel`)
+    if(!periodEvents.length){
+      lines.push("Keine Ereignisse in diesem Viertel")
+      return
     }
+
+    periodEvents.forEach(e=>{
+    const eventTime = formatReportEventTime(e)
 
     if(e.type==="goal"){
       lines.push(`⚽ ${eventTime}' ${e.player}`)
@@ -10401,6 +10744,7 @@ function buildReportText(matchId){
     else if(e.type==="sub"){
       lines.push(`🔁 ${eventTime}' ${e.player} → ${e.in}`)
     }
+    })
   })
 
   let reportTitle = "⚽ Spielbericht"
@@ -10582,7 +10926,9 @@ function findActiveLiveMatch(){
     match.team === activeTeam &&
     match.liveState &&
     match.liveState.startTime &&
-    !match.liveState.pausedAt
+    !match.liveState.pausedAt &&
+    !match.liveState.completed &&
+    match.liveState.phase !== "ended"
   ) || null
 }
 
@@ -11697,7 +12043,8 @@ function openLiveMode(matchId){
     </div>
 
     <div class="live-header-actions">
-      <button class="secondary live-lineup-btn" ${getTooltipAttrs(isUnlocked ? "Aufstellung während des Live-Spiels bearbeiten" : "Aufstellung anzeigen")} onclick="openLiveLineup()">👥 Aufstellung</button>
+
+
       ${isUnlocked ? `
         <button class="secondary" onclick="createGuestTickerLink()">🔐 Gastticker-Link</button>
         <button class="secondary" onclick="revokeGuestTickerLink()">⛔ Gastlink widerrufen</button>
@@ -12131,54 +12478,78 @@ function openLivePhotoPicker(){
   input.click()
 }
 
-function uploadLivePhotos(input){
+async function prepareLivePhoto(file){
+  if(!file || !file.type || !file.type.startsWith("image/")) throw new Error("Ungültiges Bild")
+
+  // Decode and downscale before creating the upload payload to reduce memory use.
+  const sourceUrl = URL.createObjectURL(file)
+  try{
+    const image = new Image()
+    image.decoding = "async"
+    image.src = sourceUrl
+    await new Promise((resolve, reject) => {
+      image.onload = resolve
+      image.onerror = () => reject(new Error("Foto konnte nicht gelesen werden"))
+    })
+
+    const maxSide = 1600
+    const scale = Math.min(1, maxSide / Math.max(image.naturalWidth || image.width, image.naturalHeight || image.height))
+    const canvas = document.createElement("canvas")
+    canvas.width = Math.max(1, Math.round((image.naturalWidth || image.width) * scale))
+    canvas.height = Math.max(1, Math.round((image.naturalHeight || image.height) * scale))
+    const ctx = canvas.getContext("2d", { alpha:false })
+    if(!ctx) throw new Error("Bildbearbeitung nicht verfügbar")
+    ctx.fillStyle = "#fff"
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+    ctx.drawImage(image, 0, 0, canvas.width, canvas.height)
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/jpeg", 0.82))
+    if(!blob) throw new Error("Foto konnte nicht verkleinert werden")
+    return await new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onload = () => resolve(reader.result)
+      reader.onerror = () => reject(new Error("Foto konnte nicht vorbereitet werden"))
+      reader.readAsDataURL(blob)
+    })
+  }finally{
+    URL.revokeObjectURL(sourceUrl)
+  }
+}
+
+async function uploadLivePhotos(input){
   const files = Array.from(input.files || [])
-  if(files.length === 0 || !liveMatchId){
+  const matchId = liveMatchId
+  if(files.length === 0 || !matchId){
     clearLiveReturnState()
     return
   }
 
-  const readers = files.map(file => new Promise((resolve, reject) => {
-    if(!file.type.startsWith("image/")){
-      reject(new Error("Ungültiges Bild"))
-      return
-    }
-
-    const reader = new FileReader()
-    reader.onload = () => resolve(reader.result)
-    reader.onerror = reject
-    reader.readAsDataURL(file)
-  }))
-
-  Promise.all(readers)
-    .then(images => Promise.all(images.map(imageData =>
-      fetch(API + "/live-photos/upload", {
+  try{
+    let uploaded = 0
+    // Process one image at a time so several full-resolution photos are not held in memory together.
+    for(const file of files){
+      const imageData = await prepareLivePhoto(file)
+      const response = await fetch(API + "/live-photos/upload", {
         method:"POST",
-        headers:{
-          "Content-Type":"application/json"
-        },
-        body: JSON.stringify({
-          matchId: liveMatchId,
-          imageData
-        })
-      }).then(res => res.json())
-    )))
-    .then(results => {
-      const failed = results.find(item => item.error)
-      if(failed){
-        showToast(failed.error,"info")
-        clearLiveReturnState()
-        return
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({ matchId, imageData })
+      })
+      let result
+      try{ result = await response.json() }catch{ result = {} }
+      if(!response.ok || result.error || !result.ok){
+        throw new Error(result.error || `Foto-Upload fehlgeschlagen (HTTP ${response.status})`)
       }
-
-      showToast("📷 Bilder hochgeladen","info")
-      clearLiveReturnState()
-      fetchLivePhotos()
-    })
-    .catch(() => {
-      clearLiveReturnState()
-      showToast("⚠️ Upload fehlgeschlagen","info")
-    })
+      uploaded++
+    }
+    showToast(uploaded === 1 ? "📷 Foto hochgeladen" : `📷 ${uploaded} Fotos hochgeladen`, "info")
+    await fetchLivePhotos()
+  }catch(error){
+    console.error("Live-Foto-Upload fehlgeschlagen:", error)
+    showToast("⚠️ " + (error.message || "Foto-Upload fehlgeschlagen"), "info")
+  }finally{
+    clearLiveReturnState()
+    // Release the file selection so the same photo can be selected again if needed.
+    try{ input.value = "" }catch{}
+  }
 }
 
 function setLiveEvent(type, e){
@@ -12488,15 +12859,79 @@ function pauseLiveGame(){
   updateLiveButton()
 }
 
+function closeLiveFlowModal(){
+  const modal = document.getElementById("liveFlowModal");
+  if(modal) modal.remove();
+}
+
+function showLiveFlowModal(title, message, actions){
+  closeLiveFlowModal();
+  const modal = document.createElement("div");
+  modal.id = "liveFlowModal";
+  modal.className = "live-flow-backdrop";
+  modal.setAttribute("role","dialog");
+  modal.setAttribute("aria-modal","true");
+  modal.innerHTML = `
+    <div class="live-flow-card">
+      <h2>${title}</h2>
+      <p>${message}</p>
+      <div class="live-flow-actions">
+        ${actions.map((a,i)=>`<button type="button" class="${a.className || "live-flow-secondary"}" data-flow-action="${i}">${a.label}</button>`).join("")}
+      </div>
+    </div>`;
+  modal.addEventListener("click", e => { if(e.target === modal) closeLiveFlowModal(); });
+  document.body.appendChild(modal);
+  modal.querySelectorAll("[data-flow-action]").forEach(btn=>{
+    btn.addEventListener("click",()=>{
+      const action = actions[Number(btn.dataset.flowAction)];
+      closeLiveFlowModal();
+      if(action && typeof action.run === "function") action.run();
+    });
+  });
+}
+
+function promptLiveStart(){
+  const match = matches.find(m => String(m.id) === String(liveMatchId));
+  if(!match) return;
+  const period = Math.max(1, Math.min(4, Number(livePeriod) || 1));
+  showLiveFlowModal(
+    period === 1 ? "Spiel starten?" : `${period}. Viertel starten?`,
+    period === 1 ? "Starte den Timer, sobald das Spiel tatsächlich beginnt." : "Das vorherige Viertel bleibt gespeichert. Starte den Timer für das nächste Viertel, wenn es losgeht.",
+    [
+      {label:`▶ ${period}. Viertel starten`, className:"live-flow-primary", run:()=>resumeLiveGame()},
+      {label:"Abbrechen", className:"live-flow-cancel", run:()=>{}}
+    ]
+  );
+}
+
 function toggleLiveState(){
+  const match = matches.find(m => String(m.id) === String(liveMatchId));
+  if(match && match.liveState && match.liveState.completed) return;
   if(!liveStartTime){
-    resumeLiveGame()
-    return
+    promptLiveStart();
+    return;
   }
   if(!livePausedAt){
-    pauseLiveGame()
+    pauseLiveGame();
+    showLiveFlowModal(
+      "Spiel pausiert",
+      "Die Spielzeit steht. Wähle bewusst, wie es weitergehen soll.",
+      [
+        {label:"▶ Spiel fortsetzen", className:"live-flow-primary", run:()=>resumeLiveGame()},
+        {label:`✓ ${livePeriod}. Viertel beenden`, className:"live-flow-warning", run:()=>finishLiveQuarter()},
+        {label:"Später entscheiden", className:"live-flow-cancel", run:()=>{}}
+      ]
+    );
   }else{
-    resumeLiveGame()
+    showLiveFlowModal(
+      "Spiel ist pausiert",
+      "Möchtest du weiterspielen oder das aktuelle Viertel abschließen?",
+      [
+        {label:"▶ Spiel fortsetzen", className:"live-flow-primary", run:()=>resumeLiveGame()},
+        {label:`✓ ${livePeriod}. Viertel beenden`, className:"live-flow-warning", run:()=>finishLiveQuarter()},
+        {label:"Abbrechen", className:"live-flow-cancel", run:()=>{}}
+      ]
+    );
   }
 }
 
@@ -12656,7 +13091,7 @@ function updateLiveButton(){
 function finishLiveQuarter(){
 
   let match = matches.find(m => m.id === liveMatchId)
-  if(!match || !liveStartTime || livePhase !== "stoppage") return
+  if(!match || !liveStartTime || (!livePausedAt && livePhase !== "stoppage")) return
 
   // Auch ein leeres Viertel ist ein gültiges Viertel. Beim Beenden zuerst den Timer
   // sauber einfrieren, damit die Nachspielzeit nicht während des Übergangs weiterläuft.
@@ -12687,6 +13122,11 @@ function finishLiveQuarter(){
     renderMatches()
     showLiveStatusOverlay("🏁 SPIEL BEENDET")
     showToast("🏁 Spiel beendet","info")
+    showLiveFlowModal(
+      "🏁 Spiel beendet",
+      "Das letzte Viertel ist abgeschlossen. Spielstand und Spielverlauf bleiben gespeichert.",
+      [{label:"Fertig", className:"live-flow-primary", run:()=>{}}]
+    )
     return
   }
 
@@ -12711,6 +13151,14 @@ function finishLiveQuarter(){
   startLiveTimer()
   showLiveStatusOverlay(`✓ ${finishedPeriod}. VIERTEL BEENDET · ${String((livePeriod-1)*15+1).padStart(2,"0")}:01 BEREIT`)
   showToast(`${livePeriod}. Viertel bereit – ▶ Start drücken`,"info")
+  showLiveFlowModal(
+    `${finishedPeriod}. Viertel beendet`,
+    `Der Spielstand und die Ereignisse sind gespeichert. Wenn das nächste Viertel beginnt, kannst du es hier direkt starten.`,
+    [
+      {label:`▶ ${livePeriod}. Viertel starten`, className:"live-flow-primary", run:()=>resumeLiveGame()},
+      {label:"Noch nicht – später starten", className:"live-flow-cancel", run:()=>{}}
+    ]
+  )
 }
 
 function resumeLiveGame(){
@@ -13165,6 +13613,15 @@ window.addEventListener("pageshow", () => {
 document.addEventListener("visibilitychange", () => {
   if(document.visibilityState === "visible"){
     maybeRestoreLiveReturnState()
+    renderNextGameCard()
+    if(liveMatchId){
+      const currentMatch = matches.find(match => Number(match.id) === Number(liveMatchId))
+      if(currentMatch && currentMatch.liveState && currentMatch.liveState.completed){
+        livePhase = "ended"
+        updateLiveButton()
+        updateLiveScore()
+      }
+    }
   }
 })
 
@@ -14537,9 +14994,9 @@ body::after{
 
 /* Vereinswappen in den drei Paarungsanzeigen – Größen konsequent begrenzen */
 .pairing-team-name{min-width:0;overflow-wrap:anywhere}
-.next-game-title{display:flex;align-items:center;justify-content:center;gap:8px;min-width:0;flex-wrap:wrap}
-.next-game-title .team-home,.next-game-title .team-away{display:inline-flex;align-items:center;gap:5px;min-width:0}
-.next-game-title>.match-team-crest,.next-game-title>.opponent-crest,.next-game-title .team-home .match-team-crest,.next-game-title .team-away .opponent-crest{width:26px!important;height:28px!important;max-width:26px!important;max-height:28px!important;flex:0 0 26px!important;object-fit:contain;display:inline-flex;align-items:center;justify-content:center;overflow:hidden}
+.next-game-card .next-game-title{display:grid!important;grid-template-columns:minmax(0,1fr) 50px minmax(0,1fr)!important;align-items:center;justify-content:stretch;gap:10px;min-width:0;flex-wrap:nowrap}
+.next-game-card .next-game-title .team-home,.next-game-card .next-game-title .team-away{display:inline-flex;align-items:center;gap:8px;min-width:0;font-size:clamp(16px,1.55vw,20px)!important;line-height:1.15}
+.next-game-card .next-game-title>.match-team-crest,.next-game-card .next-game-title>.opponent-crest,.next-game-card .next-game-title .team-home .match-team-crest,.next-game-card .next-game-title .team-away .opponent-crest{width:34px!important;height:38px!important;max-width:34px!important;max-height:38px!important;flex:0 0 34px!important;object-fit:contain;display:inline-flex;align-items:center;justify-content:center;overflow:hidden}
 .next-game-title .match-team-crest img,.next-game-title .match-team-crest svg,.next-game-title .opponent-crest img,.next-game-title .opponent-crest svg{width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain;display:block}
 .last-recap-team{display:inline-flex;align-items:center;gap:7px;min-width:0;max-width:100%}
 .last-recap-team.home{justify-content:flex-end}
@@ -14555,13 +15012,110 @@ body::after{
 .live-event-copy .live-event-crest + span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .live-event-copy .live-event-delete{flex:0 0 auto}
 @media(max-width:620px){
- .next-game-title .team-home,.next-game-title .team-away{gap:5px}
- .next-game-title .match-team-crest,.next-game-title .opponent-crest{width:24px!important;height:27px!important;max-width:24px!important;max-height:27px!important;flex-basis:24px!important}
+ .next-game-card .next-game-title{grid-template-columns:minmax(0,1fr) 42px minmax(0,1fr)!important;gap:5px!important}
+ .next-game-card .next-game-title .team-home,.next-game-card .next-game-title .team-away{gap:5px;font-size:clamp(13px,3.2vw,16px)!important}
+ .next-game-card .next-game-title .match-team-crest,.next-game-card .next-game-title .opponent-crest{width:29px!important;height:32px!important;max-width:29px!important;max-height:32px!important;flex-basis:29px!important}
  .last-recap-team{gap:4px;white-space:normal}
  .last-recap-team .match-team-crest,.last-recap-team .opponent-crest{width:22px!important;height:24px!important;max-width:22px!important;max-height:24px!important;flex-basis:22px!important}
  .live-team-block .match-team-crest,.live-team-block .opponent-crest{width:24px!important;height:26px!important;max-width:24px!important;max-height:26px!important;flex-basis:24px!important}
 }
 
+
+/* ===== FINAL RECAP CARD LAYOUT: matchup full-width, details + photos below ===== */
+.last-recap-match{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(260px,.92fr) !important;
+  grid-template-areas:"pair pair" "meta media" "events media" "actions media";
+  align-items:start !important;
+  column-gap:18px !important;
+  row-gap:6px !important;
+  padding:12px 16px 13px !important;
+}
+.last-recap-main{display:contents !important}
+.last-recap-top{grid-area:pair;display:grid !important;grid-template-columns:minmax(0,1fr);gap:5px !important;align-items:center !important}
+.last-recap-opponent{display:flex !important;align-items:center !important;justify-content:center !important;gap:10px !important;min-width:0;width:100%;flex-wrap:nowrap !important;overflow:visible !important}
+.last-recap-team{display:inline-flex !important;align-items:center !important;gap:7px !important;min-width:0 !important;max-width:calc(50% - 28px) !important;font-size:12px !important;line-height:1.2;white-space:normal !important;overflow-wrap:normal !important;word-break:normal !important}
+.last-recap-team.home{justify-content:flex-end !important;text-align:right !important}
+.last-recap-team.away{justify-content:flex-start !important;text-align:left !important}
+.last-recap-team .match-team-crest,.last-recap-team .opponent-crest,.last-recap-team .home-crest,.last-recap-team .away-crest{flex:0 0 25px !important;width:25px !important;height:27px !important;max-width:25px !important;max-height:27px !important;overflow:hidden;object-fit:contain}
+.last-recap-team .match-team-crest img,.last-recap-team .match-team-crest svg,.last-recap-team .opponent-crest img,.last-recap-team .opponent-crest svg,.last-recap-team .home-crest img,.last-recap-team .away-crest img{display:block;width:100% !important;height:100% !important;max-width:100% !important;max-height:100% !important;object-fit:contain}
+.last-recap-vs{flex:0 0 auto !important;padding:3px 7px !important;font-size:10px !important}
+.last-recap-scoreline{display:flex !important;align-items:center !important;justify-content:center !important;gap:9px !important;min-height:28px}
+.last-recap-score{min-width:49px !important;padding:5px 9px !important;font-size:14px !important}
+.last-recap-meta{grid-area:meta;margin-top:1px !important;line-height:1.4}
+.last-recap-events{grid-area:events;margin-top:0 !important;align-content:start;gap:4px !important}
+.match-report-actions{grid-area:actions;margin-top:0 !important;align-self:start}
+.last-recap-media{grid-area:media;align-self:stretch !important;display:flex !important;align-items:center !important;gap:7px !important;width:100%;min-height:0 !important;padding:0 !important;overflow-x:auto}
+.last-recap-photo{flex:0 0 56px !important;width:56px !important;height:56px !important}
+.last-recap-photo-lock{min-height:56px !important}
+@media(max-width:780px){
+ .last-recap-match{grid-template-columns:minmax(0,1fr) !important;grid-template-areas:"pair" "meta" "events" "media" "actions" !important;row-gap:7px !important;padding:11px 13px !important}
+ .last-recap-opponent{gap:6px !important}
+ .last-recap-team{font-size:11px !important;gap:4px !important;max-width:calc(50% - 20px) !important}
+ .last-recap-team .match-team-crest,.last-recap-team .opponent-crest,.last-recap-team .home-crest,.last-recap-team .away-crest{flex-basis:22px !important;width:22px !important;height:24px !important;max-width:22px !important;max-height:24px !important}
+ .last-recap-media{min-height:54px !important}
+ .last-recap-photo{flex-basis:54px !important;width:54px !important;height:54px !important}
+ .match-report-actions{margin-top:1px !important}
+}
+@media(max-width:420px){
+ .last-recap-team{font-size:10px !important;max-width:calc(50% - 18px) !important}
+ .last-recap-vs{padding:3px 4px !important}
+}
+</style>
+
+<style id="mobile-match-list-cleanup-v2">
+/* Mobile: target the actual match list, suppress floating result badges and keep crests clear of the score. */
+@media (max-width: 620px) {
+  /* Badge is a sibling of .match-main and was still occupying/overlapping the row. */
+  .match-result-badge { display: none !important; visibility: hidden !important; }
+  #matches .match-header .match-result-badge { display: none !important; }
+  #matches .match-main {
+    display: grid !important;
+    grid-template-columns: minmax(0,1fr) 52px minmax(0,1fr) !important;
+    column-gap: 5px !important;
+    align-items: center !important;
+    min-width: 0 !important;
+  }
+  #matches .match-main .team-left,
+  #matches .match-main .team-right {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0 !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
+  /* Exactly 4 px between the crest and the score pill. */
+  #matches .match-main .team-left .match-team-crest,
+  #matches .match-main .team-left .opponent-crest,
+  #matches .match-main .team-left .club-crest {
+    margin-left: 0 !important; margin-right: 4px !important;
+    flex-shrink: 0 !important;
+  }
+  #matches .match-main .team-right .match-team-crest,
+  #matches .match-main .team-right .opponent-crest,
+  #matches .match-main .team-right .club-crest {
+    margin-left: 4px !important; margin-right: 0 !important;
+    flex-shrink: 0 !important;
+  }
+  #matches .match-main .score {
+    width: 52px !important; min-width: 52px !important; max-width: 52px !important;
+    box-sizing: border-box !important;
+    padding-left: 3px !important; padding-right: 3px !important;
+    justify-self: center !important;
+  }
+  #matches .match-main .team-name {
+    display: block !important;
+    min-width: 0 !important; max-width: 100% !important;
+    flex: 1 1 0 !important;
+    font-size: 11px !important; line-height: 1.15 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important; text-overflow: ellipsis !important;
+    overflow-wrap: normal !important; word-break: normal !important;
+  }
+  #matches .match-main .team-left .team-name { text-align: right !important; }
+  #matches .match-main .team-right .team-name { text-align: left !important; }
+}
 </style>
 </body>
 </html>
