@@ -7532,6 +7532,39 @@ button.danger-outline{
 }
 </style>
 
+
+<style id="live-actions-first-layout">
+/* Die Live-Aktionen stehen zuerst; Verwaltungsaktionen folgen darunter. */
+#liveMode .live-control-card{
+  margin-bottom:12px !important;
+}
+#liveMode .live-header{
+  margin-top:0 !important;
+}
+#liveMode .live-control-card .live-events{
+  display:flex !important;
+  flex-direction:column !important;
+  gap:10px !important;
+}
+#liveMode .live-control-card .live-row{
+  display:grid !important;
+  grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+  gap:10px !important;
+}
+#liveMode .live-control-card .live-row .btn-live{
+  width:100% !important;
+  min-width:0 !important;
+}
+#liveMode .live-control-card .live-control{
+  margin-top:12px !important;
+}
+@media screen and (min-width:769px){
+  #liveMode .live-control-card{
+    max-width:1480px !important;
+  }
+}
+</style>
+
 </head>
 <body>
 
@@ -12367,6 +12400,44 @@ function openLiveMode(matchId){
     </div>
   </div>
 
+      <div class="live-control-card">
+        <div class="live-section-title"><span>LIVE-AKTIONEN</span><small>Nur Teamzugang</small></div>
+        <div class="live-events">
+          <div class="live-row">
+            <button class="btn-live goal" ${(!isUnlocked && !isGuestTickerMode) ? "disabled" : ""} ${getTooltipAttrs("Live-Tor")} onclick="setLiveEvent('goal')">⚽ <span>Tor</span></button>
+            <button class="btn-live against" ${(!isUnlocked && !isGuestTickerMode) ? "disabled" : ""} ${getTooltipAttrs("Live-Gegentor")} onclick="setLiveEvent('goalAgainst')">🥅 <span>Gegner</span></button>
+            <button class="btn-live against" ${(!isUnlocked && !isGuestTickerMode) ? "disabled" : ""} ${getTooltipAttrs("Eigentor eintragen")} onclick="setLiveEvent('ownGoal')">↩️ <span>Eigentor</span></button>
+          </div>
+          <div class="live-row">
+            <button class="btn-live yellow" ${(!isUnlocked && !isGuestTickerMode) ? "disabled" : ""} ${getTooltipAttrs("Live-Gelb")} onclick="setLiveEvent('yellow')">🟨 <span>Gelb</span></button>
+            <button class="btn-live red" ${(!isUnlocked && !isGuestTickerMode) ? "disabled" : ""} ${getTooltipAttrs("Live-Rot")} onclick="setLiveEvent('red')">🟥 <span>Rot</span></button>
+          </div>
+        </div>
+        <div class="live-control">
+          <button id="liveToggleBtn" class="primary" ${(!isUnlocked && !isGuestTickerMode) ? "disabled" : ""} ${getTooltipAttrs("Timer starten, pausieren oder fortsetzen")} onclick="toggleLiveState()">▶ Start</button>
+          <button id="liveQuarterBtn" class="secondary hidden" ${(!isUnlocked && !isGuestTickerMode) ? "disabled" : ""} onclick="finishLiveQuarter()">✓ Viertel beenden</button>
+        </div>
+      </div>
+
+  <div class="live-body">
+    <section class="live-main-column">
+      <div class="live-section-title"><span>SPIELVERLAUF</span><small>Neueste Ereignisse zuerst</small></div>
+      <div id="liveFeed" class="live-feed"></div>
+      <button id="liveFeedScrollBtn" class="live-feed-scroll-btn" type="button" onclick="toggleLiveFeedScroll()" aria-label="Weitere Ereignisse anzeigen">↓ Weitere Ereignisse</button>
+    </section>
+
+    <aside class="live-side-column">
+      <div id="livePhotosWrap" class="live-photos hidden">
+        <div class="live-photos-head">
+          <span>📷 Live-Bilder</span>
+          <span>30 Tage</span>
+        </div>
+        <div id="livePhotosGrid" class="live-photos-grid"></div>
+      </div>
+
+    </aside>
+  </div>
+
   <div class="live-header">
     <div class="live-left">
       <div id="liveTimer" class="live-timer">
@@ -12386,43 +12457,6 @@ function openLiveMode(matchId){
       ` : ""}
       <button class="secondary" ${getTooltipAttrs("Live-Link kopieren")} onclick="shareLiveMatch()">🔗 Teilen</button>
     </div>
-  </div>
-
-  <div class="live-body">
-    <section class="live-main-column">
-      <div class="live-section-title"><span>SPIELVERLAUF</span><small>Neueste Ereignisse zuerst</small></div>
-      <div id="liveFeed" class="live-feed"></div>
-      <button id="liveFeedScrollBtn" class="live-feed-scroll-btn" type="button" onclick="toggleLiveFeedScroll()" aria-label="Weitere Ereignisse anzeigen">↓ Weitere Ereignisse</button>
-    </section>
-
-    <aside class="live-side-column">
-      <div id="livePhotosWrap" class="live-photos hidden">
-        <div class="live-photos-head">
-          <span>📷 Live-Bilder</span>
-          <span>30 Tage</span>
-        </div>
-        <div id="livePhotosGrid" class="live-photos-grid"></div>
-      </div>
-
-      <div class="live-control-card">
-        <div class="live-section-title"><span>LIVE-AKTIONEN</span><small>Nur Teamzugang</small></div>
-        <div class="live-events">
-          <div class="live-row">
-            <button class="btn-live goal" ${(!isUnlocked && !isGuestTickerMode) ? "disabled" : ""} ${getTooltipAttrs("Live-Tor")} onclick="setLiveEvent('goal')">⚽ <span>Tor</span></button>
-            <button class="btn-live against" ${(!isUnlocked && !isGuestTickerMode) ? "disabled" : ""} ${getTooltipAttrs("Live-Gegentor")} onclick="setLiveEvent('goalAgainst')">🥅 <span>Gegner</span></button>
-            <button class="btn-live against" ${(!isUnlocked && !isGuestTickerMode) ? "disabled" : ""} ${getTooltipAttrs("Eigentor eintragen")} onclick="setLiveEvent('ownGoal')">↩️ <span>Eigentor</span></button>
-          </div>
-          <div class="live-row">
-            <button class="btn-live yellow" ${(!isUnlocked && !isGuestTickerMode) ? "disabled" : ""} ${getTooltipAttrs("Live-Gelb")} onclick="setLiveEvent('yellow')">🟨 <span>Gelb</span></button>
-            <button class="btn-live red" ${(!isUnlocked && !isGuestTickerMode) ? "disabled" : ""} ${getTooltipAttrs("Live-Rot")} onclick="setLiveEvent('red')">🟥 <span>Rot</span></button>
-          </div>
-        </div>
-        <div class="live-control">
-          <button id="liveToggleBtn" class="primary" ${(!isUnlocked && !isGuestTickerMode) ? "disabled" : ""} ${getTooltipAttrs("Timer starten, pausieren oder fortsetzen")} onclick="toggleLiveState()">▶ Start</button>
-          <button id="liveQuarterBtn" class="secondary hidden" ${(!isUnlocked && !isGuestTickerMode) ? "disabled" : ""} onclick="finishLiveQuarter()">✓ Viertel beenden</button>
-        </div>
-      </div>
-    </aside>
   </div>
 </div>
 
