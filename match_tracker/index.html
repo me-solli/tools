@@ -6942,6 +6942,127 @@ body:has(#liveMode:not(.hidden)){
 .live-flow-actions .live-flow-cancel{background:transparent;border:1px solid rgba(255,255,255,.09);color:#93a5ad}
 </style>
 
+
+<style id="daylight-button-contrast">
+/* Mehr Kontrast bei Tageslicht: Buttons heben sich klar von den Panels ab. */
+button{
+  background-color:#263943;
+  color:#f2f8fb;
+  border:1px solid #49616d;
+  box-shadow:0 2px 0 rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.055);
+  font-weight:650;
+}
+button:hover{
+  filter:brightness(1.12);
+  border-color:#7894a1;
+}
+button:focus-visible{
+  outline:3px solid #8bdcff;
+  outline-offset:2px;
+}
+button:disabled{
+  opacity:.55;
+  filter:none;
+  cursor:not-allowed;
+}
+/* Sekundäre Buttons bekommen eine erkennbare, hellere Fläche. */
+button.secondary,
+button:not(.primary):not(.success):not(.goal):not(.yellow):not(.red):not(.sub):not(.danger):not(.danger-outline){
+  background-color:#263943;
+  color:#edf6fa;
+  border:1px solid #49616d;
+}
+/* Farbige Aktionen: kräftigere Fläche und klarer Textkontrast. */
+button.primary{
+  background:#203e58;
+  color:#d8edff;
+  border-color:#5b9ac5;
+}
+button.success, button.goal{
+  background:#214b35;
+  color:#c9ffdc;
+  border:1px solid #4e9c6a;
+}
+button.yellow{
+  background:#4a3c1d;
+  color:#ffedb6;
+  border:1px solid #b99642;
+}
+button.red, button.danger{
+  background:#4a252d;
+  color:#ffd9df;
+  border:1px solid #b85a6a;
+}
+button.sub{
+  background:#342d58;
+  color:#e4ddff;
+  border:1px solid #8073c7;
+}
+button.danger-outline{
+  background:#2b2024;
+  color:#ffb9c3;
+  border-color:#bd6675;
+}
+/* Live-Ticker: größere Aktionsflächen klar von der dunklen Platte absetzen. */
+#liveMode button{
+  background-color:#263943;
+  color:#f2f8fb;
+  border-color:#526d79;
+  min-height:38px;
+}
+#liveMode button.success,
+#liveMode button.goal,
+#liveMode button.live-flow-primary{
+  background:#214b35;
+  color:#d1ffe0;
+  border-color:#62b77f;
+}
+#liveMode button.yellow,
+#liveMode button.live-flow-warning{
+  background:#4a3c1d;
+  color:#fff0bf;
+  border-color:#c5a34c;
+}
+#liveMode button.red,
+#liveMode button.danger{
+  background:#4a252d;
+  color:#ffe0e5;
+  border-color:#c86a7a;
+}
+#liveMode button.primary{
+  background:#203e58;
+  color:#e1f2ff;
+  border-color:#69a8d2;
+}
+/* Auch die neuen Start-/Pause-Popups erhalten deutliche Buttonflächen. */
+.live-flow-actions button{
+  min-height:46px;
+  font-size:14px;
+  border-width:1px;
+  box-shadow:0 2px 0 rgba(0,0,0,.25);
+}
+.live-flow-actions .live-flow-primary{
+  background:#24583b;
+  color:#d6ffe4;
+  border-color:#6bc18b;
+}
+.live-flow-actions .live-flow-secondary{
+  background:#2b414c;
+  color:#f0f8fb;
+  border-color:#607b87;
+}
+.live-flow-actions .live-flow-warning{
+  background:#58451e;
+  color:#fff0bd;
+  border-color:#d0ae56;
+}
+.live-flow-actions .live-flow-cancel{
+  background:#202d34;
+  color:#d7e4e9;
+  border-color:#52646d;
+}
+</style>
+
 </head>
 <body>
 
@@ -12437,14 +12558,6 @@ function getLiveClockState(){
       save()
     }
     showLiveStatusOverlay("🔴 NACHSPIELZEIT")
-    showLiveFlowModal(
-      `⏱ Reguläre Zeit vorbei · ${livePeriod}. Viertel`,
-      "Die reguläre Spielzeit ist erreicht. Du kannst die Nachspielzeit weiterlaufen lassen oder das Viertel jetzt bewusst beenden.",
-      [
-        {label:"▶ Nachspielzeit weiterlaufen lassen", className:"live-flow-primary", run:()=>{}},
-        {label:`✓ ${livePeriod}. Viertel beenden`, className:"live-flow-warning", run:()=>finishLiveQuarter()}
-      ]
-    )
   }
 
   if(livePhase === "stoppage" || livePhase === "ended"){
