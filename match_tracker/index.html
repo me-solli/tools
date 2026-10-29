@@ -7878,6 +7878,47 @@ button[title*="löschen" i]:hover{
 }
 </style>
 
+
+<style id="restore-live-content-flow">
+/* Ensure all live content remains in the live overlay and follows the intended layout. */
+#liveMode .live-body{
+  display:grid !important;
+  grid-template-columns:minmax(0,1.7fr) minmax(260px,.8fr) !important;
+  gap:16px !important;
+  align-items:start !important;
+  margin-top:14px !important;
+}
+#liveMode .live-main-column,
+#liveMode .live-side-column{
+  min-width:0 !important;
+}
+#liveMode .live-main-column > .live-feed,
+#liveMode .live-side-column > .live-photos,
+#liveMode .live-main-column > .live-control-card{
+  margin-bottom:16px !important;
+}
+#liveMode .live-admin-panel{
+  position:relative !important;
+  clear:both !important;
+  margin:18px auto 20px !important;
+}
+@media(max-width:768px){
+  #liveMode .live-body{
+    display:flex !important;
+    flex-direction:column !important;
+    gap:16px !important;
+  }
+  #liveMode .live-main-column,
+  #liveMode .live-side-column{
+    width:100% !important;
+  }
+  #liveMode .live-admin-panel{
+    width:calc(100% - 22px) !important;
+    margin:18px auto 20px !important;
+  }
+}
+</style>
+
 </head>
 <body>
 
@@ -12762,9 +12803,6 @@ function openLiveMode(matchId){
     </aside>
   </div>
 
-</div>
-
-
   <div class="live-admin-panel">
     <div class="live-admin-title">SPIELVERWALTUNG</div>
     <div class="live-header-actions">
@@ -12779,6 +12817,7 @@ function openLiveMode(matchId){
       <button class="secondary" ${getTooltipAttrs("Live-Link kopieren")} onclick="shareLiveMatch()">🔗 Teilen</button>
     </div>
   </div>
+</div>
 
 <input id="livePhotoInput" type="file" accept="image/*" capture="environment" multiple hidden onchange="uploadLivePhotos(this)">
   `
