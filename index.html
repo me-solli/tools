@@ -7199,6 +7199,45 @@ button.danger-outline{
 }
 </style>
 
+
+<style id="mobile-side-gutter-fix">
+/* Mobile: seitliche Luft um die Karten; Desktop-Layout bleibt unverändert. */
+@media (max-width: 600px){
+  #liveMode{
+    box-sizing:border-box !important;
+    padding-left:14px !important;
+    padding-right:14px !important;
+  }
+  #liveMode .live-ticker-shell{
+    box-sizing:border-box !important;
+    width:100% !important;
+    max-width:100% !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    padding-left:0 !important;
+    padding-right:0 !important;
+  }
+  #liveMode .live-ticker-brand,
+  #liveMode .live-competition,
+  #liveMode .live-score-big,
+  #liveMode .live-header,
+  #liveMode .live-feed,
+  #liveMode .live-photos,
+  #liveMode .live-control-card,
+  #liveMode .live-section-title,
+  #liveMode .live-feed-scroll-btn{
+    box-sizing:border-box !important;
+    max-width:100% !important;
+  }
+}
+@media (min-width: 601px){
+  #liveMode{
+    padding-left:12px !important;
+    padding-right:12px !important;
+  }
+}
+</style>
+
 </head>
 <body>
 
