@@ -7798,6 +7798,86 @@ button[title*="löschen" i]:hover{
 }
 </style>
 
+
+<style id="thin-status-bar-admin-bottom">
+/* Schmale Statusleiste direkt beim Spielstand. */
+#liveMode .live-status-strip{
+  display:flex !important;
+  align-items:center !important;
+  min-height:28px !important;
+  height:28px !important;
+  box-sizing:border-box !important;
+  margin:6px 0 12px !important;
+  padding:3px 12px !important;
+  border:1px solid rgba(112,174,194,.25) !important;
+  border-radius:7px !important;
+  background:rgba(12,25,32,.72) !important;
+  color:#b7cbd3 !important;
+  overflow:hidden !important;
+}
+#liveMode .live-status-strip .live-left{
+  display:flex !important;
+  align-items:center !important;
+  width:100% !important;
+  min-width:0 !important;
+}
+#liveMode .live-status-strip .live-timer{
+  display:flex !important;
+  align-items:center !important;
+  gap:7px !important;
+  font-size:10px !important;
+  line-height:1 !important;
+  letter-spacing:.08em !important;
+  white-space:nowrap !important;
+}
+#liveMode .live-admin-panel{
+  display:block !important;
+  box-sizing:border-box !important;
+  width:calc(100% - 12px) !important;
+  max-width:1480px !important;
+  margin:18px auto 0 !important;
+  padding:13px 15px 14px !important;
+  border:1px solid #456574 !important;
+  border-radius:14px !important;
+  background:linear-gradient(145deg,#172a34,#101e26) !important;
+  box-shadow:0 8px 22px rgba(0,0,0,.22) !important;
+}
+#liveMode .live-admin-title{
+  color:#8ceaff !important;
+  font-size:10px !important;
+  font-weight:800 !important;
+  letter-spacing:.14em !important;
+  margin:0 0 10px 2px !important;
+}
+#liveMode .live-admin-panel .live-header-actions{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  justify-content:flex-start !important;
+  gap:8px !important;
+}
+#liveMode .live-admin-panel .live-header-actions button{
+  background:#314b58 !important;
+  color:#f5fbff !important;
+  border:1px solid #6b8b9a !important;
+  border-radius:9px !important;
+  min-height:36px !important;
+}
+@media(max-width:768px){
+  #liveMode .live-status-strip{
+    width:calc(100% - 8px) !important;
+    margin:6px auto 12px !important;
+  }
+  #liveMode .live-admin-panel{
+    width:calc(100% - 22px) !important;
+    margin:18px auto 20px !important;
+    padding:12px !important;
+  }
+  #liveMode .live-admin-panel .live-header-actions{
+    justify-content:flex-start !important;
+  }
+}
+</style>
+
 </head>
 <body>
 
@@ -12635,25 +12715,12 @@ function openLiveMode(matchId){
 
 
 
-  <div class="live-header">
+  <div class="live-status-strip">
     <div class="live-left">
       <div id="liveTimer" class="live-timer">
         <span class="live-dot paused"></span>
         <span class="live-phase">SPIELZEIT</span>
       </div>
-    </div>
-
-    <div class="live-header-actions">
-
-
-      ${isUnlocked ? `
-        <button class="secondary" onclick="createGuestTickerLink()">🔐 Gastticker-Link</button>
-        <button class="secondary" onclick="revokeGuestTickerLink()">⛔ Gastlink widerrufen</button>
-        <button class="secondary" ${getTooltipAttrs("Live-Spiel zurücksetzen")} onclick="resetLiveMatch()">↺ Reset</button>
-        <button class="secondary" ${getTooltipAttrs("Bilder aufnehmen oder hochladen")} onclick="openLivePhotoPicker()">📷 Bilder</button>
-      ` : ""}
-      <button class="secondary" ${getTooltipAttrs("Live-Link kopieren")} onclick="shareLiveMatch()">🔗 Teilen</button>
-    </div>
   </div>
 
 
@@ -12696,6 +12763,22 @@ function openLiveMode(matchId){
   </div>
 
 </div>
+
+
+  <div class="live-admin-panel">
+    <div class="live-admin-title">SPIELVERWALTUNG</div>
+    <div class="live-header-actions">
+
+
+      ${isUnlocked ? `
+        <button class="secondary" onclick="createGuestTickerLink()">🔐 Gastticker-Link</button>
+        <button class="secondary" onclick="revokeGuestTickerLink()">⛔ Gastlink widerrufen</button>
+        <button class="secondary" ${getTooltipAttrs("Live-Spiel zurücksetzen")} onclick="resetLiveMatch()">↺ Reset</button>
+        <button class="secondary" ${getTooltipAttrs("Bilder aufnehmen oder hochladen")} onclick="openLivePhotoPicker()">📷 Bilder</button>
+      ` : ""}
+      <button class="secondary" ${getTooltipAttrs("Live-Link kopieren")} onclick="shareLiveMatch()">🔗 Teilen</button>
+    </div>
+  </div>
 
 <input id="livePhotoInput" type="file" accept="image/*" capture="environment" multiple hidden onchange="uploadLivePhotos(this)">
   `
