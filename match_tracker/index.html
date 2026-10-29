@@ -7063,6 +7063,75 @@ button.danger-outline{
 }
 </style>
 
+
+<style id="daylight-button-contrast-v2">
+/* Kontrast-Override für den Live-Ticker: bestehende !important-Regeln gezielt überschreiben. */
+#liveMode .live-control-card .btn-live{
+  background:#263b46 !important;
+  color:#f5fbff !important;
+  border:1px solid #66818e !important;
+  box-shadow:0 2px 0 rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.08) !important;
+  font-weight:800 !important;
+}
+#liveMode .live-control-card .btn-live.goal{
+  background:#214c35 !important;
+  color:#e0ffea !important;
+  border-color:#65b982 !important;
+  border-left:4px solid #8fe0a9 !important;
+}
+#liveMode .live-control-card .btn-live.against{
+  background:#203e4a !important;
+  color:#e1f8ff !important;
+  border-color:#65b6ce !important;
+  border-left:4px solid #68d8f4 !important;
+}
+#liveMode .live-control-card .btn-live.yellow{
+  background:#51421f !important;
+  color:#fff3c9 !important;
+  border-color:#c6a651 !important;
+  border-left:4px solid #f1c45c !important;
+}
+#liveMode .live-control-card .btn-live.red{
+  background:#512832 !important;
+  color:#ffe5e9 !important;
+  border-color:#cf7180 !important;
+  border-left:4px solid #ff7185 !important;
+}
+#liveMode .live-control-card .btn-live:hover:not(:disabled){
+  filter:brightness(1.15) !important;
+  box-shadow:0 3px 10px rgba(0,0,0,.3) !important;
+}
+#liveMode .live-control-card .btn-live:focus-visible,
+#liveMode #liveToggleBtn:focus-visible{
+  outline:3px solid #a8e8ff !important;
+  outline-offset:2px !important;
+}
+#liveMode #liveToggleBtn{
+  background:#294b2d !important;
+  color:#d9ffd0 !important;
+  border:1px solid #78b95f !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.1), 0 3px 0 rgba(0,0,0,.25) !important;
+  font-weight:900 !important;
+}
+#liveMode #liveToggleBtn:hover{
+  background:#315c35 !important;
+  filter:brightness(1.08) !important;
+}
+/* Auch die kleinen Verwaltungsbuttons auf klaren Flächen darstellen. */
+#liveMode .live-header-actions button,
+#liveMode .live-control-card button:not(.btn-live):not(#liveToggleBtn){
+  background:#263b46 !important;
+  color:#edf7fb !important;
+  border:1px solid #526d79 !important;
+  box-shadow:0 2px 0 rgba(0,0,0,.2) !important;
+}
+#liveMode .live-header-actions button:hover,
+#liveMode .live-control-card button:not(.btn-live):not(#liveToggleBtn):hover{
+  filter:brightness(1.15) !important;
+  border-color:#86a6b4 !important;
+}
+</style>
+
 </head>
 <body>
 
