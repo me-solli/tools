@@ -7565,6 +7565,16 @@ button.danger-outline{
 }
 </style>
 
+
+<style id="live-actions-under-feed">
+#liveMode .live-main-column > .live-control-card{
+  width:100% !important;
+  max-width:100% !important;
+  margin:12px 0 0 !important;
+  box-sizing:border-box !important;
+}
+</style>
+
 </head>
 <body>
 
@@ -12400,6 +12410,14 @@ function openLiveMode(matchId){
     </div>
   </div>
 
+
+
+  <div class="live-body">
+    <section class="live-main-column">
+      <div class="live-section-title"><span>SPIELVERLAUF</span><small>Neueste Ereignisse zuerst</small></div>
+      <div id="liveFeed" class="live-feed"></div>
+      <button id="liveFeedScrollBtn" class="live-feed-scroll-btn" type="button" onclick="toggleLiveFeedScroll()" aria-label="Weitere Ereignisse anzeigen">↓ Weitere Ereignisse</button>
+
       <div class="live-control-card">
         <div class="live-section-title"><span>LIVE-AKTIONEN</span><small>Nur Teamzugang</small></div>
         <div class="live-events">
@@ -12418,12 +12436,6 @@ function openLiveMode(matchId){
           <button id="liveQuarterBtn" class="secondary hidden" ${(!isUnlocked && !isGuestTickerMode) ? "disabled" : ""} onclick="finishLiveQuarter()">✓ Viertel beenden</button>
         </div>
       </div>
-
-  <div class="live-body">
-    <section class="live-main-column">
-      <div class="live-section-title"><span>SPIELVERLAUF</span><small>Neueste Ereignisse zuerst</small></div>
-      <div id="liveFeed" class="live-feed"></div>
-      <button id="liveFeedScrollBtn" class="live-feed-scroll-btn" type="button" onclick="toggleLiveFeedScroll()" aria-label="Weitere Ereignisse anzeigen">↓ Weitere Ereignisse</button>
     </section>
 
     <aside class="live-side-column">
