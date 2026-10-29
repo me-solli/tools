@@ -7697,6 +7697,54 @@ button.danger-outline{
 }
 </style>
 
+
+<style id="testhausen-crest-consistent-sizing">
+/* The custom Testhausen SVG has its own class, so component-specific crest rules did not constrain it. */
+.testhausen-crest{
+  width:30px !important;
+  height:34px !important;
+  max-width:30px !important;
+  max-height:34px !important;
+  flex:0 0 30px !important;
+  object-fit:contain !important;
+}
+/* Match cards and fixtures: align with the neighboring club crests. */
+.matches-grid .testhausen-crest,
+.next-game-card .testhausen-crest,
+.match-card .testhausen-crest,
+.match-row .testhausen-crest{
+  width:25px !important;
+  height:29px !important;
+  max-width:25px !important;
+  max-height:29px !important;
+  flex-basis:25px !important;
+}
+/* Main live scoreboard: slightly larger than list icons, but not oversized. */
+#liveMode .live-score-big .testhausen-crest{
+  width:28px !important;
+  height:32px !important;
+  max-width:28px !important;
+  max-height:32px !important;
+  flex-basis:28px !important;
+}
+/* Event feed: compact crest so it doesn't dominate the event line. */
+#liveMode .live-feed .testhausen-crest{
+  width:26px !important;
+  height:30px !important;
+  max-width:26px !important;
+  max-height:30px !important;
+  flex-basis:26px !important;
+}
+/* Team management tile: keep the logo modest beside the team name. */
+.team-brand .testhausen-crest{
+  width:30px !important;
+  height:34px !important;
+  max-width:30px !important;
+  max-height:34px !important;
+  flex-basis:30px !important;
+}
+</style>
+
 </head>
 <body>
 
