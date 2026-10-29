@@ -7643,6 +7643,60 @@ button.danger-outline{
 }
 </style>
 
+
+<style id="crest-size-and-panel-spacing-fix">
+/* Testhausen-Wappen im Ereignisfeed kleiner halten; im Scorebanner bleibt es separat gestaltet. */
+#liveMode .live-feed .match-team-crest,
+#liveMode .live-feed img.match-team-crest,
+#liveMode .live-feed .team-crest,
+#liveMode .live-feed img.team-crest{
+  width:34px !important;
+  height:34px !important;
+  max-width:34px !important;
+  max-height:34px !important;
+  object-fit:contain !important;
+  flex:0 0 34px !important;
+}
+/* Ereigniszeilen nicht durch ein zu großes Wappen aufziehen. */
+#liveMode .live-feed .live-event,
+#liveMode .live-feed .live-event-row,
+#liveMode .live-feed .event-row{
+  align-items:center !important;
+}
+#liveMode .live-feed .match-team-crest-real{
+  width:34px !important;
+  height:34px !important;
+  max-width:34px !important;
+  max-height:34px !important;
+}
+/* Spürbarer vertikaler Abstand zwischen Spielverlauf, Live-Aktionen,
+   Live-Bildern und der Verwaltungsleiste. */
+#liveMode .live-main-column > .live-control-card{
+  margin-top:18px !important;
+  margin-bottom:18px !important;
+}
+#liveMode .live-photos{
+  margin-top:16px !important;
+  margin-bottom:16px !important;
+}
+#liveMode .live-header{
+  margin-top:16px !important;
+}
+@media screen and (max-width:768px){
+  #liveMode .live-main-column > .live-control-card{
+    margin-top:20px !important;
+    margin-bottom:20px !important;
+  }
+  #liveMode .live-photos{
+    margin-top:18px !important;
+    margin-bottom:18px !important;
+  }
+  #liveMode .live-header{
+    margin-top:18px !important;
+  }
+}
+</style>
+
 </head>
 <body>
 
