@@ -12653,19 +12653,18 @@ function closeLiveMode(){
     window.liveAutoInterval = null
   }
 
-  // 🔥 WICHTIG: State vorher speichern
-  let match = matches.find(m => m.id === liveMatchId)
-
-  if(match){
-    ensureLiveState(match)
-
-    match.liveState.startTime = liveStartTime
-    match.liveState.pausedAt = livePausedAt
-    match.liveState.pausedTotal = livePausedTotal
+  // Nur die Team-/Gastticker-Ansicht darf Timerwerte speichern. Ein Besucher
+  // berechnet die Uhr lokal und darf beim Schließen keinen älteren Stand schreiben.
+  if(!isViewerMode){
+    let match = matches.find(m => m.id === liveMatchId)
+    if(match){
+      ensureLiveState(match)
+      match.liveState.startTime = liveStartTime
+      match.liveState.pausedAt = livePausedAt
+      match.liveState.pausedTotal = livePausedTotal
+    }
+    save()
   }
-
-  // 🔥 speichern (server + lokal)
-  save()
 
   document.body.style.overflow = ""
 
@@ -13458,7 +13457,9 @@ function getLiveClockState(){
   if(livePhase !== "stoppage" && livePhase !== "ended" && elapsed >= regularLimit){
     livePhase = "stoppage"
     let match = matches.find(m => m.id === liveMatchId)
-    if(match){
+    // Read-only visitors derive the phase locally; saving it here could overwrite
+    // a newer quarter or timer state set by the team.
+    if(match && !isViewerMode){
       ensureLiveState(match)
       match.liveState.phase = "stoppage"
       match.liveState.period = livePeriod
