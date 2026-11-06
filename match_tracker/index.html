@@ -8965,6 +8965,7 @@ function save(){
   const saveSnapshot = JSON.stringify(data)
   const saveVersion = (window.matchTrackerSaveVersion || 0) + 1
   window.matchTrackerSaveVersion = saveVersion
+  window.matchTrackerSavePending = true
   const sendSave = () => fetch(API + "/save", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -8986,6 +8987,9 @@ function save(){
     .then(sendSave)
     .catch(() => {
       if(status && window.matchTrackerSaveVersion === saveVersion) status.innerText = "⚠️ nur lokal gespeichert"
+    })
+    .finally(() => {
+      if(window.matchTrackerSaveVersion === saveVersion) window.matchTrackerSavePending = false
     })
 }
 
@@ -14178,6 +14182,7 @@ function startLiveAutoUpdate(){
 
     if(!liveMatchId) return
 
+    const saveVersionAtRequest = window.matchTrackerSaveVersion || 0;
     fetch(isGuestTickerMode ? API + "/guest-ticker/" + encodeURIComponent(guestTickerToken) : API + "/data")
       .then(res => res.json())
       .then(serverData => {
@@ -14185,6 +14190,14 @@ function startLiveAutoUpdate(){
         // Während einer laufenden Gast-Speicherung nicht mit einem älteren Poll-Stand
         // überschreiben; sonst könnten gerade hinzugefügte/gelöschte Events zurückspringen.
         if(isGuestTickerMode && window.guestTickerSavePending) return;
+
+        // Ein Poll kann vor einem lokalen Ereignis oder Timerwechsel gestartet sein und
+        // erst danach zurückkommen. Solche alten Antworten dürfen weder Tore löschen
+        // noch den aktuellen Viertel-/Nachspielzeitstatus zurücksetzen.
+        if(!isGuestTickerMode && (
+          window.matchTrackerSavePending ||
+          (window.matchTrackerSaveVersion || 0) !== saveVersionAtRequest
+        )) return;
 
         let serverMatch = (serverData.matches || [])
           .find(m => m.id === liveMatchId)
