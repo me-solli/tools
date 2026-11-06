@@ -8339,7 +8339,9 @@ function confirmEditAction(callback){
   function confirmDeleteAction(callback){
 
   let modal = document.getElementById("modal")
+  if(!modal) return
   let box = modal.querySelector(".modal-box")
+  if(!box) return
 
   box.innerHTML = `
     <div class="modal-header">
@@ -8361,6 +8363,7 @@ function confirmEditAction(callback){
   modalCallback = callback
 
   modal.classList.remove("hidden")
+  modal.style.display = "flex"
 
   setTimeout(()=>{
     document.getElementById("modalInput").focus()
@@ -10174,7 +10177,7 @@ if(!hasAccess(activeTeam)){
   
 confirmDeleteAction(()=>{
 
-matches = matches.filter(m=>m.id!==id)
+matches = matches.filter(m=>String(m.id)!==String(id))
 
 save()
 renderAll()
@@ -11044,7 +11047,7 @@ onclick="event.stopPropagation();handleEditMatch(${match.id})">
 
 <button class="danger"
 ${getTooltipAttrs("Spiel löschen")}
-onclick="event.stopPropagation();deleteMatch(${match.id})">
+onclick="event.stopPropagation();deleteMatch(${JSON.stringify(match.id)})">
 🗑
 </button>
 ` : `
