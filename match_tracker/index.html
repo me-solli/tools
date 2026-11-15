@@ -8961,6 +8961,36 @@ function save(){
     return;
   }
 
+  // Während ein Live-Ticker offen ist, nur dessen Spiel speichern.
+  // So können parallel laufende Ticker nicht mit alten Gesamt-Snapshots
+  // die Änderungen des jeweils anderen Spiels überschreiben.
+  if(liveMatchId !== null && liveMatchId !== undefined){
+    const liveMatch = matches.find(m => String(m.id) === String(liveMatchId))
+    if(!liveMatch) return
+    const liveSnapshot = JSON.stringify({liveState:liveMatch.liveState || {},events:liveMatch.events || []})
+    const liveSaveVersion = (window.matchTrackerLiveSaveVersion || 0) + 1
+    window.matchTrackerLiveSaveVersion = liveSaveVersion
+    window.matchTrackerSavePending = true
+    const sendLiveSave = () => fetch(API + "/live-update/" + encodeURIComponent(liveMatchId), {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:liveSnapshot
+    }).then(res => res.json()).then(res => {
+      if(res.error) showToast(res.error,"info")
+      else if(status && window.matchTrackerLiveSaveVersion === liveSaveVersion){
+        status.innerText = "✓ gespeichert"
+        setTimeout(()=> { if(status.innerText === "✓ gespeichert") status.innerText = "" }, 1500)
+      }
+      return res
+    })
+    window.matchTrackerLiveSaveQueue = (window.matchTrackerLiveSaveQueue || Promise.resolve())
+      .catch(() => {})
+      .then(sendLiveSave)
+      .catch(() => { if(status && window.matchTrackerLiveSaveVersion === liveSaveVersion) status.innerText = "⚠️ nur lokal gespeichert" })
+      .finally(() => { if(window.matchTrackerLiveSaveVersion === liveSaveVersion) window.matchTrackerSavePending = false })
+    return
+  }
+
   // SERVER SPEICHERN: Snapshots strikt in Aufrufreihenfolge senden.
   // Live-Timer, Viertelwechsel und Events können in kurzer Folge save() auslösen.
   // Parallele POSTs mit älteren Snapshots konnten sonst einen neueren Event-Stand

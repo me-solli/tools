@@ -1002,6 +1002,33 @@ app.get(
 // SAVE
 // ============================================================
 
+// Live-Ticker speichern: nur das betroffene Spiel aus dem aktuellen
+// Serverstand aktualisieren. Ein kompletter Browser-Snapshot kann sonst
+// Änderungen eines parallel getickerten Spiels zurücksetzen.
+app.post("/live-update/:matchId", (req, res) => {
+  try {
+    const matchId = String(req.params.matchId || "").trim()
+    const incoming = req.body || {}
+    if (!matchId || !incoming.liveState || typeof incoming.liveState !== "object" || !Array.isArray(incoming.events)) {
+      return res.status(400).json({ error: "Ungültige Live-Daten" })
+    }
+
+    const data = readData()
+    const match = data.matches.find(item => String(item.id) === matchId)
+    if (!match) return res.status(404).json({ error: "Spiel nicht gefunden" })
+
+    match.liveState = incoming.liveState
+    match.events = incoming.events
+    const tempFile = FILE + ".tmp"
+    fs.writeFileSync(tempFile, JSON.stringify(data, null, 2))
+    fs.renameSync(tempFile, FILE)
+    res.json({ status: "ok" })
+  } catch (err) {
+    console.error("LIVE UPDATE ERROR:", err)
+    res.status(500).json({ error: "Live-Ticker konnte nicht gespeichert werden" })
+  }
+})
+
 const ipLog = {}
 
 
