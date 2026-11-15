@@ -7955,55 +7955,6 @@ button[title*="löschen" i]:hover{
 }
 </style>
 
-<style id="section-navigation-layout">
-  [hidden]{display:none!important}
-  .section-nav{position:relative;z-index:900;margin:0 auto;padding:10px 22px;background:rgba(10,15,19,.94);border-bottom:1px solid rgba(113,163,182,.13);box-shadow:0 10px 26px rgba(0,0,0,.2);backdrop-filter:blur(14px)}
-  .section-nav-inner{max-width:1540px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:14px}
-  .section-nav-links{display:flex;align-items:center;gap:6px;padding:4px;border:1px solid rgba(255,255,255,.07);border-radius:13px;background:rgba(255,255,255,.025)}
-  .section-nav-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:0 17px;border:1px solid transparent;border-radius:9px;background:transparent;color:#93a5af;font-size:12px;font-weight:800;letter-spacing:.02em;cursor:pointer;transition:background .16s ease,color .16s ease,border-color .16s ease}
-  .section-nav-btn span{font-size:15px;color:#6f8c99}
-  .section-nav-btn:hover{color:#eaf8fc;background:rgba(255,255,255,.045)}
-  .section-nav-btn[aria-selected="true"]{color:#eafbff;background:linear-gradient(135deg,rgba(88,224,255,.13),rgba(88,224,255,.055));border-color:rgba(88,224,255,.20);box-shadow:inset 0 1px rgba(255,255,255,.045)}
-  .section-nav-btn[aria-selected="true"] span{color:#58e0ff}
-  .section-nav-login{display:flex;align-items:center;gap:9px;min-height:42px;padding:0 15px;border-radius:10px;border:1px solid rgba(185,239,103,.25);background:linear-gradient(135deg,rgba(185,239,103,.12),rgba(185,239,103,.045));color:#ddf7ba;font-size:12px;font-weight:800;cursor:pointer;transition:.16s ease}
-  .section-nav-login:hover{border-color:rgba(185,239,103,.48);background:rgba(185,239,103,.15);transform:translateY(-1px)}
-  .section-nav-login-arrow{color:#9cb977;font-size:13px}
-  .section-nav-login:focus-visible,.section-nav-btn:focus-visible{outline:2px solid #58e0ff;outline-offset:2px}
-  body[data-app-page="overview"] .app,
-  body[data-app-page="games"] .app,
-  body[data-app-page="team"] .app{display:block!important}
-  body[data-app-page="overview"] .app>.sidebar,
-  body[data-app-page="games"] .app>.sidebar{display:none!important}
-  body[data-app-page="team"] .app{display:grid!important;grid-template-columns:minmax(0,1fr) 300px!important;gap:18px!important;align-items:start!important}
-  body[data-app-page="team"] .app>.sidebar{display:block!important;grid-column:2;grid-row:1;position:static!important}
-  body[data-app-page="team"] .app>.content-wrap{grid-column:1;grid-row:1}
-  .app>.content-wrap{display:flex!important;flex-direction:column!important;gap:14px!important;width:100%!important}
-  .app>.content-wrap>.main{display:contents!important}
-  .app>.content-wrap>.panel{width:100%;margin:0 0 14px!important}
-  .page-heading{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:16px 2px 14px}
-  .page-heading-kicker{font-size:9px;font-weight:900;letter-spacing:.2em;color:#58e0ff;text-transform:uppercase}
-  .page-heading h1{margin:5px 0 0;font-size:clamp(22px,3vw,30px);line-height:1.05;letter-spacing:-.035em;color:#f2f8fa}
-  .page-heading p{margin:6px 0 0;color:#8298a3;font-size:12px;line-height:1.45}
-  body[data-app-page="overview"] [data-page-section]:not([data-page-section="overview"]),
-  body[data-app-page="games"] [data-page-section]:not([data-page-section="games"]),
-  body[data-app-page="team"] [data-page-section]:not([data-page-section="team"]){display:none!important}
-  body[data-app-page="overview"] .app>.content-wrap>.main #saveStatus{margin-top:0!important}
-  @media(max-width:760px){
-    .section-nav{padding:8px 10px}
-    .section-nav-inner{gap:8px}
-    .section-nav-links{flex:1;gap:3px}
-    .section-nav-btn{flex:1;min-height:40px;padding:0 7px;font-size:11px;gap:5px}
-    .section-nav-login{min-height:40px;padding:0 10px;gap:6px}
-    .section-nav-login-label{font-size:0}
-    .section-nav-login-label:after{content:"Login";font-size:11px}
-    .section-nav-login-arrow{display:none}
-    body[data-app-page="team"] .app{display:flex!important;flex-direction:column!important}
-    body[data-app-page="team"] .app>.sidebar{order:0;width:100%;position:static!important}
-    body[data-app-page="team"] .app>.content-wrap{order:1;width:100%}
-    .page-heading{margin-top:12px}
-  }
-</style>
-
 </head>
 <body>
 
@@ -8048,18 +7999,6 @@ button[title*="löschen" i]:hover{
   </div>
 </div>
 
-<nav class="section-nav" aria-label="Hauptnavigation">
-  <div class="section-nav-inner">
-    <div class="section-nav-links" role="tablist" aria-label="Bereiche">
-      <button type="button" class="section-nav-btn" data-app-page="overview" role="tab" aria-selected="true" onclick="showAppPage('overview')"><span>⌂</span> Übersicht</button>
-      <button type="button" class="section-nav-btn" data-app-page="games" role="tab" aria-selected="false" onclick="showAppPage('games')"><span>⚽</span> Spiele</button>
-      <button type="button" class="section-nav-btn" data-app-page="team" role="tab" aria-selected="false" onclick="showAppPage('team')"><span>👥</span> Team</button>
-    </div>
-    <button id="sectionLiveShortcut" class="section-live-shortcut" type="button" onclick="showLivePreviews()" hidden><span class="section-live-dot"></span><span id="sectionLiveCount">LIVE</span></button>
-    <button type="button" class="section-nav-login" onclick="openTeamAccess()"><span>🔐</span><span class="section-nav-login-label">Teamzugang</span><span class="section-nav-login-arrow">↗</span></button>
-  </div>
-</nav>
-
 
 <div class="weather-bar">
   <div class="weather-strip" id="weatherStrip">
@@ -8070,7 +8009,7 @@ button[title*="löschen" i]:hover{
 
 <div class="app">
 
-<div class="sidebar" data-page-section="team">
+<div class="sidebar">
 
 <div class="sidebar-section team-hub">
   <div class="hub-head">
@@ -8107,19 +8046,17 @@ button[title*="löschen" i]:hover{
 <div class="content-wrap">
   <div class="main">
 
-  <div id="appPageHeading" class="page-heading" aria-live="polite"></div>
   <div id="saveStatus" style="font-size:12px;opacity:.7;margin-top:-10px;margin-bottom:10px"></div>
-  <section id="livePreviewSection" class="live-preview-section" data-page-section="overview" aria-label="Live-Spiele"></section>
-  <div id="teamQuickBar" class="matchday-quickbar" aria-label="Trainer-Zentrale Schnellzugriff" data-page-section="overview"></div>
-  <div id="nextGameCard" data-page-section="overview"></div>
-  <div id="lastMatchdayCard" class="last-matchday-wrap" data-page-section="overview"></div>
+  <div id="teamQuickBar" class="matchday-quickbar" aria-label="Trainer-Zentrale Schnellzugriff"></div>
+  <div id="nextGameCard"></div>
+  <div id="lastMatchdayCard" class="last-matchday-wrap"></div>
 
 <div class="match-actions">
 
 </div>
 </div>
 
-<div class="panel matches-panel" data-page-section="games">
+<div class="panel matches-panel">
 
 <div class="matches-panel-head">
   <div>
@@ -8169,7 +8106,7 @@ button[title*="löschen" i]:hover{
   <div id="matches" class="matches-grid"></div>
 </div>
 
-<div class="panel calendar-panel" data-page-section="games">
+<div class="panel calendar-panel">
   <div class="calendar-head">
     <div>
       <div class="panel-eyebrow">SPIELKALENDER</div>
@@ -8188,16 +8125,16 @@ button[title*="löschen" i]:hover{
   <div class="calendar-legend"><span class="calendar-dot"></span> Spiel / Eintrag</div>
 </div>
 
-<section id="reactionLightBox" class="panel reaction-light" aria-label="Reaktionen" data-page-section="overview"></section>
+<section id="reactionLightBox" class="panel reaction-light" aria-label="Reaktionen" ></section>
 
-<div class="panel scorer-panel" data-page-section="team">
+<div class="panel scorer-panel">
   <div class="panel-eyebrow">TEAM STATS</div>
   <h2 class="scorer-title"><span class="scorer-title-icon" aria-hidden="true">⚽</span> Top Scorer</h2>
   <div class="stats-caption">Tore im aktuellen Team <span class="scorer-expand-hint">· Spieler antippen für Details <span aria-hidden="true">⌄</span></span></div>
   <div id="scorerRanking"></div>
 </div>
 
-<div class="panel" id="toolsPanel" style="opacity:.7" data-page-section="team">
+<div class="panel" id="toolsPanel" style="opacity:.7">
   <h3 style="font-size:13px;margin-bottom:8px">Tools</h3>
 
   <button onclick="exportBackup()" aria-label="Backup herunterladen" data-tooltip="Backup herunterladen">💾 Backup</button>
@@ -11849,135 +11786,7 @@ function startNextGameTicker(){
 
   nextGameInterval = setInterval(()=>{
     renderNextGameCard()
-    renderCompactLiveTicker()
   },1000)
-}
-
-function getCompactLiveClock(match){
-  const state = match?.liveState || {}
-  const period = Math.min(4, Math.max(1, Number(state.period) || 1))
-  if(state.completed || state.phase === "ended") return "Abpfiff"
-  const start = Number(state.periodStartAt || state.startTime || 0)
-  if(!start) return `${period}. Viertel · bereit`
-  const pausedAt = Number(state.periodPausedAt || state.pausedAt || 0)
-  const now = pausedAt || Date.now()
-  const pausedTotal = Math.max(0, Number(state.periodPausedTotal ?? state.pausedTotal) || 0)
-  const elapsed = Math.max(0, Math.floor((now - start - pausedTotal) / 1000))
-  const regularLimit = period === 1 ? 900 : 899
-  const clockBase = period === 1 ? 0 : (period - 1) * 900 + 1
-  if(state.phase === "stoppage" || elapsed >= regularLimit){
-    const added = Math.max(0, elapsed - regularLimit)
-    const mm = String(Math.floor(added / 60)).padStart(2,"0")
-    const ss = String(added % 60).padStart(2,"0")
-    return `${period}. Viertel · ${String(period * 15).padStart(2,"0")}:00 + ${mm}:${ss}${pausedAt ? " · Pause" : ""}`
-  }
-  const seconds = clockBase + elapsed
-  const mm = String(Math.floor(seconds / 60)).padStart(2,"0")
-  const ss = String(seconds % 60).padStart(2,"0")
-  return `${period}. Viertel · ${mm}:${ss}${pausedAt ? " · Pause" : ""}`
-}
-
-function getCompactLiveEventText(event){
-  const player = String(event?.player || "").trim()
-  const entrant = String(event?.in || "").trim()
-  if(event?.type === "goal") return `⚽ Tor${player ? ` · ${player}` : ""}`
-  if(event?.type === "goalAgainst") return `🥅 Gegentor${player ? ` · ${player}` : ""}`
-  if(event?.type === "ownGoal") return `↩️ Eigentor${player ? ` · ${player}` : ""}`
-  if(event?.type === "yellow") return `🟨 Gelbe Karte${player ? ` · ${player}` : ""}`
-  if(event?.type === "red") return `🟥 Rote Karte${player ? ` · ${player}` : ""}`
-  if(event?.type === "sub" || event?.type === "substitution") return `🔁 Wechsel${player ? ` · ${player}` : ""}${entrant ? ` → ${entrant}` : ""}`
-  if(event?.type === "penalty") return `⏱ Zeitstrafe${player ? ` · ${player}` : ""}`
-  return "Live-Ereignis"
-}
-
-function renderCompactLiveTicker(){
-  const section = document.getElementById("livePreviewSection")
-  const shortcut = document.getElementById("sectionLiveShortcut")
-  const countLabel = document.getElementById("sectionLiveCount")
-  if(!section) return
-
-  const liveMatches = activeTeam ? matches.filter(match => {
-    if(match.team !== activeTeam) return false
-    const state = match.liveState || {}
-    const waitingForNextPeriod = Number(state.period) > 1 && (match.events || []).length > 0
-    return !state.completed && state.phase !== "ended" && !!(state.startTime || state.pausedAt || state.periodStartAt || waitingForNextPeriod)
-  }) : []
-
-  if(shortcut){
-    shortcut.hidden = liveMatches.length === 0
-    if(countLabel) countLabel.textContent = `${liveMatches.length} LIVE`
-  }
-  if(!liveMatches.length){
-    section.innerHTML = ""
-    return
-  }
-
-  const cards = liveMatches.map(match => {
-    const sides = getMatchSides(match)
-    const score = getMatchScore(match)
-    const state = match.liveState || {}
-    const waiting = !state.startTime && !state.pausedAt && !state.periodStartAt && Number(state.period) > 1
-    const paused = !!(state.pausedAt || state.periodPausedAt || waiting)
-    const status = waiting ? "BEREIT" : paused ? "PAUSE" : state.phase === "stoppage" ? "NACHSPIELZEIT" : "LIVE"
-    const events = Array.isArray(match.events) ? [...match.events] : []
-    events.sort((a,b) => getEventPeriod(b) - getEventPeriod(a) || getEventSortSeconds(b) - getEventSortSeconds(a) || Number(b.time||0) - Number(a.time||0))
-    const latest = events[0]
-    const eventMarkup = latest
-      ? `<div class="live-preview-event"><strong>${escapeHtml(formatTickerEventTime(latest))}</strong><span>${escapeHtml(getCompactLiveEventText(latest))}</span></div>`
-      : `<div class="live-preview-event"><strong>—</strong><span>Noch keine Ereignisse</span></div>`
-    const matchId = JSON.stringify(match.id)
-    return `<article class="live-preview-card">
-      <div class="live-preview-card-top"><span class="live-preview-status ${paused?"paused":""}"><span class="section-live-dot"></span>${status}</span><span class="live-preview-team">${escapeHtml(match.team||activeTeam)}</span></div>
-      <div class="live-preview-clock">${escapeHtml(getCompactLiveClock(match))}</div>
-      <div class="live-preview-scoreline">
-        <div class="live-preview-side home"><span>${escapeHtml(sides.home)}</span>${teamCrestMarkup(sides.home)}</div>
-        <div class="live-preview-score">${score.home} : ${score.away}</div>
-        <div class="live-preview-side away">${teamCrestMarkup(sides.away)}<span>${escapeHtml(sides.away)}</span></div>
-      </div>
-      ${eventMarkup}
-      <button type="button" class="live-preview-open" onclick="openLiveMode(${matchId})">Tickerdetails ansehen <span aria-hidden="true">↗</span></button>
-    </article>`
-  }).join("")
-
-  section.innerHTML = `<div class="live-preview-head"><div class="live-preview-title"><span class="section-live-dot"></span> Live jetzt <small>${liveMatches.length===1?"1 Spiel":""+liveMatches.length+" Spiele"}</small></div></div><div class="live-preview-list">${cards}</div>`
-}
-
-function showLivePreviews(){
-  showAppPage("overview")
-  window.setTimeout(() => document.getElementById("livePreviewSection")?.scrollIntoView({behavior:"smooth",block:"start"}), 50)
-}
-
-function startLivePreviewPolling(){
-  if(window.livePreviewPollInterval) clearInterval(window.livePreviewPollInterval)
-  let requestInFlight = false
-  window.livePreviewPollInterval = setInterval(async () => {
-    if(document.visibilityState === "hidden" || isGuestTickerMode || liveMatchId || requestInFlight || window.matchTrackerSavePending) return
-    const saveVersion = window.matchTrackerSaveVersion || 0
-    requestInFlight = true
-    try{
-      const response = await fetch(API + "/data", {cache:"no-store"})
-      if(!response.ok) return
-      const serverData = await response.json()
-      if(window.matchTrackerSavePending || (window.matchTrackerSaveVersion || 0) !== saveVersion) return
-      const byId = new Map((serverData.matches || []).map(match => [String(match.id), match]))
-      let changed = false
-      matches.forEach(match => {
-        const serverMatch = byId.get(String(match.id))
-        if(!serverMatch || serverMatch.team !== match.team) return
-        const nextEvents = JSON.stringify(serverMatch.events || [])
-        const nextState = JSON.stringify(serverMatch.liveState || {})
-        if(nextEvents === JSON.stringify(match.events || []) && nextState === JSON.stringify(match.liveState || {})) return
-        match.events = serverMatch.events || []
-        match.liveState = serverMatch.liveState || {}
-        changed = true
-      })
-      if(changed){
-        renderCompactLiveTicker()
-        renderNextGameCard()
-      }
-    }catch{}
-    finally{ requestInFlight = false }
-  }, 4000)
 }
 
 
@@ -12796,55 +12605,10 @@ function deleteTeamTodo(id){
   todos.splice(idx,1);persistTeamTodos()
 }
 
-function showAppPage(page, persist = true){
-  const validPages = new Set(["overview","games","team"])
-  if(!validPages.has(page)) page = "overview"
-  document.body.dataset.appPage = page
-  document.querySelectorAll(".section-nav-btn[data-app-page]").forEach(button => {
-    const active = button.dataset.appPage === page
-    button.setAttribute("aria-selected", active ? "true" : "false")
-    button.tabIndex = active ? 0 : -1
-  })
-  const headings = {
-    overview:["Dein Spieltag","Alles Wichtige auf einen Blick","Live-Spiele, nächste Begegnungen und der Rückblick für dein Team."],
-    games:["Spielbetrieb","Spiele & Termine","Plane Begegnungen, verfolge Ergebnisse und behalte den Spielkalender im Blick."],
-    team:["Teamzentrale","Mannschaft & Kader","Team auswählen, anmelden und Spielerstatistiken verwalten."]
-  }
-  const heading = document.getElementById("appPageHeading")
-  if(heading){
-    const [kicker,title,description] = headings[page]
-    heading.innerHTML = `<div><div class="page-heading-kicker">${kicker}</div><h1>${title}</h1><p>${description}</p></div>`
-  }
-  if(persist){
-    try{ localStorage.setItem("matchTrackerPage", page) }catch{}
-  }
-  if(page === "team"){
-    const current = document.querySelector(".team-chip.active")
-    if(current) current.scrollIntoView({block:"nearest",behavior:"smooth"})
-  }
-}
-
-function openTeamAccess(){
-  showAppPage("team")
-  window.setTimeout(() => {
-    const teamPanel = document.querySelector(".sidebar-section.team-hub")
-    if(teamPanel) teamPanel.scrollIntoView({block:"start",behavior:"smooth"})
-    const loginButton = document.querySelector("#teamList .team-login:not(.active)")
-    if(loginButton) loginButton.focus({preventScroll:true})
-  }, 60)
-}
-
 function renderAll(){
-
-  if(!document.body.dataset.appPage){
-    let startPage = "overview"
-    try{ startPage = localStorage.getItem("matchTrackerPage") || "overview" }catch{}
-    showAppPage(startPage, false)
-  }
 
   renderTeamQuickBar()
   renderNextGameCard()
-  renderCompactLiveTicker()
   renderLastMatchday()
   renderCalendar()
   renderReactionLight()
@@ -14647,7 +14411,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
   bindTooltipEvents()
   loadFromServer()
-  startLivePreviewPolling()
   checkLiveFromURL()
   window.setInterval(checkTeamSessionExpiry, 30000)
 })
@@ -16163,73 +15926,6 @@ body::after{
   #matches .match-main .team-left .team-name { text-align: right !important; }
   #matches .match-main .team-right .team-name { text-align: left !important; }
 }
-</style>
-<style id="section-navigation-cascade-fix">
-  [hidden]{display:none!important}
-  body[data-app-page="overview"] .app,
-  body[data-app-page="games"] .app{display:block!important}
-  body[data-app-page="overview"] .app>.sidebar,
-  body[data-app-page="games"] .app>.sidebar{display:none!important}
-  body[data-app-page="team"] .app{display:grid!important;grid-template-columns:minmax(0,1fr) 300px!important;gap:18px!important;align-items:start!important}
-  body[data-app-page="team"] .app>.sidebar{display:block!important;grid-column:2!important;grid-row:1!important;position:static!important}
-  body[data-app-page="team"] .app>.content-wrap{grid-column:1!important;grid-row:1!important}
-  .app>.content-wrap{display:flex!important;flex-direction:column!important;gap:14px!important;width:100%!important}
-  .app>.content-wrap>.main{display:contents!important}
-  .app>.content-wrap>.panel{width:100%;margin:0 0 14px!important}
-  .section-live-shortcut{display:inline-flex;align-items:center;gap:7px;min-height:34px;padding:0 11px;border-radius:999px;border:1px solid rgba(185,239,103,.22);background:rgba(185,239,103,.07);color:#d7f3ac;font-size:9px;font-weight:900;letter-spacing:.09em;cursor:pointer}
-  .section-live-shortcut[hidden]{display:none!important}
-  .section-live-dot{width:7px;height:7px;border-radius:50%;background:#b9ef67;box-shadow:0 0 10px rgba(185,239,103,.75);animation:sectionLivePulse 1.4s ease-in-out infinite}
-  @keyframes sectionLivePulse{50%{opacity:.45;box-shadow:0 0 3px rgba(185,239,103,.3)}}
-  .live-preview-section{display:grid;gap:9px;margin:0 0 15px}
-  .live-preview-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 2px}
-  .live-preview-title{display:flex;align-items:center;gap:8px;color:#eaf3f6;font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
-  .live-preview-title small{color:#6e8791;font-size:9px;font-weight:600;letter-spacing:.02em;text-transform:none}
-  .live-preview-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:10px}
-  .live-preview-card{min-width:0;padding:13px 15px;border-radius:14px;border:1px solid rgba(88,224,255,.16);background:linear-gradient(125deg,rgba(12,27,34,.97),rgba(11,17,22,.96));box-shadow:0 10px 26px rgba(0,0,0,.2);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 14px;align-items:center}
-  .live-preview-card-top{display:flex;align-items:center;gap:7px;min-width:0;color:#85a4af;font-size:9px;font-weight:800;letter-spacing:.07em;text-transform:uppercase}
-  .live-preview-card-top .live-preview-team{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .live-preview-status{flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;padding:4px 7px;border-radius:999px;border:1px solid rgba(185,239,103,.2);background:rgba(185,239,103,.07);color:#c9f18c;font-size:8px;letter-spacing:.06em}
-  .live-preview-status.paused{border-color:rgba(255,190,107,.2);background:rgba(255,190,107,.07);color:#ffd18b}
-  .live-preview-scoreline{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:10px;padding:2px 0}
-  .live-preview-side{min-width:0;display:flex;align-items:center;gap:7px;color:#e6eef1;font-size:12px;font-weight:800}
-  .live-preview-side>.match-team-crest,.live-preview-side>.opponent-crest,.live-preview-side>.club-crest{width:21px!important;height:24px!important;max-width:21px!important;max-height:24px!important;flex:0 0 21px!important;object-fit:contain}
-  .live-preview-side>.match-team-crest img,.live-preview-side>.opponent-crest img,.live-preview-side>.club-crest img,.live-preview-side>.opponent-crest svg{display:block;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain}
-  .live-preview-side.home{justify-content:flex-end;text-align:right}
-  .live-preview-side.away{justify-content:flex-start;text-align:left}
-  .live-preview-side span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .live-preview-score{min-width:76px;text-align:center;color:#f5fbfd;font-size:24px;font-weight:900;letter-spacing:.04em;font-variant-numeric:tabular-nums}
-  .live-preview-clock{color:#88a0ab;font-size:10px;font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
-  .live-preview-event{grid-column:1/-1;min-width:0;display:flex;align-items:center;gap:8px;padding-top:8px;border-top:1px solid rgba(255,255,255,.06);color:#a9bac2;font-size:10px}
-  .live-preview-event strong{flex:0 0 auto;color:#728b96;font-size:9px;font-variant-numeric:tabular-nums}
-  .live-preview-event span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .live-preview-empty{padding:13px 15px;border:1px dashed rgba(130,165,180,.17);border-radius:13px;color:#82959e;font-size:11px}
-  .live-preview-open{grid-column:1/-1;justify-self:start;padding:6px 0 0;border:0;background:none;color:#58d5ee;font-size:10px;font-weight:800;cursor:pointer}
-  .live-preview-open:hover{color:#a4f0ff}
-  body[data-app-page="overview"] [data-page-section]:not([data-page-section="overview"]),
-  body[data-app-page="games"] [data-page-section]:not([data-page-section="games"]),
-  body[data-app-page="team"] [data-page-section]:not([data-page-section="team"]){display:none!important}
-  @media(max-width:760px){
-    .live-preview-list{grid-template-columns:minmax(0,1fr)}
-    .live-preview-card{padding:12px;gap:7px 10px}
-    .live-preview-score{font-size:21px;min-width:66px}
-    .live-preview-side{font-size:11px;gap:5px}
-    .live-preview-clock{font-size:9px}
-    body[data-app-page="team"] .app{display:flex!important;flex-direction:column!important}
-    body[data-app-page="team"] .app>.sidebar{order:0!important;width:100%;position:static!important}
-    body[data-app-page="team"] .app>.content-wrap{order:1!important;width:100%}
-  }
-  @media(max-width:420px){
-    .section-nav{padding-left:7px;padding-right:7px}
-    .section-nav-inner{gap:5px}
-    .section-nav-btn{padding:0 5px;font-size:10px;gap:4px}
-    .section-nav-btn span{font-size:12px}
-    .section-live-shortcut{min-height:32px;padding:0 7px;font-size:8px;gap:5px}
-    .section-nav-login{padding:0 8px}
-    .live-preview-card{padding:10px}
-    .live-preview-scoreline{gap:6px}
-    .live-preview-score{min-width:58px;font-size:19px}
-    .live-preview-side{font-size:10px}
-  }
 </style>
 </body>
 </html>

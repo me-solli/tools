@@ -1,4 +1,4 @@
-const CACHE_VERSION = "mt-cache-v3"
+const CACHE_VERSION = "mt-cache-v2"
 const APP_SHELL = [
   "./",
   "./index.html",
